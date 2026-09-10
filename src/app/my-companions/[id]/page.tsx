@@ -1,26 +1,13 @@
-"use client";
-
-import { use, useMemo } from "react";
-import Link from "next/link";
+import { notFound } from "next/navigation";
 import { CompanionStudio } from "@/components/studio/CompanionStudio";
-import { useNest } from "@/lib/state/nest-context";
+import { getInstance } from "@/lib/server/grants";
 
-export default function CompanionStudioPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const { instances, hydrated } = useNest();
-  const instance = useMemo(() => instances.find((row) => row.id === id), [id, instances]);
+export const dynamic = "force-dynamic";
 
-  if (!hydrated) return <div className="px-4 py-16 text-ink-soft">Finding them…</div>;
-  if (!instance) {
-    return (
-      <div className="mx-auto max-w-xl px-4 py-16">
-        <h1 className="font-display text-4xl">They are not in this nest.</h1>
-        <Link href="/my-companions" className="mt-4 inline-block text-moss underline">
-          Back to companions
-        </Link>
-      </div>
-    );
-  }
+export default async function CompanionStudioPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const instance = getInstance(id);
+  if (!instance) notFound();
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">

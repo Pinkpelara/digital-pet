@@ -1,15 +1,14 @@
-"use client";
-
 import Link from "next/link";
 import { items } from "@/data/catalog";
 import { hrefForItem } from "@/lib/catalog-paths";
 import { formatPrice } from "@/lib/format";
-import { useNest } from "@/lib/state/nest-context";
+import { listOwnership } from "@/lib/server/grants";
+
+export const metadata = { title: "Inventory" };
+export const dynamic = "force-dynamic";
 
 export default function InventoryPage() {
-  const { ownership, hydrated } = useNest();
-  if (!hydrated) return <div className="px-4 py-16 text-ink-soft">Counting belongings…</div>;
-
+  const ownership = listOwnership("demo-user");
   const rows = ownership
     .map((row) => ({ row, item: items.find((item) => item.id === row.itemId) }))
     .filter((entry): entry is { row: (typeof ownership)[number]; item: (typeof items)[number] } => Boolean(entry.item));

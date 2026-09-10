@@ -1,20 +1,17 @@
-"use client";
-
 import Link from "next/link";
 import { Creature } from "@/components/creatures/Creature";
-import { useNest } from "@/lib/state/nest-context";
+import { listInstances } from "@/lib/server/grants";
+
+export const metadata = { title: "My companions" };
+export const dynamic = "force-dynamic";
 
 export default function MyCompanionsPage() {
-  const { instances, hydrated, user } = useNest();
-
-  if (!hydrated) {
-    return <div className="mx-auto max-w-6xl px-4 py-16 text-ink-soft">Warming the nest…</div>;
-  }
+  const instances = listInstances("demo-user");
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">My companions</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">{user ? `${user.displayName}'s nest` : "Your nest"}</h1>
+      <h1 className="mt-2 font-display text-5xl text-ink">Your nest</h1>
       <p className="mt-3 max-w-xl text-ink-soft">
         Customization lives here: a big live character, LOOK / GADGET / SKILLS / PERSONALITY, and Save outfit.
       </p>
