@@ -26,11 +26,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
 
   const options = useMemo(
     () =>
-      items.filter(
-        (item) =>
-          (tabKinds[tab] as readonly string[]).includes(item.kind) &&
-          (owns(item.id) || item.kind === "skill" || item.kind === "personality"),
-      ),
+      items.filter((item) => (tabKinds[tab] as readonly string[]).includes(item.kind)),
     [owns, tab],
   );
 

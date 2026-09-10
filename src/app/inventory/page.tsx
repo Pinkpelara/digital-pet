@@ -2,13 +2,14 @@ import Link from "next/link";
 import { items } from "@/data/catalog";
 import { hrefForItem } from "@/lib/catalog-paths";
 import { formatPrice } from "@/lib/format";
-import { listOwnership } from "@/lib/server/grants";
+import { listInstances, listOwnership } from "@/lib/server/grants";
 
 export const metadata = { title: "Inventory" };
 export const dynamic = "force-dynamic";
 
 export default function InventoryPage() {
   const ownership = listOwnership("demo-user");
+  const nest = listInstances("demo-user");
   const rows = ownership
     .map((row) => ({ row, item: items.find((item) => item.id === row.itemId) }))
     .filter((entry): entry is { row: (typeof ownership)[number]; item: (typeof items)[number] } => Boolean(entry.item));
@@ -20,6 +21,21 @@ export default function InventoryPage() {
       <p className="mt-3 text-ink-soft">
         Entitlements, not files. Ownership is granted server-side after a verified purchase — the browser never inserts it.
       </p>
+      {nest.length > 0 && (
+        <section className="mt-8">
+          <h2 className="font-display text-2xl text-ink">Who lives here</h2>
+          <ul className="mt-3 space-y-2">
+            {nest.map((instance) => (
+              <li key={instance.id}>
+                <Link href={`/my-companions/${instance.id}`} className="text-ink underline">
+                  {instance.name}
+                </Link>
+                <span className="text-ink-soft"> · a {instance.speciesId}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {rows.length === 0 ? (
         <p className="mt-8 text-ink-soft">Nothing here yet. Adopt, dress, or redeem a gift.</p>
       ) : (
