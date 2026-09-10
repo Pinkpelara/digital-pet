@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Creature } from "@/components/creatures/Creature";
+import { LiveStage } from "@/components/stage/LiveStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
 import { adoptHref } from "@/lib/catalog-paths";
+import { formatPrice } from "@/lib/format";
 import type { CatalogItem, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
@@ -55,30 +56,37 @@ export function TryOnStage({
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="relative z-10 overflow-hidden rounded-[2rem] bg-cream px-6 py-10">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_top,#e8d8b8,transparent)]" />
-        <div className="flex min-h-[340px] items-end justify-center">
-          <Creature species={species} size={280} equipped={equipped} skill={skill} mood={skill ? "skill" : "idle"} />
-        </div>
+    <div className="relative isolate min-h-[100svh] overflow-hidden bg-void text-mist">
+      <div className="absolute inset-0">
+        <LiveStage
+          species={species}
+          equipped={equipped}
+          skill={skill}
+          mood={skill ? "skill" : "idle"}
+          className="h-full min-h-[100svh] w-full"
+          cameraZ={5.75}
+          placement="stage-right"
+        />
       </div>
-      <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-moss">Live try-on</p>
-        <h1 className="mt-2 font-display text-5xl text-ink">{product.name}</h1>
-        <p className="mt-3 text-lg text-ink-soft">{product.description}</p>
-        <div className="mt-6">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,8,9,0.82)_0%,rgba(7,8,9,0.28)_42%,transparent_68%)] max-md:bg-[linear-gradient(180deg,transparent_38%,rgba(7,8,9,0.9)_100%)]" />
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-10 md:pb-24">
+        <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">Live try-on</p>
+        <h1 className="mt-4 max-w-[12ch] font-display text-5xl leading-[0.92] text-paper md:text-7xl">
+          {product.name}
+        </h1>
+        <p className="mt-4 max-w-md text-base leading-relaxed text-mist/75 md:text-lg">{product.description}</p>
+        <div className="pointer-events-auto mt-8">
           <Link
             href={adoptHref([product.id])}
             onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-            className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper hover:bg-ink/90"
+            className="inline-flex items-center justify-center rounded-full bg-paper px-6 py-3 text-void hover:bg-mist"
           >
-            {product.kind === "companion" ? "Adopt" : "Add to nest"}{" "}
-            {(product.priceCents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" })}
+            {product.kind === "companion" ? "Adopt" : "Add to nest"} {formatPrice(product.priceCents)}
           </Link>
         </div>
         {tryOns.length > 0 && (
-          <div className="mt-8">
-            <p className="text-sm font-medium text-ink">Dress and teach on this page</p>
+          <div className="pointer-events-auto mt-10 max-w-lg">
+            <p className="text-sm text-mist/55">Dress and teach on this stage</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {tryOns.map((item) => {
                 const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
@@ -94,8 +102,8 @@ export function TryOnStage({
                     aria-pressed={active}
                     className={`rounded-full border px-3 py-1.5 text-sm ${
                       active
-                        ? "border-moss bg-moss text-paper"
-                        : "border-ink/10 bg-paper text-ink hover:border-ink/30"
+                        ? "border-paper bg-paper text-void"
+                        : "border-mist/20 bg-transparent text-mist hover:border-mist/50"
                     }`}
                   >
                     {item.name}
@@ -105,7 +113,9 @@ export function TryOnStage({
             </div>
           </div>
         )}
-        <LooksGoodWith ids={product.looksGoodWith} />
+        <div className="pointer-events-auto max-w-lg">
+          <LooksGoodWith ids={product.looksGoodWith} tone="dark" />
+        </div>
       </div>
     </div>
   );

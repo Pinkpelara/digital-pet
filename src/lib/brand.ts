@@ -1,9 +1,9 @@
 export const brand = {
   name: "Sillkin",
   domain: "sillkin.app",
-  tagline: "Tiny creatures for your screen.",
-  hero: "Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Then let it loose on your computer.",
-  concept: ["Adopt", "Customize", "Bring to desktop"] as const,
+  tagline: "Soft volume for the edge of the screen.",
+  hero: "Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally bring them to a desktop app.",
+  concept: ["Adopt", "Customize", "Keep them close"] as const,
   deepLinkScheme: "companions",
   supportEmail: "hello@sillkin.app",
   ageGate: "13+",
@@ -23,5 +23,5 @@ export const navLinks = [
 export const nestLinks = [
   { href: "/my-companions", label: "My companions" },
   { href: "/inventory", label: "Inventory" },
-  { href: "/desktop", label: "Desktop" },
+  { href: "/live", label: "Where they live" },
 ] as const;

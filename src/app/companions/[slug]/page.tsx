@@ -24,13 +24,13 @@ export default async function CompanionPage({ params }: { params: Promise<{ slug
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
+    <div className="bg-void">
       <Suspense>
         <TryOnStage species={companion.id} product={product} suggestions={suggestions.slice(0, 8)} />
       </Suspense>
-      <ul className="mt-10 flex flex-wrap gap-2">
+      <ul className="mx-auto flex max-w-7xl flex-wrap gap-2 px-5 pb-16 md:px-10">
         {companion.traits.map((trait) => (
-          <li key={trait} className="rounded-full bg-cream px-3 py-1 text-sm text-ink">
+          <li key={trait} className="rounded-full border border-white/10 px-3 py-1 text-sm text-mist/70">
             {trait}
           </li>
         ))}

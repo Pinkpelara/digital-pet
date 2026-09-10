@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { items } from "@/data/catalog";
-import { RiveCreature } from "@/components/creatures/RiveCreature";
+import { LiveStage } from "@/components/stage/LiveStage";
 import { track } from "@/lib/analytics";
 import { useNest } from "@/lib/state/nest-context";
 import type { CompanionInstance, EquipSlot, SkillId } from "@/lib/types";
@@ -49,8 +49,14 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-      <div className="rounded-[2rem] bg-cream px-6 py-12">
-        <RiveCreature species={instance.speciesId} size={320} equipped={equipped} skill={skill} name={instance.name} />
+      <div className="min-h-[52vh] overflow-hidden rounded-2xl bg-void lg:min-h-[64vh]">
+        <LiveStage
+          species={instance.speciesId}
+          equipped={equipped}
+          skill={skill}
+          className="h-full min-h-[52vh] w-full lg:min-h-[64vh]"
+          cameraZ={5.5}
+        />
       </div>
       <div>
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Customize">

@@ -8,8 +8,8 @@ const faqs = [
     a: "No. You bought a digital entitlement stored on your account. The creature is not a downloadable asset you copy around.",
   },
   {
-    q: "Where is the desktop app?",
-    a: "Not in this website MVP. Download pages are stubs. Your nest will sync when the Tauri app arrives.",
+    q: "Do I have to install something?",
+    a: "No. The website is the home. You can pin Sillkin in Chrome or Edge (helpful on work computers). A Windows/Mac app is optional and not ready yet. Nothing is a loot box, and nothing is required after you adopt.",
   },
   {
     q: "Can I gift a companion?",

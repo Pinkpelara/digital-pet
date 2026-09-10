@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #241c16;
-  --ink-soft: #5c5046;
-  --cream: #f4ead9;
-  --paper: #fff8ee;
-  --moss: #3f6f4e;
-  --peach: #e89b6c;
-  --sky: #6ba8b8;
-  --blush: #e4a8a4;
-  --gold: #c9963a;
+  --ink: #121413;
+  --ink-soft: #5e6660;
+  --cream: #d4d9d4;
+  --paper: #eceee9;
+  --moss: #6d8a82;
+  --peach: #a88868;
+  --sky: #7a8b92;
+  --blush: #7d746e;
+  --gold: #9a8a62;
+  --void: #070809;
+  --stage: #0c0e10;
+  --mist: #c5cbc6;
 }
 
 @theme inline {
@@ -22,8 +25,11 @@
   --color-sky: var(--sky);
   --color-blush: var(--blush);
   --color-gold: var(--gold);
-  --font-sans: var(--font-nunito);
-  --font-display: var(--font-fraunces);
+  --color-void: var(--void);
+  --color-stage: var(--stage);
+  --color-mist: var(--mist);
+  --font-sans: var(--font-sans-face);
+  --font-display: var(--font-display-face);
 }
 
 html {
@@ -31,21 +37,21 @@ html {
 }
 
 :focus-visible {
-  outline: 3px solid var(--moss);
+  outline: 2px solid var(--moss);
   outline-offset: 3px;
 }
 
 body {
-  background:
-    radial-gradient(1200px 500px at 10% -10%, #d7ecf0 0%, transparent 50%),
-    radial-gradient(900px 400px at 110% 0%, #f3d6c4 0%, transparent 46%),
-    var(--cream);
+  background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.01em;
 }
 
 .font-display {
-  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+  font-family: var(--font-display-face), ui-serif, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.03em;
 }
 
 .card-lift {
@@ -342,6 +348,11 @@ body {
   background: linear-gradient(#d8c2a0, #c4a57a);
   border-radius: 999px;
   box-shadow: 0 10px 0 #b08958;
+}
+
+.grain-layer {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 @media (prefers-reduced-motion: reduce) {

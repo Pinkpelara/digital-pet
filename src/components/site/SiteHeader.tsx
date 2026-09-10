@@ -1,40 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { Creature } from "@/components/creatures/Creature";
+import { usePathname } from "next/navigation";
 import { brand, navLinks } from "@/lib/brand";
 import { useNest } from "@/lib/state/nest-context";
-import { useReducedMotion } from "@/components/site/use-reduced-motion";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const params = useSearchParams();
-  const { user, creaturesEnabled, instances } = useNest();
-  const reducedMotion = useReducedMotion();
-  const paused = params.get("pause") === "1" || !creaturesEnabled;
+  const { user, instances, hydrated } = useNest();
+  const cinematic =
+    pathname === "/" || pathname.startsWith("/companions") || pathname.startsWith("/item");
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/8 bg-paper/85 backdrop-blur-md">
+    <header
+      className={`${
+        cinematic
+          ? "absolute inset-x-0 top-0 z-40 border-transparent bg-gradient-to-b from-void/80 to-transparent text-paper"
+          : "sticky top-0 z-40 border-b border-ink/8 bg-paper/80 text-ink backdrop-blur-md"
+      }`}
+    >
       <a
         href="#content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded-full focus:bg-moss focus:px-4 focus:py-2 focus:text-paper"
       >
         Skip to content
       </a>
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link href="/" className="group relative flex items-end gap-2 text-ink">
-          <span className="font-display text-2xl tracking-tight">{brand.name}</span>
-          <span className="hidden text-sm text-ink-soft sm:inline">{brand.tagline}</span>
-          <span className="nav-perch absolute -right-10 -top-3 hidden sm:block">
-            <Creature
-              species="bloop"
-              size={54}
-              mood={creaturesEnabled && !reducedMotion ? "idle" : "idle"}
-              equipped={{ body: "outfit-raincoat" }}
-              reducedMotion={reducedMotion || !creaturesEnabled}
-              decorative
-            />
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
+        <Link href="/" className="flex items-baseline gap-3">
+          <span className="font-display text-[1.7rem] tracking-tight">{brand.name}</span>
+          <span className={`hidden text-xs uppercase tracking-[0.22em] sm:inline ${cinematic ? "text-mist/55" : "text-ink-soft"}`}>
+            {brand.tagline}
           </span>
         </Link>
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
@@ -45,7 +40,13 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 className={`rounded-full px-3 py-1.5 text-sm transition ${
-                  active ? "bg-moss text-paper" : "text-ink-soft hover:bg-cream hover:text-ink"
+                  active
+                    ? cinematic
+                      ? "bg-paper text-void"
+                      : "bg-ink text-paper"
+                    : cinematic
+                      ? "text-mist/75 hover:text-paper"
+                      : "text-ink-soft hover:text-ink"
                 }`}
               >
                 {link.label}
@@ -55,26 +56,26 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2">
           <Link
-            href={paused ? "/" : "/?pause=1"}
-            className="rounded-full border border-ink/10 px-3 py-1.5 text-xs text-ink-soft hover:border-ink/30"
-            aria-label={paused ? "Let creatures roam" : "Pause roaming creatures"}
-          >
-            {paused ? "Roam" : "Pause"}
-          </Link>
-          <Link
             href="/my-companions"
-            className="rounded-full bg-ink px-3 py-1.5 text-sm text-paper hover:bg-ink/90"
+            className={`rounded-full px-3 py-1.5 text-sm ${cinematic ? "bg-paper text-void" : "bg-ink text-paper"}`}
           >
-            {instances.length > 0 ? `Nest (${instances.length})` : "My nest"}
+            {hydrated && instances.length > 0 ? `Nest (${instances.length})` : "My nest"}
           </Link>
-          <Link href={user ? "/inventory" : "/login"} className="hidden text-sm text-ink-soft sm:inline">
-            {user ? user.displayName : "Sign in"}
+          <Link href={user && hydrated ? "/inventory" : "/login"} className={`hidden text-sm sm:inline ${cinematic ? "text-mist/65" : "text-ink-soft"}`}>
+            {hydrated && user ? user.displayName : "Sign in"}
           </Link>
         </div>
       </div>
-      <nav aria-label="Store sections" className="flex gap-2 overflow-x-auto border-t border-ink/5 px-4 py-2 lg:hidden">
+      <nav
+        aria-label="Store sections"
+        className={`flex gap-2 overflow-x-auto px-4 pb-3 lg:hidden ${cinematic ? "" : "border-t border-ink/5 pt-2"}`}
+      >
         {navLinks.map((link) => (
-          <Link key={link.href} href={link.href} className="shrink-0 rounded-full bg-cream px-3 py-1 text-sm text-ink">
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`shrink-0 rounded-full px-3 py-1 text-sm ${cinematic ? "bg-white/10 text-paper" : "bg-cream text-ink"}`}
+          >
             {link.label}
           </Link>
         ))}
