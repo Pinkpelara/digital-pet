@@ -1,12 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { Creature } from "@/components/creatures/Creature";
-import { listInstances } from "@/lib/server/grants";
-
-export const metadata = { title: "My companions" };
-export const dynamic = "force-dynamic";
+import { studioHref } from "@/lib/catalog-paths";
+import { useNest } from "@/lib/state/nest-context";
 
 export default function MyCompanionsPage() {
-  const instances = listInstances("demo-user");
+  const { instances, hydrated } = useNest();
+
+  if (!hydrated) {
+    return <div className="mx-auto max-w-6xl px-4 py-12 text-ink-soft">Looking in the nest…</div>;
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
@@ -27,7 +31,7 @@ export default function MyCompanionsPage() {
           {instances.map((instance) => (
             <Link
               key={instance.id}
-              href={`/my-companions/${instance.id}`}
+              href={studioHref(instance.id)}
               className="card-lift rounded-[1.6rem] bg-paper p-6 ring-1 ring-ink/8"
             >
               <Creature species={instance.speciesId} size={180} equipped={instance.equipped} name={instance.name} />

@@ -27,7 +27,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
   const options = useMemo(
     () =>
       items.filter((item) => (tabKinds[tab] as readonly string[]).includes(item.kind)),
-    [owns, tab],
+    [tab],
   );
 
   function toggle(itemId: string, slot?: EquipSlot, skillId?: SkillId) {

@@ -18,7 +18,10 @@ export async function POST(request: Request) {
   if (!instance) return NextResponse.json({ error: "Missing companion" }, { status: 404 });
   const named = saveInstance({ ...instance, name: name.trim() || instance.name });
   if (!contentType.includes("application/json")) {
-    return new NextResponse(null, { status: 303, headers: { Location: `/my-companions/${named.id}` } });
+    return new NextResponse(null, {
+      status: 303,
+      headers: { Location: `/my-companions/studio?id=${encodeURIComponent(named.id)}` },
+    });
   }
   return NextResponse.json({ instance: named });
 }

@@ -1,33 +1,36 @@
+"use client";
+
 import Link from "next/link";
 import { items } from "@/data/catalog";
-import { hrefForItem } from "@/lib/catalog-paths";
+import { hrefForItem, studioHref } from "@/lib/catalog-paths";
 import { formatPrice } from "@/lib/format";
-import { listInstances, listOwnership } from "@/lib/server/grants";
-
-export const metadata = { title: "Inventory" };
-export const dynamic = "force-dynamic";
+import { useNest } from "@/lib/state/nest-context";
 
 export default function InventoryPage() {
-  const ownership = listOwnership("demo-user");
-  const nest = listInstances("demo-user");
+  const { ownership, instances, hydrated } = useNest();
   const rows = ownership
     .map((row) => ({ row, item: items.find((item) => item.id === row.itemId) }))
     .filter((entry): entry is { row: (typeof ownership)[number]; item: (typeof items)[number] } => Boolean(entry.item));
+
+  if (!hydrated) {
+    return <div className="mx-auto max-w-4xl px-4 py-12 text-ink-soft">Opening the backpack…</div>;
+  }
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">Inventory</p>
       <h1 className="mt-2 font-display text-5xl text-ink">What you own</h1>
       <p className="mt-3 text-ink-soft">
-        Entitlements, not files. Ownership is granted server-side after a verified purchase — the browser never inserts it.
+        On this static preview, entitlements live in your browser (localStorage). A later Vercel deploy can grant them
+        from Stripe + Supabase instead — the nest looks the same.
       </p>
-      {nest.length > 0 && (
+      {instances.length > 0 && (
         <section className="mt-8">
           <h2 className="font-display text-2xl text-ink">Who lives here</h2>
           <ul className="mt-3 space-y-2">
-            {nest.map((instance) => (
+            {instances.map((instance) => (
               <li key={instance.id}>
-                <Link href={`/my-companions/${instance.id}`} className="text-ink underline">
+                <Link href={studioHref(instance.id)} className="text-ink underline">
                   {instance.name}
                 </Link>
                 <span className="text-ink-soft"> · a {instance.speciesId}</span>

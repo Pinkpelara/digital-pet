@@ -9,12 +9,14 @@ export type PersistedNest = {
   creaturesEnabled: boolean;
 };
 
-export const emptyNest = (): PersistedNest => ({
+export const EMPTY_NEST: PersistedNest = {
   user: null,
   ownership: [],
   instances: [],
   creaturesEnabled: true,
-});
+};
+
+export const emptyNest = (): PersistedNest => EMPTY_NEST;
 
 export function readNest(): PersistedNest {
   if (typeof window === "undefined") return emptyNest();

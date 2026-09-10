@@ -1,50 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
+import { items as seedItems } from "@/data/catalog";
 import type { CatalogItem } from "@/lib/types";
-
-type Status = "checking" | "locked" | "open";
+import {
+  DEMO_ADMIN_PASSWORD,
+  isAdminUnlocked,
+  readAdminItems,
+  unlockAdmin,
+  writeAdminItems,
+} from "@/lib/state/admin-overlay";
+import { useClientMounted } from "@/lib/state/use-client-mounted";
 
 export function AdminDesk() {
-  const [status, setStatus] = useState<Status>("locked");
-  const [items, setItems] = useState<CatalogItem[]>([]);
+  const mounted = useClientMounted();
+  const [edits, setEdits] = useState<CatalogItem[] | null>(null);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  async function refresh() {
-    try {
-      const response = await fetch("/api/admin/products");
-      if (response.status === 401) {
-        setStatus("locked");
-        return;
-      }
-      const data = (await response.json()) as { items: CatalogItem[] };
-      setItems(data.items);
-      setStatus("open");
-    } catch {
-      setStatus("locked");
+  const unlocked = mounted && isAdminUnlocked();
+  const items = edits ?? (mounted ? readAdminItems() : seedItems);
+
+  function login(event: FormEvent) {
+    event.preventDefault();
+    if (!unlockAdmin(password)) {
+      setError("That key did not turn.");
+      return;
     }
+    setError(null);
+    setEdits(readAdminItems());
   }
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      void refresh();
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
-
-  async function save(item: CatalogItem) {
-    const response = await fetch("/api/admin/products", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(item),
-    });
-    if (response.ok) await refresh();
+  function save(item: CatalogItem) {
+    const next = items.map((row) => (row.id === item.id ? item : row));
+    setEdits(next);
+    writeAdminItems(next);
   }
 
-  if (status === "checking") return <p className="text-ink-soft">Checking the lock…</p>;
+  if (!mounted) return <p className="text-ink-soft">Checking the lock…</p>;
 
-  if (status === "locked") {
+  if (!unlocked) {
     return (
-      <form action="/api/admin/login" method="POST" className="max-w-sm space-y-3">
+      <form onSubmit={login} className="max-w-sm space-y-3">
         <label htmlFor="admin-pass" className="block text-sm text-ink">
           Attic password
         </label>
@@ -52,12 +49,15 @@ export function AdminDesk() {
           id="admin-pass"
           name="password"
           type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
           className="w-full rounded-full border border-ink/15 px-4 py-3"
         />
         <button type="submit" className="rounded-full bg-ink px-5 py-3 text-paper">
           Unlock
         </button>
-        <p className="text-xs text-ink-soft">Demo default: sillkin-admin</p>
+        <p className="text-xs text-ink-soft">Demo default: {DEMO_ADMIN_PASSWORD}</p>
+        {error && <p className="text-sm text-peach">{error}</p>}
       </form>
     );
   }
@@ -65,8 +65,8 @@ export function AdminDesk() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-ink-soft">
-        Protected CRUD. In demo this writes an in-memory overlay. In production the same handlers talk to Supabase with
-        the service role — never the browser.
+        Protected CRUD. On GitHub Pages this writes a local overlay (this browser only). On a later Vercel deploy the
+        same attic can talk to Supabase with the service role — never the browser.
       </p>
       <div className="overflow-x-auto rounded-[1.4rem] bg-paper ring-1 ring-ink/8">
         <table className="min-w-full text-left text-sm">
@@ -86,7 +86,7 @@ export function AdminDesk() {
                   <input
                     value={item.name}
                     onChange={(event) =>
-                      setItems((prev) => prev.map((row) => (row.id === item.id ? { ...row, name: event.target.value } : row)))
+                      setEdits(items.map((row) => (row.id === item.id ? { ...row, name: event.target.value } : row)))
                     }
                     className="w-full bg-transparent"
                   />
@@ -97,8 +97,8 @@ export function AdminDesk() {
                     type="number"
                     value={item.priceCents}
                     onChange={(event) =>
-                      setItems((prev) =>
-                        prev.map((row) =>
+                      setEdits(
+                        items.map((row) =>
                           row.id === item.id ? { ...row, priceCents: Number(event.target.value) } : row,
                         ),
                       )
@@ -111,9 +111,7 @@ export function AdminDesk() {
                     type="checkbox"
                     checked={item.active}
                     onChange={(event) =>
-                      setItems((prev) =>
-                        prev.map((row) => (row.id === item.id ? { ...row, active: event.target.checked } : row)),
-                      )
+                      setEdits(items.map((row) => (row.id === item.id ? { ...row, active: event.target.checked } : row)))
                     }
                   />
                 </td>

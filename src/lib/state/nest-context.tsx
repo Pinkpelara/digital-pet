@@ -3,7 +3,9 @@
 import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
 import { items } from "@/data/catalog";
 import { track } from "@/lib/analytics";
-import { emptyNest, readNest, writeNest, type PersistedNest } from "@/lib/state/storage";
+import { demoUser, grantItemsLocally } from "@/lib/state/grant-demo";
+import { emptyNest, readNest, writeNest, EMPTY_NEST, type PersistedNest } from "@/lib/state/storage";
+import { useClientMounted } from "@/lib/state/use-client-mounted";
 import type {
   CompanionInstance,
   DemoUser,
@@ -19,6 +21,7 @@ type NestContextValue = PersistedNest & {
   signInDemo: (user?: Partial<DemoUser>) => DemoUser;
   signOut: () => void;
   applyGrant: (input: { user: DemoUser; ownership: OwnershipRecord[]; instances: CompanionInstance[] }) => void;
+  grantItems: (itemIds: string[], source?: OwnershipRecord["source"]) => CompanionInstance[];
   saveOutfit: (instanceId: string, equipped: CompanionInstance["equipped"]) => void;
   renameCompanion: (instanceId: string, name: string) => void;
   setCreaturesEnabled: (enabled: boolean) => void;
@@ -26,14 +29,6 @@ type NestContextValue = PersistedNest & {
 };
 
 const NestContext = createContext<NestContextValue | null>(null);
-
-const demoUser = (): DemoUser => ({
-  id: "demo-user",
-  email: "you@sillkin.local",
-  displayName: "Explorer",
-  publicId: "sill-42",
-  provider: "demo",
-});
 
 const listeners = new Set<() => void>();
 
@@ -71,7 +66,9 @@ function getSnapshot(): PersistedNest {
 }
 
 export function NestProvider({ children }: { children: React.ReactNode }) {
-  const nest = useSyncExternalStore(subscribe, getSnapshot, emptyNest);
+  const live = useSyncExternalStore(subscribe, getSnapshot, emptyNest);
+  const hydrated = useClientMounted();
+  const nest = hydrated ? live : EMPTY_NEST;
 
   const update = useCallback((recipe: (prev: PersistedNest) => PersistedNest) => {
     persist(recipe(getSnapshot()));
@@ -108,6 +105,15 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
     [update],
   );
 
+  const grantItems = useCallback(
+    (itemIds: string[], source: OwnershipRecord["source"] = "purchase") => {
+      persist(grantItemsLocally(getSnapshot(), itemIds, source));
+      track("purchase_granted", { itemIds: itemIds.join(",") });
+      return getSnapshot().instances;
+    },
+    [],
+  );
+
   const saveOutfit = useCallback((instanceId: string, equipped: CompanionInstance["equipped"]) => {
     update((prev) => ({
       ...prev,
@@ -132,12 +138,13 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo<NestContextValue>(
     () => ({
       ...nest,
-      hydrated: true,
+      hydrated,
       ownedItemIds,
       owns: (itemId: string) => ownedItemIds.has(itemId),
       signInDemo,
       signOut,
       applyGrant,
+      grantItems,
       saveOutfit,
       renameCompanion,
       setCreaturesEnabled,
@@ -147,7 +154,7 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
         return { slot: item.slot, skillId: item.skillId };
       },
     }),
-    [applyGrant, nest, ownedItemIds, renameCompanion, saveOutfit, setCreaturesEnabled, signInDemo, signOut],
+    [applyGrant, grantItems, hydrated, nest, ownedItemIds, renameCompanion, saveOutfit, setCreaturesEnabled, signInDemo, signOut],
   );
 
   return <NestContext.Provider value={value}>{children}</NestContext.Provider>;

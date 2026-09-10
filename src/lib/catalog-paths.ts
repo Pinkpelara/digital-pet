@@ -5,6 +5,14 @@ export function hrefForItem(item: CatalogItem): string {
   return `/item/${item.slug}`;
 }
 
+export function studioHref(id: string): string {
+  return `/my-companions/studio?id=${encodeURIComponent(id)}`;
+}
+
+export function adoptHref(itemIds: string[]): string {
+  return `/adopt/success?items=${itemIds.join(",")}`;
+}
+
 export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: string } {
   switch (kind) {
     case "companion":

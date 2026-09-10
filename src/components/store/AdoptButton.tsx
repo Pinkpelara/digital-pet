@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { track } from "@/lib/analytics";
+import { adoptHref } from "@/lib/catalog-paths";
 import { formatPrice } from "@/lib/format";
 import { useNest } from "@/lib/state/nest-context";
 
@@ -17,59 +17,27 @@ export function AdoptButton({
   label?: string;
   className?: string;
 }) {
-  const router = useRouter();
-  const { owns, user, signInDemo } = useNest();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const already = itemIds.every((id) => owns(id));
-
-  async function checkout() {
-    setBusy(true);
-    setError(null);
-    const sessionUser = user ?? signInDemo();
-    track("checkout_started", { itemIds: itemIds.join(","), demo: true });
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          itemIds,
-          userId: sessionUser.id,
-          email: sessionUser.email,
-        }),
-      });
-      const data = (await response.json()) as { url?: string; path?: string; error?: string };
-      if (!response.ok || !(data.path || data.url)) throw new Error(data.error ?? "Checkout failed");
-      router.push(data.path ?? data.url!);
-    } catch (err) {
-      console.error(err);
-      setError(err instanceof Error ? err.message : "The parcel would not leave the counter.");
-      setBusy(false);
-    }
-  }
+  const { owns, hydrated } = useNest();
+  const already = hydrated && itemIds.every((id) => owns(id));
 
   if (already) {
     return (
-      <a
+      <Link
         href="/inventory"
         className={`inline-flex items-center justify-center rounded-full bg-moss px-5 py-3 text-paper ${className ?? ""}`}
       >
         In your nest
-      </a>
+      </Link>
     );
   }
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={checkout}
-        disabled={busy}
-        className={`inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper transition hover:bg-ink/90 disabled:opacity-60 ${className ?? ""}`}
-      >
-        {busy ? "Tying the parcel…" : `${label} ${formatPrice(priceCents)}`}
-      </button>
-      {error ? <p className="mt-2 text-sm text-peach">{error}</p> : null}
-    </div>
+    <Link
+      href={adoptHref(itemIds)}
+      onClick={() => track("checkout_started", { itemIds: itemIds.join(","), demo: true })}
+      className={`inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper transition hover:bg-ink/90 ${className ?? ""}`}
+    >
+      {label} {formatPrice(priceCents)}
+    </Link>
   );
 }

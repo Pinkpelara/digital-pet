@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Creature } from "@/components/creatures/Creature";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
+import { adoptHref } from "@/lib/catalog-paths";
 import type { CatalogItem, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
@@ -66,14 +67,14 @@ export function TryOnStage({
         <h1 className="mt-2 font-display text-5xl text-ink">{product.name}</h1>
         <p className="mt-3 text-lg text-ink-soft">{product.description}</p>
         <div className="mt-6">
-          <a
-            href={`/api/checkout?itemIds=${product.id}`}
+          <Link
+            href={adoptHref([product.id])}
             onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
             className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper hover:bg-ink/90"
           >
             {product.kind === "companion" ? "Adopt" : "Add to nest"}{" "}
             {(product.priceCents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" })}
-          </a>
+          </Link>
         </div>
         {tryOns.length > 0 && (
           <div className="mt-8">

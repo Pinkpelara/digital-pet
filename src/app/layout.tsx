@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   description: brand.hero,
   applicationName: brand.name,
-  metadataBase: new URL("https://sillkin.app"),
+  metadataBase: new URL("https://pinkpelara.github.io/digital-pet"),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
