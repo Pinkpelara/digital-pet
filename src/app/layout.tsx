@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Outfit } from "next/font/google";
+import { Fraunces, Nunito } from "next/font/google";
 import { SiteShell } from "@/components/site/SiteShell";
 import { brand } from "@/lib/brand";
 import { publicBasePath } from "@/lib/site";
 import "./globals.css";
 
-const display = Instrument_Serif({
+const display = Fraunces({
   variable: "--font-display-face",
   subsets: ["latin"],
-  weight: "400",
   display: "swap",
 });
 
-const sans = Outfit({
+const sans = Nunito({
   variable: "--font-sans-face",
   subsets: ["latin"],
   display: "swap",

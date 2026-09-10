@@ -64,13 +64,13 @@ export function TryOnStage({
           skill={skill}
           mood={skill ? "skill" : "idle"}
           className="h-full min-h-[100svh] w-full"
-          cameraZ={5.75}
+          cameraZ={5.25}
           placement="stage-right"
         />
       </div>
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,8,9,0.82)_0%,rgba(7,8,9,0.28)_42%,transparent_68%)] max-md:bg-[linear-gradient(180deg,transparent_38%,rgba(7,8,9,0.9)_100%)]" />
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-10 md:pb-24">
-        <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">Live try-on</p>
+        <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">Hold to squeeze · live try-on</p>
         <h1 className="mt-4 max-w-[12ch] font-display text-5xl leading-[0.92] text-paper md:text-7xl">
           {product.name}
         </h1>

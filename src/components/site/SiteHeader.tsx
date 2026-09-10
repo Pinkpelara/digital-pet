@@ -9,7 +9,10 @@ export function SiteHeader() {
   const pathname = usePathname();
   const { user, instances, hydrated } = useNest();
   const cinematic =
-    pathname === "/" || pathname.startsWith("/companions") || pathname.startsWith("/item");
+    pathname === "/" ||
+    pathname.startsWith("/companions") ||
+    pathname.startsWith("/item") ||
+    pathname.startsWith("/adopt");
 
   return (
     <header

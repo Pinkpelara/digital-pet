@@ -3,8 +3,8 @@
 :root {
   --ink: #121413;
   --ink-soft: #5e6660;
-  --cream: #d4d9d4;
-  --paper: #eceee9;
+  --cream: #d6d4cc;
+  --paper: #e8e6df;
   --moss: #6d8a82;
   --peach: #a88868;
   --sky: #7a8b92;
@@ -51,7 +51,8 @@ body {
 .font-display {
   font-family: var(--font-display-face), ui-serif, "Times New Roman", serif;
   font-weight: 400;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.045em;
+  font-optical-sizing: auto;
 }
 
 .card-lift {

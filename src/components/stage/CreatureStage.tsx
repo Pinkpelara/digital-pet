@@ -52,6 +52,7 @@ export function CreatureStage({
   placement = "center",
 }: CreatureStageProps) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const [press, setPress] = useState(0);
   const figureX = placement === "stage-right" ? 0.82 : 0;
 
   return (
@@ -65,13 +66,15 @@ export function CreatureStage({
         const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
         setPointer({ x, y });
       }}
+      onPointerDown={() => setPress(1)}
+      onPointerUp={() => setPress(0)}
     >
       <color attach="background" args={["#070809"]} />
       <fog attach="fog" args={["#070809", 8, 16]} />
       <StudioLights intensity={0.95} />
       <StudioSill width={placement === "stage-right" ? 10 : 6.5} />
       <Aim pointer={pointer} placement={placement} cameraZ={cameraZ} />
-      <group position={[figureX, 0.04, 0]} scale={placement === "stage-right" ? 1.12 : 1}>
+      <group position={[figureX, 0.12, 0]} scale={placement === "stage-right" ? 1.16 : 1.08}>
         <FigurineMesh
           species={species}
           equipped={equipped}
@@ -79,6 +82,7 @@ export function CreatureStage({
           skill={skill}
           followPointer={followPointer}
           pointer={pointer}
+          press={press}
         />
       </group>
       <StudioShadows scale={placement === "stage-right" ? 12 : 10} />
