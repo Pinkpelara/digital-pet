@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { companions, items } from "@/data/catalog";
-import { Creature } from "@/components/creatures/Creature";
+import { LiveStage } from "@/components/stage/LiveStage";
 import { WhereTheyLive } from "@/components/live/WhereTheyLive";
 import { useNest } from "@/lib/state/nest-context";
 
@@ -43,14 +43,13 @@ export function AdoptCeremony() {
     <div className="mx-auto flex min-h-[80vh] max-w-6xl flex-col items-center px-4 py-16">
       <div className="flex w-full max-w-2xl flex-col items-center text-center">
       <p className="text-xs uppercase tracking-[0.22em] text-moss">A parcel for you</p>
-      <div className="relative mt-8 flex h-72 w-full items-end justify-center">
-        <div className="parcel is-shaking is-open">
-          <div className="parcel-box" />
-          <div className="parcel-flap" />
-        </div>
-        <div className="creature-crawl absolute bottom-6">
-          <Creature species={species} size={180} mood="happy" name={instance?.name ?? speciesMeta?.name} />
-        </div>
+      <div className="relative mt-8 h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+        <LiveStage
+          species={species}
+          className="h-full w-full"
+          mood="happy"
+          cameraZ={3.4}
+        />
       </div>
 
       {companionItem && instance ? (

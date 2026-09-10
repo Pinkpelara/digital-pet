@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Creature } from "@/components/creatures/Creature";
+import { LiveStage } from "@/components/stage/LiveStage";
 import { studioHref, liveHref } from "@/lib/catalog-paths";
 import { useNest } from "@/lib/state/nest-context";
 
@@ -36,9 +36,16 @@ export default function MyCompanionsPage() {
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {instances.map((instance) => (
             <article key={instance.id} className="rounded-[1.6rem] bg-paper p-6 ring-1 ring-ink/8">
-              <Link href={studioHref(instance.id)} className="card-lift block">
-                <Creature species={instance.speciesId} size={180} equipped={instance.equipped} name={instance.name} />
-                <h2 className="mt-2 font-display text-3xl">{instance.name}</h2>
+              <Link href={studioHref(instance.id)} className="block">
+                <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-void">
+                  <LiveStage
+                    species={instance.speciesId}
+                    equipped={instance.equipped}
+                    className="h-full w-full"
+                    cameraZ={3.7}
+                  />
+                </div>
+                <h2 className="mt-3 font-display text-3xl">{instance.name}</h2>
                 <p className="text-sm text-ink-soft">Open the studio</p>
               </Link>
               <Link href={liveHref(instance.id)} className="mt-4 inline-block text-sm text-moss underline">

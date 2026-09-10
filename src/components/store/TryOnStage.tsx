@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Creature } from "@/components/creatures/Creature";
+import { LiveStage } from "@/components/stage/LiveStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
 import { adoptHref } from "@/lib/catalog-paths";
@@ -55,16 +55,20 @@ export function TryOnStage({
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="relative z-10 overflow-hidden rounded-[2rem] bg-cream px-6 py-10">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_top,#e8d8b8,transparent)]" />
-        <div className="flex min-h-[340px] items-end justify-center">
-          <Creature species={species} size={280} equipped={equipped} skill={skill} mood={skill ? "skill" : "idle"} />
-        </div>
+    <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+      <div className="relative z-10 min-h-[52vh] overflow-hidden rounded-2xl bg-void lg:min-h-[70vh]">
+        <LiveStage
+          species={species}
+          equipped={equipped}
+          skill={skill}
+          mood={skill ? "skill" : "idle"}
+          className="h-full min-h-[52vh] w-full lg:min-h-[70vh]"
+          cameraZ={3.2}
+        />
       </div>
-      <div>
-        <p className="text-xs uppercase tracking-[0.2em] text-moss">Live try-on</p>
-        <h1 className="mt-2 font-display text-5xl text-ink">{product.name}</h1>
+      <div className="lg:py-6">
+        <p className="text-[11px] uppercase tracking-[0.28em] text-moss">Live try-on</p>
+        <h1 className="mt-3 font-display text-5xl leading-[1.02] text-ink md:text-6xl">{product.name}</h1>
         <p className="mt-3 text-lg text-ink-soft">{product.description}</p>
         <div className="mt-6">
           <Link

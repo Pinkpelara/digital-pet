@@ -33,7 +33,7 @@ export function WhereTheyLive({
             <Link
               href={path.href(instanceId)}
               onClick={() => choose(path.id)}
-              className="card-lift flex h-full flex-col rounded-[1.6rem] bg-paper p-5 text-left ring-1 ring-ink/8"
+              className="flex h-full flex-col rounded-2xl bg-paper p-6 text-left ring-1 ring-ink/10 transition hover:-translate-y-0.5 hover:ring-ink/20"
             >
               <p className="text-xs uppercase tracking-[0.16em] text-moss">{path.kicker}</p>
               <p className="mt-2 w-fit rounded-full bg-cream px-2 py-0.5 text-[11px] uppercase tracking-wider text-ink">

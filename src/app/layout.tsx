@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Fraunces, Nunito } from "next/font/google";
+import { Instrument_Serif, Outfit } from "next/font/google";
 import { SiteShell } from "@/components/site/SiteShell";
 import { brand } from "@/lib/brand";
 import { publicBasePath } from "@/lib/site";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const display = Instrument_Serif({
+  variable: "--font-display-face",
   subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const sans = Outfit({
+  variable: "--font-sans-face",
   subsets: ["latin"],
   display: "swap",
 });
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: brand.name,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
   },
   icons: {
     apple: `${publicBasePath()}/apple-touch-icon.png`,
@@ -37,12 +38,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#3f6f4e",
+  themeColor: "#0a0b0c",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${nunito.variable} h-full antialiased`}>
+    <html lang="en" className={`${display.variable} ${sans.variable} h-full antialiased`}>
       <body className="min-h-full">
         <SiteShell>{children}</SiteShell>
       </body>
