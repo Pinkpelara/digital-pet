@@ -7,7 +7,7 @@ import { useNest } from "@/lib/state/nest-context";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const { user, instances } = useNest();
+  const { user, instances, hydrated } = useNest();
   const cinematic =
     pathname === "/" || pathname.startsWith("/companions") || pathname.startsWith("/item");
 
@@ -59,10 +59,10 @@ export function SiteHeader() {
             href="/my-companions"
             className={`rounded-full px-3 py-1.5 text-sm ${cinematic ? "bg-paper text-void" : "bg-ink text-paper"}`}
           >
-            {instances.length > 0 ? `Nest (${instances.length})` : "My nest"}
+            {hydrated && instances.length > 0 ? `Nest (${instances.length})` : "My nest"}
           </Link>
-          <Link href={user ? "/inventory" : "/login"} className={`hidden text-sm sm:inline ${cinematic ? "text-mist/65" : "text-ink-soft"}`}>
-            {user ? user.displayName : "Sign in"}
+          <Link href={user && hydrated ? "/inventory" : "/login"} className={`hidden text-sm sm:inline ${cinematic ? "text-mist/65" : "text-ink-soft"}`}>
+            {hydrated && user ? user.displayName : "Sign in"}
           </Link>
         </div>
       </div>

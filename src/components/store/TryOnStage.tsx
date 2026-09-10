@@ -56,23 +56,26 @@ export function TryOnStage({
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
 
   return (
-    <div className="relative isolate min-h-[100svh] bg-void text-mist">
-      <div className="absolute inset-0 lg:right-[36%]">
+    <div className="relative isolate min-h-[100svh] overflow-hidden bg-void text-mist">
+      <div className="absolute inset-0">
         <LiveStage
           species={species}
           equipped={equipped}
           skill={skill}
           mood={skill ? "skill" : "idle"}
           className="h-full min-h-[100svh] w-full"
-          cameraZ={5.5}
+          cameraZ={5.75}
+          placement="stage-right"
         />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent_50%,rgba(7,8,9,0.55)_100%)] max-lg:bg-[linear-gradient(180deg,transparent_45%,rgba(7,8,9,0.88)_100%)]" />
       </div>
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 lg:ml-auto lg:w-[42%] lg:justify-center lg:px-8 lg:pb-24">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,8,9,0.82)_0%,rgba(7,8,9,0.28)_42%,transparent_68%)] max-md:bg-[linear-gradient(180deg,transparent_38%,rgba(7,8,9,0.9)_100%)]" />
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-10 md:pb-24">
         <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">Live try-on</p>
-        <h1 className="mt-4 font-display text-5xl leading-[0.92] text-paper md:text-7xl">{product.name}</h1>
+        <h1 className="mt-4 max-w-[12ch] font-display text-5xl leading-[0.92] text-paper md:text-7xl">
+          {product.name}
+        </h1>
         <p className="mt-4 max-w-md text-base leading-relaxed text-mist/75 md:text-lg">{product.description}</p>
-        <div className="mt-8">
+        <div className="pointer-events-auto mt-8">
           <Link
             href={adoptHref([product.id])}
             onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
@@ -82,7 +85,7 @@ export function TryOnStage({
           </Link>
         </div>
         {tryOns.length > 0 && (
-          <div className="mt-10">
+          <div className="pointer-events-auto mt-10 max-w-lg">
             <p className="text-sm text-mist/55">Dress and teach on this stage</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {tryOns.map((item) => {
@@ -110,7 +113,9 @@ export function TryOnStage({
             </div>
           </div>
         )}
-        <LooksGoodWith ids={product.looksGoodWith} tone="dark" />
+        <div className="pointer-events-auto max-w-lg">
+          <LooksGoodWith ids={product.looksGoodWith} tone="dark" />
+        </div>
       </div>
     </div>
   );
