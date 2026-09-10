@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Creature } from "@/components/creatures/Creature";
 import { track } from "@/lib/analytics";
-import { AdoptButton } from "@/components/store/AdoptButton";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
 import type { CatalogItem, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
@@ -11,15 +11,23 @@ export function TryOnStage({
   species,
   product,
   suggestions,
+  initialEquipped = {},
+  initialSkill = null,
 }: {
   species: SpeciesId;
   product: CatalogItem;
   suggestions: CatalogItem[];
+  initialEquipped?: EquipmentLoadout;
+  initialSkill?: SkillId | null;
 }) {
   const [equipped, setEquipped] = useState<EquipmentLoadout>(() =>
-    product.slot ? { [product.slot]: product.id } : {},
+    Object.keys(initialEquipped).length
+      ? initialEquipped
+      : product.slot
+        ? { [product.slot]: product.id }
+        : {},
   );
-  const [skill, setSkill] = useState<SkillId | null>(product.skillId ?? null);
+  const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
 
   const tryOns = useMemo(
     () => suggestions.filter((item) => item.slot || item.skillId),
@@ -43,6 +51,8 @@ export function TryOnStage({
     }
   }
 
+  const wearParam = Object.values(equipped).filter(Boolean).join(",");
+
   return (
     <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
       <div className="relative z-10 overflow-hidden rounded-[2rem] bg-cream px-6 py-10">
@@ -56,27 +66,41 @@ export function TryOnStage({
         <h1 className="mt-2 font-display text-5xl text-ink">{product.name}</h1>
         <p className="mt-3 text-lg text-ink-soft">{product.description}</p>
         <div className="mt-6">
-          <AdoptButton itemIds={[product.id]} priceCents={product.priceCents} label={product.kind === "companion" ? "Adopt" : "Add to nest"} />
+          <a
+            href={`/api/checkout?itemIds=${product.id}`}
+            onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+            className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper hover:bg-ink/90"
+          >
+            {product.kind === "companion" ? "Adopt" : "Add to nest"}{" "}
+            {(product.priceCents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" })}
+          </a>
         </div>
         {tryOns.length > 0 && (
           <div className="mt-8">
             <p className="text-sm font-medium text-ink">Dress and teach on this page</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {tryOns.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => apply(item)}
-                  aria-pressed={item.slot ? equipped[item.slot] === item.id : skill === item.skillId}
-                  className={`rounded-full border px-3 py-1.5 text-sm ${
-                    (item.slot && equipped[item.slot] === item.id) || skill === item.skillId
-                      ? "border-moss bg-moss text-paper"
-                      : "border-ink/10 bg-paper text-ink hover:border-ink/30"
-                  }`}
-                >
-                  {item.name}
-                </button>
-              ))}
+              {tryOns.map((item) => {
+                const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
+                const href = item.skillId
+                  ? `?wear=${wearParam || ""}&play=${item.skillId}`
+                  : `?wear=${item.id}`;
+                return (
+                  <Link
+                    key={item.id}
+                    href={href}
+                    scroll={false}
+                    onClick={() => apply(item)}
+                    aria-pressed={active}
+                    className={`rounded-full border px-3 py-1.5 text-sm ${
+                      active
+                        ? "border-moss bg-moss text-paper"
+                        : "border-ink/10 bg-paper text-ink hover:border-ink/30"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

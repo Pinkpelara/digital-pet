@@ -2,14 +2,24 @@ import Link from "next/link";
 import { companions, items } from "@/data/catalog";
 import { Creature } from "@/components/creatures/Creature";
 import { ProductCard } from "@/components/store/ProductCard";
+import { WorldLayer } from "@/components/creatures/WorldLayer";
 import { hrefForItem } from "@/lib/catalog-paths";
 import { brand } from "@/lib/brand";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pause?: string }>;
+}) {
+  const query = await searchParams;
   const featured = items.filter((item) => ["companion-bloop", "outfit-raincoat", "skill-moonwalk", "drop-cape"].includes(item.id));
+  const paused = query.pause === "1";
 
   return (
     <div>
+      {!paused && <WorldLayer enabled />}
       <section className="relative mx-auto max-w-6xl overflow-hidden px-4 pb-10 pt-16">
         <div className="pointer-events-none absolute right-[8%] top-10 hidden md:block">
           <div className="headline-peek">

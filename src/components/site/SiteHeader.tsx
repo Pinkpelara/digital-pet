@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Creature } from "@/components/creatures/Creature";
 import { brand, navLinks } from "@/lib/brand";
 import { useNest } from "@/lib/state/nest-context";
@@ -9,8 +9,10 @@ import { useReducedMotion } from "@/components/site/use-reduced-motion";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const { user, creaturesEnabled, setCreaturesEnabled, instances } = useNest();
+  const params = useSearchParams();
+  const { user, creaturesEnabled, instances } = useNest();
   const reducedMotion = useReducedMotion();
+  const paused = params.get("pause") === "1" || !creaturesEnabled;
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink/8 bg-paper/85 backdrop-blur-md">
@@ -52,15 +54,13 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Link
+            href={paused ? "/" : "/?pause=1"}
             className="rounded-full border border-ink/10 px-3 py-1.5 text-xs text-ink-soft hover:border-ink/30"
-            aria-label={creaturesEnabled ? "Pause roaming creatures" : "Let creatures roam"}
-            onClick={() => setCreaturesEnabled(!creaturesEnabled)}
-            aria-pressed={!creaturesEnabled}
+            aria-label={paused ? "Let creatures roam" : "Pause roaming creatures"}
           >
-            {creaturesEnabled ? "Pause" : "Roam"}
-          </button>
+            {paused ? "Roam" : "Pause"}
+          </Link>
           <Link
             href="/my-companions"
             className="rounded-full bg-ink px-3 py-1.5 text-sm text-paper hover:bg-ink/90"

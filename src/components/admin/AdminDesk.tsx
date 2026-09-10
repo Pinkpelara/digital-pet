@@ -7,9 +7,7 @@ type Status = "checking" | "locked" | "open";
 
 export function AdminDesk() {
   const [status, setStatus] = useState<Status>("locked");
-  const [password, setPassword] = useState("");
   const [items, setItems] = useState<CatalogItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
     try {
@@ -33,21 +31,6 @@ export function AdminDesk() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
-  async function login(event: React.FormEvent) {
-    event.preventDefault();
-    setError(null);
-    const response = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    if (!response.ok) {
-      setError("That password did not open the attic.");
-      return;
-    }
-    await refresh();
-  }
-
   async function save(item: CatalogItem) {
     const response = await fetch("/api/admin/products", {
       method: "PUT",
@@ -61,22 +44,20 @@ export function AdminDesk() {
 
   if (status === "locked") {
     return (
-      <form onSubmit={login} className="max-w-sm space-y-3">
+      <form action="/api/admin/login" method="POST" className="max-w-sm space-y-3">
         <label htmlFor="admin-pass" className="block text-sm text-ink">
           Attic password
         </label>
         <input
           id="admin-pass"
+          name="password"
           type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
           className="w-full rounded-full border border-ink/15 px-4 py-3"
         />
         <button type="submit" className="rounded-full bg-ink px-5 py-3 text-paper">
           Unlock
         </button>
         <p className="text-xs text-ink-soft">Demo default: sillkin-admin</p>
-        {error && <p className="text-sm text-peach">{error}</p>}
       </form>
     );
   }
