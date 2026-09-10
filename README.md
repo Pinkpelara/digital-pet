@@ -10,7 +10,9 @@ Sillkin is a **website-first** digital companion studio. Customers buy entitleme
 
 The site is a static export (`output: "export"`) with `basePath` / `assetPrefix` set to `/digital-pet` so assets resolve on the project Pages URL above.
 
-A workflow at `.github/workflows/deploy-pages.yml` builds `out/` and deploys on push to `main` (and this feature branch, plus **Run workflow**). In the GitHub repo: **Settings → Pages → Source: GitHub Actions**.
+A workflow at `.github/workflows/deploy-pages.yml` builds `out/` and deploys on push to `main` (and this feature branch, plus **Run workflow**). It also publishes a `gh-pages` branch.
+
+If the github.io URL 404s, enable hosting once in the repo: **Settings → Pages**, then either **Source: GitHub Actions** or **Deploy from a branch** → `gh-pages` / `/`. Re-run the workflow after that.
 
 On Pages, demo adoption, inventory, try-on, studio, gifts, and admin run entirely in the browser (`localStorage`). There is no Node server.
 
