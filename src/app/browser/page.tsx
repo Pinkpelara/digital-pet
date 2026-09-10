@@ -5,39 +5,44 @@ export const metadata = { title: "Add to your browser" };
 
 export default function BrowserPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Work-friendly</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">Add Sillkin to your browser.</h1>
+    <div className="mx-auto max-w-3xl px-5 py-16 md:px-10">
+      <p className="kicker">Where supported</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">Add them to your browser.</h1>
       <p className="mt-4 text-lg text-ink-soft">
-        Many work computers will not let you install a full desktop program. That is fine. Pin this website as an app or
-        a home-screen icon. Your companions already live in the nest — this only makes them easier to open.
+        Where your browser supports it, install this site as an app so your companions are one click
+        away. Your companions already live in your account — this only makes them easier to open.
       </p>
 
-      <section className="mt-10 rounded-[1.6rem] bg-paper p-6 ring-1 ring-ink/8">
-        <h2 className="font-display text-3xl text-ink">Install Sillkin</h2>
-        <p className="mt-2 text-ink-soft">Chrome and Edge can offer a one-click install. Other browsers use a short menu path.</p>
+      <section className="card mt-10 p-6">
+        <h2 className="font-display text-3xl text-ink">Install</h2>
+        <p className="mt-2 text-ink-soft">
+          Chrome and Edge can offer a one-click install. Other browsers use a short menu path. If
+          yours cannot install sites, nothing is broken.
+        </p>
         <div className="mt-5">
           <PwaInstall />
         </div>
       </section>
 
-      <section className="mt-8 rounded-[1.6rem] bg-cream/80 p-6 ring-1 ring-ink/8">
+      <section className="card mt-6 p-6">
         <h2 className="font-display text-3xl text-ink">Browser extension</h2>
         <p className="mt-2 text-ink-soft">
-          <span className="mr-2 rounded-full bg-ink/10 px-2 py-0.5 text-xs uppercase tracking-wider text-ink">Coming soon</span>
-          A small extension could perch a creature on any tab. It is not built yet. You do not need it to use Sillkin
-          today.
+          <span className="mr-2 rounded-full bg-cream px-2 py-0.5 text-xs uppercase tracking-wider text-ink">
+            Coming later
+          </span>
+          A small extension could perch a companion on any tab. It is not built yet, and you do not
+          need it.
         </p>
       </section>
 
       <p className="mt-8 text-ink-soft">
         Prefer the full website?{" "}
         <Link href="/my-companions" className="underline">
-          Open your nest
+          Open your companions
         </Link>
-        . Curious about a real desktop window later?{" "}
+        . Curious about desktop roaming?{" "}
         <Link href="/desktop" className="underline">
-          Optional desktop app
+          Read what exists
         </Link>
         .
       </p>

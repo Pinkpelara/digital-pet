@@ -1,12 +1,6 @@
 export type SpeciesId = "bloop" | "mochi" | "sprout" | "niblet";
 
-export type ItemKind =
-  | "companion"
-  | "outfit"
-  | "gadget"
-  | "skill"
-  | "personality"
-  | "drop";
+export type ItemKind = "companion" | "outfit" | "gadget" | "skill" | "drop";
 
 export type EquipSlot = "head" | "face" | "body" | "hand" | "back" | "feet";
 
@@ -20,14 +14,6 @@ export type SkillId =
   | "skate"
   | "nap";
 
-export type PersonalityId =
-  | "chaotic"
-  | "dramatic"
-  | "sleepy"
-  | "shy"
-  | "clingy"
-  | "explorer";
-
 export type CreatureMood =
   | "idle"
   | "walk"
@@ -40,6 +26,7 @@ export type CreatureMood =
 
 export type AuthProvider = "google" | "apple" | "magic-link" | "demo";
 
+/** Internal behaviour engine numbers. Never rendered to a user. */
 export type PersonalityStats = {
   chaos: number;
   drama: number;
@@ -47,6 +34,72 @@ export type PersonalityStats = {
   shy: number;
   cling: number;
   curiosity: number;
+};
+
+/**
+ * The hidden personality of one adopted companion instance.
+ * Species set the tendencies; the seed decides the individual.
+ */
+export type TraitKey =
+  | "curiosity"
+  | "courage"
+  | "clinginess"
+  | "sleepiness"
+  | "sociability"
+  | "mischief"
+  | "energy"
+  | "drama";
+
+export type PersonalitySeed = {
+  /** Stable id, also used to reproduce the same individual. */
+  id: string;
+  values: Record<TraitKey, number>;
+};
+
+export type PersonalityLabel =
+  | "Curious"
+  | "Cowardly"
+  | "Brave"
+  | "Clingy"
+  | "Sleepy"
+  | "Restless"
+  | "Dramatic"
+  | "Chaotic"
+  | "Shy"
+  | "Friendly"
+  | "Nosy"
+  | "Show-off";
+
+export type DiscoveredTrait = {
+  label: PersonalityLabel;
+  at: string;
+};
+
+/** Behaviours observed while living together. Drives discovery + share cards. */
+export type BehaviourCounters = Partial<
+  Record<
+    | "climbed"
+    | "napped"
+    | "followedCursor"
+    | "fell"
+    | "hid"
+    | "skated"
+    | "photographed"
+    | "played"
+    | "explored",
+    number
+  >
+>;
+
+export type CompanionBond = {
+  otherInstanceId: string;
+  kind: "curious-about" | "napping-together" | "partners-in-crime";
+  strength: number;
+};
+
+export type CompanionSecret = {
+  id: string;
+  at: string;
 };
 
 export type CatalogItem = {
@@ -61,11 +114,13 @@ export type CatalogItem = {
   currency: "usd";
   slot?: EquipSlot;
   skillId?: SkillId;
-  personalityId?: PersonalityId;
   speciesId?: SpeciesId;
   limited?: boolean;
   limitedNote?: string;
+  /** Plain-language promise of what the object changes about behaviour. */
   unlocksBehavior?: string;
+  /** Short line shown on the "things change what they do" rail. */
+  behaviorNote?: string;
   looksGoodWith: string[];
   compatibleSpecies?: SpeciesId[];
   accent: string;
@@ -79,10 +134,19 @@ export type CompanionSpecies = {
   name: string;
   itemId: string;
   title: string;
+  /** One funny, specific line. Not poetry. */
   tagline: string;
   description: string;
   priceCents: number;
   traits: string[];
+  /** Behaviours everyone notices eventually. */
+  knownHabits: string[];
+  /** The one thing this species does without being taught. */
+  nativeTalent: string;
+  /** Hidden behaviours. Count shown; names stay secret until found. */
+  secrets: string[];
+  /** Broad species tendencies applied on top of the individual seed. */
+  tendencies: Partial<Record<TraitKey, number>>;
   defaultStats: PersonalityStats;
   nativeSkills: SkillId[];
   accent: string;
@@ -108,10 +172,17 @@ export type CompanionInstance = {
   ownershipId: string;
   name: string;
   publicId: string;
+  /** Hidden. Never shown as numbers, never editable. */
+  seed: PersonalitySeed;
+  /** Derived from the seed for the behaviour engine only. */
   stats: PersonalityStats;
   equipped: Partial<Record<EquipSlot, string>>;
   unlockedSkills: SkillId[];
-  personalityPacks: PersonalityId[];
+  discovered: DiscoveredTrait[];
+  counters: BehaviourCounters;
+  secrets: CompanionSecret[];
+  favouriteSpot: string | null;
+  bonds: CompanionBond[];
   createdAt: string;
 };
 
@@ -195,4 +266,6 @@ export type AnalyticsEventName =
   | "home_path_chosen"
   | "pwa_install_prompted"
   | "auth_started"
-  | "gift_redeemed";
+  | "gift_redeemed"
+  | "personality_revealed"
+  | "clip_shared";

@@ -10,9 +10,9 @@ export function isDemoMode(): boolean {
 }
 
 export function demoGrantSecret(): string {
-  return process.env.DEMO_GRANT_SECRET ?? "sillkin-demo-grant-not-for-production";
+  return process.env.DEMO_GRANT_SECRET ?? "companions-demo-grant-not-for-production";
 }
 
 export function adminPassword(): string {
-  return process.env.ADMIN_PASSWORD ?? "sillkin-admin";
+  return process.env.ADMIN_PASSWORD ?? "companions-admin";
 }

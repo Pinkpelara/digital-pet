@@ -1,9 +1,9 @@
 import { items as seedItems } from "@/data/catalog";
 import type { CatalogItem } from "@/lib/types";
 
-const OVERLAY_KEY = "sillkin.admin.overlay.v1";
-const AUTH_KEY = "sillkin.admin.auth";
-export const DEMO_ADMIN_PASSWORD = "sillkin-admin";
+const OVERLAY_KEY = "companions.admin.overlay.v1";
+const AUTH_KEY = "companions.admin.auth";
+export const DEMO_ADMIN_PASSWORD = "companions-admin";
 
 export function isAdminUnlocked(): boolean {
   if (typeof window === "undefined") return false;

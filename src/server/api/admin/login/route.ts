@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const response = isForm
     ? new NextResponse(null, { status: 303, headers: { Location: "/admin" } })
     : NextResponse.json({ ok: true });
-  response.cookies.set("sillkin_admin", "1", {
+  response.cookies.set("companions_admin", "1", {
     httpOnly: true,
     sameSite: "lax",
     path: "/",

@@ -1,12 +1,6 @@
 import { companions, items } from "@/data/catalog";
-import { personalityShift } from "@/data/catalog";
-import type {
-  CompanionInstance,
-  Discovery,
-  OwnershipRecord,
-  PersonalityStats,
-} from "@/lib/types";
-import { clampStat } from "@/lib/format";
+import { newCompanionInstance } from "@/lib/state/grant-demo";
+import type { CompanionInstance, Discovery, OwnershipRecord } from "@/lib/types";
 
 type GrantInput = {
   userId: string;
@@ -29,18 +23,18 @@ type Store = {
   processedEvents: Set<string>;
 };
 
-const globalStore = globalThis as typeof globalThis & { __sillkinGrants?: Store };
+const globalStore = globalThis as typeof globalThis & { __companionsGrants?: Store };
 
 function store(): Store {
-  if (!globalStore.__sillkinGrants) {
-    globalStore.__sillkinGrants = {
+  if (!globalStore.__companionsGrants) {
+    globalStore.__companionsGrants = {
       ownership: new Map(),
       instances: new Map(),
       discoveries: new Map(),
       processedEvents: new Set(),
     };
   }
-  return globalStore.__sillkinGrants;
+  return globalStore.__companionsGrants;
 }
 
 const ownership = () => store().ownership;
@@ -50,20 +44,6 @@ const processedEvents = () => store().processedEvents;
 
 function keyFor(userId: string, itemId: string): string {
   return `${userId}:${itemId}`;
-}
-
-function applyPack(stats: PersonalityStats, itemId: string): PersonalityStats {
-  const item = items.find((entry) => entry.id === itemId);
-  if (!item?.personalityId) return stats;
-  const shift = personalityShift(item.personalityId);
-  return {
-    chaos: clampStat(stats.chaos + (shift.chaos ?? 0)),
-    drama: clampStat(stats.drama + (shift.drama ?? 0)),
-    energy: clampStat(stats.energy + (shift.energy ?? 0)),
-    shy: clampStat(stats.shy + (shift.shy ?? 0)),
-    cling: clampStat(stats.cling + (shift.cling ?? 0)),
-    curiosity: clampStat(stats.curiosity + (shift.curiosity ?? 0)),
-  };
 }
 
 export function listOwnership(userId: string): OwnershipRecord[] {
@@ -98,7 +78,6 @@ export function grantOwnership(input: GrantInput): GrantResult {
   }
 
   const granted: OwnershipRecord[] = [];
-  const newInstances: CompanionInstance[] = [];
   const newDiscoveries: Discovery[] = [];
 
   for (const itemId of input.itemIds) {
@@ -122,27 +101,15 @@ export function grantOwnership(input: GrantInput): GrantResult {
     if (item.kind === "companion" && item.speciesId) {
       const species = companions.find((entry) => entry.id === item.speciesId);
       if (species) {
-        const instance: CompanionInstance = {
-          id: crypto.randomUUID(),
-          userId: input.userId,
-          speciesId: species.id,
-          ownershipId: record.id,
-          name: species.name,
-          publicId: `sill-${Math.random().toString(36).slice(2, 7)}`,
-          stats: { ...species.defaultStats },
-          equipped: {},
-          unlockedSkills: [...species.nativeSkills],
-          personalityPacks: [],
-          createdAt: record.grantedAt,
-        };
+        // The individual: hidden seed decided here, never chosen or sold.
+        const instance = newCompanionInstance(species.id, record.id, input.userId);
         instances().set(instance.id, instance);
-        newInstances.push(instance);
         const discovery: Discovery = {
           id: crypto.randomUUID(),
           userId: input.userId,
           instanceId: instance.id,
           kind: "arrived",
-          note: `${species.name} crawled out of a parcel.`,
+          note: `${species.name} climbed out of a parcel.`,
           createdAt: record.grantedAt,
         };
         discoveries().set(discovery.id, discovery);
@@ -151,18 +118,14 @@ export function grantOwnership(input: GrantInput): GrantResult {
     }
   }
 
+  // Skills are taught to every companion the user owns; nothing edits personality.
   const userInstances = listInstances(input.userId);
   for (const itemId of input.itemIds) {
     const item = items.find((entry) => entry.id === itemId);
-    if (!item) continue;
+    if (!item?.skillId) continue;
     for (const instance of userInstances) {
-      if (item.skillId && !instance.unlockedSkills.includes(item.skillId)) {
+      if (!instance.unlockedSkills.includes(item.skillId)) {
         instance.unlockedSkills = [...instance.unlockedSkills, item.skillId];
-        instances().set(instance.id, instance);
-      }
-      if (item.personalityId && !instance.personalityPacks.includes(item.personalityId)) {
-        instance.personalityPacks = [...instance.personalityPacks, item.personalityId];
-        instance.stats = applyPack(instance.stats, item.id);
         instances().set(instance.id, instance);
       }
     }

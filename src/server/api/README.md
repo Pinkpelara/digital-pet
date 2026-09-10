@@ -8,4 +8,4 @@ They are preserved here so a later Node host can restore them:
 2. In `next.config.ts`, set `GITHUB_PAGES=false` (or remove `output: "export"`) so the app is a Node server again.
 3. Point Stripe webhooks at `/api/webhooks/stripe`.
 
-The GitHub Pages demo does **not** call these handlers. Adoption, inventory, try-on, studio, gifts, and admin all run in the browser against `localStorage`.
+The GitHub Pages demo does **not** call these handlers. Adoption, inventory, customization, studio, gifts, and admin all run in the browser against `localStorage`. Personality seeds are generated at adoption — on a real host, server-side.

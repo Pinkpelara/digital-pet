@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { companions } from "@/data/catalog";
 import { Creature } from "@/components/creatures/Creature";
+import { discoveredLabels } from "@/lib/personality";
 import { useNest } from "@/lib/state/nest-context";
 
 export function ProfileView({ publicId }: { publicId: string }) {
@@ -12,25 +13,46 @@ export function ProfileView({ publicId }: { publicId: string }) {
     [instances, publicId, user?.publicId],
   );
 
-  if (!hydrated) return <div className="px-4 py-16 text-ink-soft">Looking through the window…</div>;
+  if (!hydrated) return <div className="px-5 py-16 text-ink-soft">Looking through the window.</div>;
 
   const showcase = mine[0] ?? {
     name: "A visiting companion",
     speciesId: "bloop" as const,
     equipped: { body: "outfit-raincoat" },
-    stats: companions[0].defaultStats,
+    discovered: [],
   };
 
+  const labels = "discovered" in showcase ? discoveredLabels(showcase.discovered) : [];
+
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Public nest · {publicId}</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">{user?.displayName ?? "Someone"}&apos;s sill</h1>
+    <div className="mx-auto max-w-2xl px-5 py-16 text-center">
+      <p className="kicker">Shared companion · {publicId}</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">
+        {user?.displayName ?? "Someone"}&apos;s companion
+      </h1>
       <p className="mt-3 text-ink-soft">
-        A quiet showcase — no comments, no feed, no kids chat. Just a creature you can look at.
+        A quiet showcase. No comments, no feed, no messaging — just a creature you can look at.
       </p>
-      <div className="mt-8 rounded-[2rem] bg-paper p-8 ring-1 ring-ink/8">
-        <Creature species={showcase.speciesId} size={240} equipped={showcase.equipped} name={showcase.name} />
-        <p className="mt-3 font-display text-3xl">{showcase.name}</p>
+      <div className="card mt-8 p-8">
+        <Creature
+          species={showcase.speciesId}
+          size={240}
+          equipped={showcase.equipped}
+          name={showcase.name}
+        />
+        <p className="mt-3 font-display text-3xl text-ink">{showcase.name}</p>
+        {labels.length > 0 && (
+          <ul className="mt-3 flex flex-wrap justify-center gap-2">
+            {labels.map((label) => (
+              <li key={label} className="chip">
+                {label}
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="mt-4 text-sm text-ink-soft">
+          Species: {companions.find((entry) => entry.id === showcase.speciesId)?.name}
+        </p>
       </div>
     </div>
   );

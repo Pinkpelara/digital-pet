@@ -1,8 +1,8 @@
 {
-  "name": "sillkin",
+  "name": "companions",
   "version": "0.1.0",
   "private": true,
-  "description": "Sillkin — tiny creatures for your screen. Adopt, dress, teach, then let them loose.",
+  "description": "Tiny digital creatures that live with you. Adopt, name, discover, dress, teach, and eventually let them roam your computer.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -16,7 +16,7 @@ function LiveHubInner() {
     <div className="mx-auto max-w-6xl px-4 py-12">
       <WhereTheyLive heading="h1" instanceId={instance?.id ?? id ?? undefined} companionName={name} />
       <p className="mt-10 max-w-2xl text-sm text-ink-soft">
-        You can change your mind later. The nest on this website is always there. Browser pin and desktop app are extra
+        You can change your mind later. Your companions stay in your account either way. Browser and desktop are extra
         doors into the same belongings — never a second checkout, never a loot box.
       </p>
     </div>

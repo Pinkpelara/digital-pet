@@ -1,24 +1,50 @@
-# Sillkin
+# Companions (temporary name)
 
-Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally use a desktop app later.
+Tiny digital creatures that actually live with you. Adopt one, give it a name, discover its
+personality, dress it, give it gadgets, teach it skills — and eventually let it roam your computer.
+Every adopted companion develops a little differently.
 
 **Live site:** [https://pinkpelara.github.io/digital-pet/](https://pinkpelara.github.io/digital-pet/)
 
-Sillkin is a **website-first** digital companion studio. Customers buy entitlements (companions, outfits, gadgets, skills, personality packs) that live in an account inventory — like a Roblox backpack, not a file download. You do **not** need a desktop app. Work computers can pin the site in Chrome/Edge. The Tauri desktop client is an optional, later upgrade; download pages are honest stubs with `companions://` deep links.
+> The brand name is temporary (`TEMP_BRAND_NAME` in `src/lib/brand.ts`). Replace it in that one file
+> and every visible string updates.
+
+## The product thesis
+
+**You do not choose its personality. You meet it.**
+
+- A **species** has broad tendencies. An **adopted companion instance** gets a hidden personality
+  seed (curiosity, courage, clinginess, sleepiness, sociability, mischief, energy, drama).
+- Users never see numbers and cannot edit them with sliders. Personality is discovered through
+  living together: "Mine is unbelievably cowardly." / "Yours sleeps constantly."
+- Personality is **not for sale**. There are no personality packs. Objects and skills change
+  *opportunities* for behaviour: a hammock means more naps, a skateboard means skating, a camera
+  means photography, an explorer kit means expeditions.
+- Ownership is permanent and lives in the account (Roblox-like inventory). No loot boxes, no
+  currency, no downloadable zip files, no social feed.
+
+## What exists today
+
+| Surface | Status |
+| --- | --- |
+| Website (adopt, customize, live companions) | Live |
+| Browser install / home screen | Live, where the browser supports it |
+| Desktop roaming (transparent companion over your whole computer) | Prototype — **not shipped**, and no download pretends otherwise |
 
 ## GitHub Pages
 
-The site is a static export (`output: "export"`) with `basePath` / `assetPrefix` set to `/digital-pet` so assets resolve on the project Pages URL above.
+Static export (`output: "export"`) with `basePath` / `assetPrefix` set to `/digital-pet`.
 
-A workflow at `.github/workflows/deploy-pages.yml` builds `out/` and deploys on push to `main` (and this feature branch, plus **Run workflow**). It also publishes a `gh-pages` branch.
+`.github/workflows/deploy-pages.yml` builds `out/` and deploys on push (plus **Run workflow**). If
+the URL 404s, enable Pages once in **Settings → Pages** (GitHub Actions or `gh-pages` branch) and
+re-run the workflow.
 
-If the github.io URL 404s, enable hosting once in the repo: **Settings → Pages**, then either **Source: GitHub Actions** or **Deploy from a branch** → `gh-pages` / `/`. Re-run the workflow after that.
-
-On Pages, demo adoption, inventory, try-on, studio, gifts, and admin run entirely in the browser (`localStorage`). There is no Node server.
+On Pages, adoption, inventory, studio, gifts, and admin run entirely in the browser
+(`localStorage`). There is no Node server.
 
 ## Run locally (demo mode)
 
-Demo mode is the default. You do **not** need Supabase or Stripe keys.
+Demo mode is the default — no Supabase or Stripe keys needed.
 
 ```bash
 npm install
@@ -26,40 +52,55 @@ cp .env.example .env.local   # optional
 npm run dev
 ```
 
-Because `basePath` is `/digital-pet` by default, open [http://localhost:3000/digital-pet/](http://localhost:3000/digital-pet/). To serve at the site root instead:
+`basePath` is `/digital-pet` by default, so open
+[http://localhost:3000/digital-pet/](http://localhost:3000/digital-pet/). For the site root:
 
 ```bash
 GITHUB_PAGES=false npm run dev
 ```
 
-- Living homepage: a creature on the nav, one behind the headline, one watching the cursor, one causing mild mischief.
-- Store: `/companions`, `/closet`, `/gadgets`, `/skills`, `/personality`, `/drops`
-- Try-on: open Bloop (or any companion) and equip a raincoat / play moonwalk
-- Checkout: **Adopt** grants into the local nest and opens a parcel ceremony, then three homes (website / browser / optional desktop)
-- Where they live: `/live` · Add to browser: `/browser` · Desktop (optional): `/desktop`
-- Gift: `/gift/WELCOME-BLOOP`
-- Admin attic: `/admin` password `sillkin-admin`
-- Pause roaming creatures in the header; `prefers-reduced-motion` is respected
+Things to try:
+
+- **Homepage**: creatures moving in their pens, two Bloops behaving differently, gadget behaviour
+  demo, "something happened while you were gone", desktop vision.
+- **Adopt**: `/companions/bloop` → Adopt → parcel shakes → creature climbs out → name it →
+  "[NAME] moved in." → "Where should [NAME] live?" (here / browser / desktop later).
+- **My companions**: `/my-companions` → open one → profile with discovered personality, secrets,
+  "What did they just do?" share card, and the "We think we figured [NAME] out" reveal card.
+- **Studio**: `/my-companions/studio?id=…` → equip owned items, trigger taught skills.
+- **Gift ceremony**: `/gift/WELCOME-BLOOP`, `/gift/TINY-PROBLEM`.
+- **Where they live**: `/live` · browser: `/browser` · desktop (honest): `/desktop`
+- **Admin catalogue**: `/admin`, password `companions-admin`
+- **Accessibility**: pause creatures in the header; `prefers-reduced-motion` is respected everywhere.
 
 ```bash
 npm run build          # static export → out/
-npx serve out          # preview the Pages build (not `npm start`)
+npx serve out          # preview the Pages build
+npm run lint
 ```
 
-`npm start` is for a Node host after you turn export off. GitHub Pages only serves `out/`.
+## Architecture notes
 
-## Brand
-
-**Sillkin** — kin that live on the window sill / the edge of your screen.
+- **Individuality**: `src/lib/personality.ts` (seeds, discovery rules, reveal card copy),
+  `src/lib/types.ts` (`CompanionInstance.seed`, `discovered`, `counters`, `secrets`, `bonds`),
+  `src/lib/state/grant-demo.ts` (seed generated at adoption).
+- **Behaviour engine**: `src/components/creatures/behavior.ts` — weighted moods driven by the seed.
+  `src/components/creatures/LivePen.tsx` runs a creature inside a box; `RoamingCreature` / `WorldLayer`
+  still roam the viewport.
+- **Creature rendering**: lightweight SVG (`Creature.tsx`) with a Rive-ready swap
+  (`RiveCreature.tsx`, pass `riveSrc`). A three.js figurine pipeline (`src/components/stage/*`) is
+  preserved for future art direction — the product is **not** committed to 2D or 3D yet.
+- **Commerce**: `items` in `src/data/catalog.ts`; kinds are `companion | outfit | gadget | skill |
+  drop`. Server-authoritative grants in `src/lib/server/grants.ts` + `src/server/api/*`.
+- **Production scaffolding**: Supabase schema/RLS in `supabase/`, Stripe Checkout + webhook stub in
+  `src/server/api/`, `src/lib/stripe.ts`.
 
 ## Stack
 
 - Next.js App Router + TypeScript (strict) + Tailwind CSS v4
-- SVG/canvas-style creatures with a weighted idle / walk / nap / follow-cursor loop
-- `@rive-app/react-canvas` ready — pass `riveSrc` when you have `.riv` files; SVG is the shipped fallback
-- Supabase-shaped schema + RLS notes in `/supabase`
-- Stripe Checkout session shape + webhook stub (kept under `src/server/api` for a later Vercel deploy)
-- Analytics `track()` hooks (console in demo; swap in PostHog/GA via `window.silkinAnalytics`)
+- SVG creatures + Rive readiness + optional three.js figurine stage
+- Supabase-shaped schema with RLS, Stripe session shape and webhook stub
+- Demo mode / localStorage (`companions.nest.v2`) with the same code paths as production grants
 
 ## Demo vs production
 
@@ -67,57 +108,10 @@ npx serve out          # preview the Pages build (not `npm start`)
 | --- | --- | --- |
 | Catalog | Seeded fixtures in `src/data/catalog.ts` | Same seed, admin overlay → Supabase `items` |
 | Auth | Google / Apple / magic-link UI; local demo session | Supabase Auth (those three providers, no password-first) |
-| Checkout | Client grant → `/adopt/success?items=…` | Restore `src/server/api` to `src/app/api`, Stripe Checkout Session |
-| Ownership | `localStorage` key `sillkin.nest.v1` | Stripe webhook + service role insert. Client still never inserts. |
+| Checkout | Client grant → `/adopt/success?items=…` | Restore `src/server/api` to `src/app/api`, Stripe Checkout |
+| Ownership | `localStorage` key `companions.nest.v2` | Stripe webhook + service role insert. Client never inserts. |
+| Personality seed | Generated in the browser at adoption | Generated server-side at grant; never client-writable |
 | Admin | Session unlock + local overlay | Service-role CRUD |
 
-`isDemoMode()` is true unless **both** Supabase public keys and `STRIPE_SECRET_KEY` are set (or `NEXT_PUBLIC_DEMO_MODE=false`).
-
-## Environment
-
-See `.env.example`.
-
-| Variable | Purpose |
-| --- | --- |
-| `GITHUB_PAGES` | Default on. Set to `false` to drop `/digital-pet` basePath and (when copied back) allow API routes |
-| `NEXT_PUBLIC_DEMO_MODE` | Force demo on/off |
-| `DEMO_GRANT_SECRET` | Signs the short-lived grant token (Node API only) |
-| `ADMIN_PASSWORD` | `/admin` gate on a Node host (Pages demo uses `sillkin-admin`) |
-| `NEXT_PUBLIC_SUPABASE_URL` / `ANON_KEY` | Browser client (read + self profile) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Webhook / admin only |
-| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Live checkout + verified events |
-
-## Architecture
-
-```
-src/app/            static routes (no Route Handlers while exporting)
-src/server/api/     Stripe/Supabase handlers — copy to src/app/api for Vercel
-src/components/     creatures, store, studio, ceremony
-src/data/catalog.ts seed SKUs and personalities
-src/lib/server/     grants, catalog overlay, HMAC tokens (Node)
-src/lib/state/      nest context (localStorage demo nest)
-supabase/           schema.sql + RLS.md
-```
-
-**Security:** on a Node deploy, ownership is granted only on the server after a verified purchase (or a signed demo token). RLS denies client inserts on `ownership` and `unlocked_skills`. See `supabase/RLS.md`. The Pages preview stores the same nest shape locally so the UI can be tried without a backend.
-
-**Sitemap:** `/` `/companions` `/companions/[slug]` `/closet` `/gadgets` `/skills` `/personality` `/drops` `/item/[slug]` `/my-companions` `/my-companions/studio` `/inventory` `/gift/[code]` `/profile/[public-id]` `/live` `/browser` `/desktop` `/download/windows` `/download/mac` `/about` `/support` `/privacy` `/terms` `/admin` `/login` `/adopt/success`
-
-## Where companions live
-
-- **Website (default, live):** `/my-companions` and the studio
-- **Browser (work-friendly, live):** `/browser` — PWA / “Install page as app” / Add to Home Screen. Extension marked coming soon
-- **Desktop (optional, later):** `/desktop`, `/download/windows`, `/download/mac`
-- Deep links: `companions://home`, `companions://adopt/{id}`, `companions://download/{platform}` — only if a test build is already installed
-- Web app manifest + a tiny service worker so Chrome/Edge can offer **Install Sillkin** on the GitHub Pages URL
-- No Tauri binary in this repo
-
-## Audience & commerce
-
-13+ / general. Adult account and payment. No kids chat, no social feed, no loot boxes. Fixed transparent prices. Limited drops are timed listings, not gacha.
-
-## Deploy
-
-**GitHub Pages (current):** push to `main` (or run the workflow). Live URL: https://pinkpelara.github.io/digital-pet/
-
-**Vercel (later):** copy `src/server/api` → `src/app/api`, set `GITHUB_PAGES=false`, remove or gate `output: "export"`. Set env vars in the project. Point Stripe webhooks at `/api/webhooks/stripe`. Apply `supabase/schema.sql` before flipping demo mode off.
+`isDemoMode()` is true unless **both** Supabase public keys and `STRIPE_SECRET_KEY` are set (or
+`NEXT_PUBLIC_DEMO_MODE=false`).

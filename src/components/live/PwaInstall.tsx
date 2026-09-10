@@ -57,7 +57,7 @@ export function PwaInstall() {
   if (installed) {
     return (
       <p className="rounded-[1.4rem] bg-moss/10 px-5 py-4 text-ink">
-        Sillkin is already installed on this device. Open it from your home screen or app list — same nest as the website.
+        Already installed here. Open it from your home screen or app list — same companions, same account.
       </p>
     );
   }
@@ -71,7 +71,7 @@ export function PwaInstall() {
           disabled={busy}
           className="rounded-full bg-ink px-5 py-3 text-paper disabled:opacity-60"
         >
-          {busy ? "Opening the install card…" : "Install Sillkin"}
+          {busy ? "Opening the install card…" : "Install this site"}
         </button>
       ) : (
         <p className="text-ink-soft">
@@ -82,14 +82,14 @@ export function PwaInstall() {
       <ol className="space-y-3 text-ink-soft">
         <li>
           <strong className="text-ink">Chrome or Edge (Windows, Mac, Chromebook):</strong> open the menu (three dots) →
-          Cast, save, and share → <em>Install page as app</em> / <em>Install Sillkin</em>. You get a window of this site, not
+          Cast, save, and share → <em>Install page as app</em> / <em>Install this site</em>. You get a window of this site, not
           a store download.
         </li>
         <li>
           <strong className="text-ink">Safari on iPhone or iPad:</strong> tap Share → Add to Home Screen.{mounted && isIos() ? " You are on iOS — that Share button is at the bottom (or top) of Safari." : ""}
         </li>
         <li>
-          <strong className="text-ink">Safari on a Mac:</strong> File → Add to Dock. The nest stays in the browser; nothing extra is installed from us.
+          <strong className="text-ink">Safari on a Mac:</strong> File → Add to Dock. Your companions stay in your account; nothing extra is installed from us.
         </li>
         <li>
           <strong className="text-ink">Firefox:</strong> bookmark this page or pin the tab. Firefox does not always offer “Install app.”
@@ -97,7 +97,7 @@ export function PwaInstall() {
       </ol>
       <p className="text-sm text-ink-soft">
         The site address stays {publicBasePath() ? "pinkpelara.github.io/digital-pet" : "this same origin"}. Pinning does not
-        move your nest off this computer’s browser storage in demo mode.
+        move your companions off this computer’s browser storage in demo mode.
       </p>
     </div>
   );

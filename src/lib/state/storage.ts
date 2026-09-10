@@ -1,6 +1,8 @@
 import type { CompanionInstance, DemoUser, OwnershipRecord } from "@/lib/types";
+import { randomSeed, statsFromSeed } from "@/lib/personality";
 
-const KEY = "sillkin.nest.v1";
+/** v2: companions now carry a hidden personality seed. Old demo data is ignored. */
+const KEY = "companions.nest.v2";
 
 export type PersistedNest = {
   user: DemoUser | null;
@@ -18,6 +20,13 @@ export const EMPTY_NEST: PersistedNest = {
 
 export const emptyNest = (): PersistedNest => EMPTY_NEST;
 
+/** Defensive: an instance without a seed is not a valid individual. */
+function normalize(instance: CompanionInstance): CompanionInstance {
+  if (instance.seed?.values) return instance;
+  const seed = randomSeed();
+  return { ...instance, seed, stats: statsFromSeed(seed) };
+}
+
 export function readNest(): PersistedNest {
   if (typeof window === "undefined") return emptyNest();
   try {
@@ -27,7 +36,7 @@ export function readNest(): PersistedNest {
     return {
       user: parsed.user ?? null,
       ownership: parsed.ownership ?? [],
-      instances: parsed.instances ?? [],
+      instances: (parsed.instances ?? []).map(normalize),
       creaturesEnabled: parsed.creaturesEnabled ?? true,
     };
   } catch {

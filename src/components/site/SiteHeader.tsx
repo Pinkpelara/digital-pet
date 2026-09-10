@@ -58,10 +58,15 @@ export function SiteHeader() {
           <Link
             href="/my-companions"
             className={`rounded-full px-3 py-1.5 text-sm ${cinematic ? "bg-paper text-void" : "bg-ink text-paper"}`}
+            suppressHydrationWarning
           >
-            {hydrated && instances.length > 0 ? `Nest (${instances.length})` : "My nest"}
+            {hydrated && instances.length > 0 ? `My companions (${instances.length})` : "My companions"}
           </Link>
-          <Link href={user && hydrated ? "/inventory" : "/login"} className={`hidden text-sm sm:inline ${cinematic ? "text-mist/65" : "text-ink-soft"}`}>
+          <Link
+            href={user && hydrated ? "/inventory" : "/login"}
+            className={`hidden text-sm sm:inline ${cinematic ? "text-mist/65" : "text-ink-soft"}`}
+            suppressHydrationWarning
+          >
             {hydrated && user ? user.displayName : "Sign in"}
           </Link>
         </div>

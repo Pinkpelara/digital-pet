@@ -1,32 +1,31 @@
 import Link from "next/link";
+import { Creature } from "@/components/creatures/Creature";
 
-export const metadata = { title: "Download for Windows" };
+export const metadata = { title: "Desktop app for Windows" };
 
 export default function WindowsDownloadPage() {
   return (
-    <div className="mx-auto max-w-xl px-4 py-16">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Windows · optional</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">Installer coming to this sill.</h1>
-      <p className="mt-4 text-ink-soft">
-        You do not need this download to keep a companion. They already live on the website. If your work PC blocks
-        installers,{" "}
-        <Link href="/browser" className="underline">
-          pin Sillkin in the browser
-        </Link>{" "}
-        instead.
+    <div className="mx-auto max-w-xl px-5 py-16">
+      <p className="kicker">Not available yet</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">No Windows installer exists yet.</h1>
+      <p className="mt-4 text-lg text-ink-soft">
+        Desktop roaming is the future flagship experience and it is still being built. Adopt on the
+        web today — nothing you own will be left behind.
       </p>
-      <p className="mt-3 text-ink-soft">
-        A Tauri desktop app is planned as an optional upgrade. Leave a note with support if you want the first build.
-        The <code>companions://</code> link below only works if you already installed a test copy.
-      </p>
-      <a href="companions://download/windows" className="mt-6 inline-block rounded-full bg-cream px-5 py-3 text-ink">
-        Open if already installed
-      </a>
-      <p className="mt-6">
-        <Link href="/live" className="text-moss underline">
-          See all three homes
+      <div className="card mt-8 flex items-center gap-4 p-6">
+        <Creature species="niblet" size={110} mood="happy" decorative />
+        <p className="text-ink-soft">
+          Work PCs that block installers can use the browser version. Same companions, same account.
+        </p>
+      </div>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/browser" className="btn btn-primary">
+          Add to browser
         </Link>
-      </p>
+        <Link href="/live" className="btn btn-ghost">
+          See where they live
+        </Link>
+      </div>
     </div>
   );
 }

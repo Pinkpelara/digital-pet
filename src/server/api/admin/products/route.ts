@@ -5,7 +5,7 @@ import type { CatalogItem } from "@/lib/types";
 
 async function requireAdmin() {
   const jar = await cookies();
-  return jar.get("sillkin_admin")?.value === "1";
+  return jar.get("companions_admin")?.value === "1";
 }
 
 export async function GET() {

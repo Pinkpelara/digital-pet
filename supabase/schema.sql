@@ -1,4 +1,5 @@
--- Sillkin schema (Supabase / Postgres)
+-- Companions schema (Supabase / Postgres)
+-- Personality is a hidden per-instance seed: never client-writable, never sold.
 -- Ownership is NEVER inserted by the anon/authenticated client.
 -- Stripe webhook (service role) is the only production writer for ownership.
 
@@ -32,7 +33,7 @@ create table if not exists items (
   id text primary key,
   sku text unique not null,
   slug text unique not null,
-  kind text not null check (kind in ('companion','outfit','gadget','skill','personality','drop')),
+  kind text not null check (kind in ('companion','outfit','gadget','skill','drop')),
   name text not null,
   tagline text,
   description text,
@@ -40,11 +41,11 @@ create table if not exists items (
   currency text not null default 'usd',
   slot text check (slot in ('head','face','body','hand','back','feet')),
   skill_id text,
-  personality_id text,
   species_id text references companions(id),
   limited boolean not null default false,
   limited_note text,
   unlocks_behavior text,
+  behavior_note text,
   looks_good_with text[] not null default '{}',
   accent text,
   rive_src text,
@@ -69,7 +70,12 @@ create table if not exists companion_instances (
   ownership_id uuid not null references ownership(id) on delete cascade,
   name text not null,
   public_id text unique not null,
-  personality_stats jsonb not null default '{}',
+  -- Hidden individual personality. Never shown as numbers, never editable.
+  personality_seed jsonb not null default '{}',
+  discovered_traits jsonb not null default '[]',
+  behaviour_counters jsonb not null default '{}',
+  secrets_found jsonb not null default '[]',
+  favourite_spot text,
   created_at timestamptz not null default now()
 );
 

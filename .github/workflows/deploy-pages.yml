@@ -6,6 +6,7 @@ on:
       - main
       - cursor/sillkin-website-mvp-8cd7
       - cursor/where-pets-live-8cd7
+      - cursor/companions-revision
   workflow_dispatch:
 
 permissions:

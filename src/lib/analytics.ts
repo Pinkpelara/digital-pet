@@ -4,7 +4,7 @@ type EventPayload = Record<string, string | number | boolean | null | undefined>
 
 declare global {
   interface Window {
-    silkinAnalytics?: {
+    companionsAnalytics?: {
       track: (name: string, payload?: EventPayload) => void;
     };
   }
@@ -22,9 +22,9 @@ export function track(name: AnalyticsEventName, payload: EventPayload = {}): voi
     return;
   }
 
-  window.silkinAnalytics?.track(name, payload);
+  window.companionsAnalytics?.track(name, payload);
 
   if (process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_DEBUG_ANALYTICS === "true") {
-    console.info("[sillkin:event]", event);
+    console.info("[companions:event]", event);
   }
 }

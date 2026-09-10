@@ -4,30 +4,34 @@ export const metadata = { title: "Support" };
 
 const faqs = [
   {
-    q: "Did I buy a file?",
-    a: "No. You bought a digital entitlement stored on your account. The creature is not a downloadable asset you copy around.",
+    q: "Am I buying a file?",
+    a: "No. You get a permanent entitlement in your account. There is no zip, no model file, and nothing to lose in your downloads folder.",
   },
   {
-    q: "Do I have to install something?",
-    a: "No. The website is the home. You can pin Sillkin in Chrome or Edge (helpful on work computers). A Windows/Mac app is optional and not ready yet. Nothing is a loot box, and nothing is required after you adopt.",
+    q: "Can I choose its personality?",
+    a: "No, and that is the point. You adopt an individual and discover who it is. You can influence what it does — a hammock means naps, a skateboard means skating — but you cannot buy 'sleepy'.",
+  },
+  {
+    q: "Do I have to install anything?",
+    a: "No. The website is home. Browser install works where your browser supports it. The desktop app is not ready and we are not pretending otherwise.",
   },
   {
     q: "Can I gift a companion?",
-    a: "Yes — try /gift/WELCOME-BLOOP in demo mode.",
+    a: "Yes — try /gift/WELCOME-BLOOP or /gift/TINY-PROBLEM.",
   },
   {
-    q: "Are there loot boxes?",
-    a: "Never. Limited drops are timed, priced, and listed. What you see is what you pay.",
+    q: "Are there loot boxes or a currency?",
+    a: "Never. Fixed prices, permanent ownership, limited drops that end when they end.",
   },
 ];
 
 export default function SupportPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Support</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">We are here. Softly.</h1>
+    <div className="mx-auto max-w-2xl px-5 py-16">
+      <p className="kicker">Support</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">Questions, answered quickly.</h1>
       <p className="mt-3 text-ink-soft">
-        Write {brand.supportEmail}. Demo mode needs no ticket — it runs without Stripe or Supabase keys.
+        Write {brand.supportEmail}. Demo mode needs no keys — it runs without Stripe or Supabase.
       </p>
       <dl className="mt-10 space-y-6">
         {faqs.map((faq) => (

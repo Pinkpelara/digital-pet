@@ -3,14 +3,17 @@
 import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
 import { items } from "@/data/catalog";
 import { track } from "@/lib/analytics";
+import { revealNextTrait } from "@/lib/personality";
 import { demoUser, grantItemsLocally } from "@/lib/state/grant-demo";
 import { emptyNest, readNest, writeNest, EMPTY_NEST, type PersistedNest } from "@/lib/state/storage";
 import { useClientMounted } from "@/lib/state/use-client-mounted";
 import type {
+  BehaviourCounters,
   CompanionInstance,
   DemoUser,
   EquipSlot,
   OwnershipRecord,
+  PersonalityLabel,
   SkillId,
 } from "@/lib/types";
 
@@ -24,6 +27,10 @@ type NestContextValue = PersistedNest & {
   grantItems: (itemIds: string[], source?: OwnershipRecord["source"]) => CompanionInstance[];
   saveOutfit: (instanceId: string, equipped: CompanionInstance["equipped"]) => void;
   renameCompanion: (instanceId: string, name: string) => void;
+  /** Called when a behaviour is observed. May unlock a personality label. */
+  recordBehaviour: (instanceId: string, kind: keyof BehaviourCounters) => PersonalityLabel | null;
+  discoverSecret: (instanceId: string, secretId: string) => void;
+  setFavouriteSpot: (instanceId: string, spot: string) => void;
   setCreaturesEnabled: (enabled: boolean) => void;
   previewItem: (itemId: string) => { slot?: EquipSlot; skillId?: SkillId } | undefined;
 };
@@ -73,6 +80,16 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
   const update = useCallback((recipe: (prev: PersistedNest) => PersistedNest) => {
     persist(recipe(getSnapshot()));
   }, []);
+
+  const patchInstance = useCallback(
+    (instanceId: string, recipe: (instance: CompanionInstance) => CompanionInstance) => {
+      update((prev) => ({
+        ...prev,
+        instances: prev.instances.map((row) => (row.id === instanceId ? recipe(row) : row)),
+      }));
+    },
+    [update],
+  );
 
   const ownedItemIds = useMemo(() => new Set(nest.ownership.map((row) => row.itemId)), [nest.ownership]);
 
@@ -130,6 +147,49 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
     track("companion_named", { instanceId });
   }, [update]);
 
+  const recordBehaviour = useCallback(
+    (instanceId: string, kind: keyof BehaviourCounters) => {
+      let revealed: PersonalityLabel | null = null;
+      update((prev) => ({
+        ...prev,
+        instances: prev.instances.map((row) => {
+          if (row.id !== instanceId) return row;
+          const counters: BehaviourCounters = {
+            ...row.counters,
+            [kind]: (row.counters[kind] ?? 0) + 1,
+          };
+          const next = revealNextTrait(row.seed, row.discovered, counters);
+          if (next) {
+            revealed = next.label;
+            track("personality_revealed", { instanceId, label: next.label });
+            return { ...row, counters, discovered: [...row.discovered, next] };
+          }
+          return { ...row, counters };
+        }),
+      }));
+      return revealed;
+    },
+    [update],
+  );
+
+  const discoverSecret = useCallback(
+    (instanceId: string, secretId: string) => {
+      patchInstance(instanceId, (row) =>
+        row.secrets.some((entry) => entry.id === secretId)
+          ? row
+          : { ...row, secrets: [...row.secrets, { id: secretId, at: new Date().toISOString() }] },
+      );
+    },
+    [patchInstance],
+  );
+
+  const setFavouriteSpot = useCallback(
+    (instanceId: string, spot: string) => {
+      patchInstance(instanceId, (row) => ({ ...row, favouriteSpot: spot }));
+    },
+    [patchInstance],
+  );
+
   const setCreaturesEnabled = useCallback((enabled: boolean) => {
     update((prev) => ({ ...prev, creaturesEnabled: enabled }));
     track("creatures_paused", { enabled });
@@ -147,6 +207,9 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
       grantItems,
       saveOutfit,
       renameCompanion,
+      recordBehaviour,
+      discoverSecret,
+      setFavouriteSpot,
       setCreaturesEnabled,
       previewItem: (itemId: string) => {
         const item = items.find((entry) => entry.id === itemId);
@@ -154,7 +217,21 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
         return { slot: item.slot, skillId: item.skillId };
       },
     }),
-    [applyGrant, grantItems, hydrated, nest, ownedItemIds, renameCompanion, saveOutfit, setCreaturesEnabled, signInDemo, signOut],
+    [
+      applyGrant,
+      discoverSecret,
+      grantItems,
+      hydrated,
+      nest,
+      ownedItemIds,
+      recordBehaviour,
+      renameCompanion,
+      saveOutfit,
+      setCreaturesEnabled,
+      setFavouriteSpot,
+      signInDemo,
+      signOut,
+    ],
   );
 
   return <NestContext.Provider value={value}>{children}</NestContext.Provider>;

@@ -1,35 +1,60 @@
-import { companions, items, personalityShift } from "@/data/catalog";
-import { clampStat } from "@/lib/format";
+import { companions, items } from "@/data/catalog";
+import {
+  applyTendencies,
+  fullLabels,
+  randomSeed,
+  statsFromSeed,
+} from "@/lib/personality";
 import type {
   CompanionInstance,
   DemoUser,
   OwnershipRecord,
-  PersonalityStats,
   SkillId,
 } from "@/lib/types";
 import type { PersistedNest } from "@/lib/state/storage";
 
-function applyPack(stats: PersonalityStats, itemId: string): PersonalityStats {
-  const item = items.find((entry) => entry.id === itemId);
-  if (!item?.personalityId) return stats;
-  const shift = personalityShift(item.personalityId);
-  return {
-    chaos: clampStat(stats.chaos + (shift.chaos ?? 0)),
-    drama: clampStat(stats.drama + (shift.drama ?? 0)),
-    energy: clampStat(stats.energy + (shift.energy ?? 0)),
-    shy: clampStat(stats.shy + (shift.shy ?? 0)),
-    cling: clampStat(stats.cling + (shift.cling ?? 0)),
-    curiosity: clampStat(stats.curiosity + (shift.curiosity ?? 0)),
-  };
-}
-
 export const demoUser = (): DemoUser => ({
   id: "demo-user",
-  email: "you@sillkin.local",
+  email: "you@companions.local",
   displayName: "Explorer",
-  publicId: "sill-42",
+  publicId: "cmp-42",
   provider: "demo",
 });
+
+/**
+ * A new individual. Species tendencies shape the seed; the seed stays hidden
+ * and cannot be edited. The first personality label is obvious immediately,
+ * the rest arrive as you live together.
+ */
+export function newCompanionInstance(
+  speciesId: CompanionInstance["speciesId"],
+  ownershipId: string,
+  userId: string,
+  name?: string,
+): CompanionInstance {
+  const species = companions.find((entry) => entry.id === speciesId) ?? companions[0];
+  const seed = applyTendencies(randomSeed(), species.tendencies);
+  const at = new Date().toISOString();
+  const first = fullLabels(seed)[0];
+  return {
+    id: crypto.randomUUID(),
+    userId,
+    speciesId: species.id,
+    ownershipId,
+    name: name ?? species.name,
+    publicId: `cmp-${Math.random().toString(36).slice(2, 7)}`,
+    seed,
+    stats: statsFromSeed(seed),
+    equipped: {},
+    unlockedSkills: [...species.nativeSkills],
+    discovered: first ? [{ label: first, at }] : [],
+    counters: {},
+    secrets: [],
+    favouriteSpot: null,
+    bonds: [],
+    createdAt: at,
+  };
+}
 
 export function grantItemsLocally(
   prev: PersistedNest,
@@ -54,41 +79,21 @@ export function grantItemsLocally(
     }
     if (item.kind === "companion" && item.speciesId) {
       const already = [...instanceById.values()].some((row) => row.speciesId === item.speciesId);
-      const species = companions.find((entry) => entry.id === item.speciesId);
-      if (!already && species) {
+      if (!already) {
         const ownership = ownershipByItem.get(itemId)!;
-        const instance: CompanionInstance = {
-          id: crypto.randomUUID(),
-          userId: user.id,
-          speciesId: species.id,
-          ownershipId: ownership.id,
-          name: species.name,
-          publicId: `sill-${Math.random().toString(36).slice(2, 7)}`,
-          stats: { ...species.defaultStats },
-          equipped: {},
-          unlockedSkills: [...species.nativeSkills],
-          personalityPacks: [],
-          createdAt: ownership.grantedAt,
-        };
+        const instance = newCompanionInstance(item.speciesId, ownership.id, user.id);
         instanceById.set(instance.id, instance);
       }
     }
   }
 
+  // Skills are taught, not worn: owning one unlocks it for every companion.
   const instances = [...instanceById.values()].map((instance) => {
     let next = instance;
     for (const itemId of itemIds) {
       const item = items.find((entry) => entry.id === itemId);
-      if (!item) continue;
-      if (item.skillId && !next.unlockedSkills.includes(item.skillId)) {
+      if (item?.skillId && !next.unlockedSkills.includes(item.skillId)) {
         next = { ...next, unlockedSkills: [...next.unlockedSkills, item.skillId as SkillId] };
-      }
-      if (item.personalityId && !next.personalityPacks.includes(item.personalityId)) {
-        next = {
-          ...next,
-          personalityPacks: [...next.personalityPacks, item.personalityId],
-          stats: applyPack(next.stats, item.id),
-        };
       }
     }
     return next;

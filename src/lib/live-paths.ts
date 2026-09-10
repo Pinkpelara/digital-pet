@@ -16,32 +16,32 @@ export type LivePath = {
 export const livePaths: LivePath[] = [
   {
     id: "website",
-    kicker: "Primary · ready now",
+    kicker: "Here · live now",
     title: "Keep them on the website",
-    body: "They already live in My companions. Open the nest, dress them, teach tricks — no install, any computer with a browser.",
+    body: "They live in My companions. Open it, dress them, teach them things. No install, any computer with a browser.",
     href: (instanceId) => (instanceId ? studioHref(instanceId) : "/my-companions"),
-    cta: "Open the nest",
-    badge: "Default",
+    cta: "Open your companions",
+    badge: "Live now",
     ready: true,
   },
   {
     id: "browser",
-    kicker: "Work-friendly · ready now",
-    title: "Add to my browser",
-    body: "Pin Sillkin like an app in Chrome or Edge, or add it to your phone’s home screen. A browser extension is coming later — you do not need it yet.",
+    kicker: "Also here · where supported",
+    title: "Add to browser",
+    body: "Install the web experience if your browser offers it, or keep a home-screen icon. Handy on work computers.",
     href: () => "/browser",
     cta: "Add to browser",
-    badge: "No IT install",
+    badge: "Where supported",
     ready: true,
   },
   {
     id: "desktop",
-    kicker: "Optional · coming soon",
-    title: "Get the desktop app",
-    body: "For people who want a creature on the real Windows or Mac desktop. Not required. Work PCs that block installers can skip this entirely.",
+    kicker: "Future flagship · not shipped",
+    title: "Let them roam your desktop",
+    body: "A transparent companion walking across your whole computer is the big version of this. It is still being built — nothing to download yet.",
     href: () => "/desktop",
-    cta: "See desktop options",
-    badge: "Upgrade",
+    cta: "See the plan",
+    badge: "Coming soon",
     ready: false,
   },
 ];
@@ -49,12 +49,12 @@ export const livePaths: LivePath[] = [
 export function liveIntro(name?: string): { title: string; lede: string } {
   if (name) {
     return {
-      title: `Where does ${name} live?`,
-      lede: `You already own ${name}. Choosing a place only changes where they appear — it is not another purchase, and nothing is required.`,
+      title: `Where should ${name} live?`,
+      lede: `${name} is already yours. Picking a place only changes where you see them — it is not another purchase.`,
     };
   }
   return {
     title: "Where should they live?",
-    lede: "You already own your companions. Pick one home or several. The website is the default. The browser is the work-friendly pin. The desktop app is optional, later.",
+    lede: "Your companions are yours either way. The website is home today, the browser is the install option, and desktop roaming is the future flagship experience.",
   };
 }

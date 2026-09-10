@@ -1,30 +1,32 @@
 import Link from "next/link";
+import { Creature } from "@/components/creatures/Creature";
 
-export const metadata = { title: "Download for Mac" };
+export const metadata = { title: "Desktop app for Mac" };
 
 export default function MacDownloadPage() {
   return (
-    <div className="mx-auto max-w-xl px-4 py-16">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">macOS · optional</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">A menu-bar creature, soon.</h1>
-      <p className="mt-4 text-ink-soft">
-        No .dmg yet. Adopt on the web first — that is the real product today. If you cannot install apps,{" "}
-        <Link href="/browser" className="underline">
-          add Sillkin to your browser
+    <div className="mx-auto max-w-xl px-5 py-16">
+      <p className="kicker">Not available yet</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">There is no Mac app to download.</h1>
+      <p className="mt-4 text-lg text-ink-soft">
+        We are not going to hand you a fake .dmg. Adopt on the web first — that is the real product
+        today.
+      </p>
+      <div className="card mt-8 flex items-center gap-4 p-6">
+        <Creature species="sprout" size={110} mood="idle" decorative />
+        <p className="text-ink-soft">
+          When desktop roaming ships, it will read the same account. Your companions will not need
+          re-buying.
+        </p>
+      </div>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/browser" className="btn btn-primary">
+          Add to browser instead
         </Link>
-        .
-      </p>
-      <p className="mt-3 text-ink-soft">
-        The desktop client will read the same nest. The link below is only for people who already have a test build.
-      </p>
-      <a href="companions://download/mac" className="mt-6 inline-block rounded-full bg-cream px-5 py-3 text-ink">
-        Open if already installed
-      </a>
-      <p className="mt-6">
-        <Link href="/live" className="text-moss underline">
-          See all three homes
+        <Link href="/live" className="btn btn-ghost">
+          See where they live
         </Link>
-      </p>
+      </div>
     </div>
   );
 }

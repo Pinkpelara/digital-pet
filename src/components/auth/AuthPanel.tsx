@@ -15,7 +15,7 @@ export function AuthPanel() {
     track("auth_started", { provider });
     signInDemo({
       provider,
-      email: email || "you@sillkin.local",
+      email: email || "you@companions.local",
       displayName: provider === "demo" ? "Explorer" : email.split("@")[0] || "Explorer",
     });
     router.push("/my-companions");

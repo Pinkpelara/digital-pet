@@ -1,7 +1,7 @@
 import { ProfileView } from "./profile-view";
 
 export function generateStaticParams() {
-  return [{ "public-id": "sill-42" }];
+  return [{ "public-id": "cmp-42" }];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ "public-id": string }> }) {
