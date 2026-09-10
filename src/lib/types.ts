@@ -192,5 +192,7 @@ export type AnalyticsEventName =
   | "companion_named"
   | "creatures_paused"
   | "desktop_deeplink_clicked"
+  | "home_path_chosen"
+  | "pwa_install_prompted"
   | "auth_started"
   | "gift_redeemed";

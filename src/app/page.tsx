@@ -28,14 +28,15 @@ export default function HomePage() {
           Tiny creatures for your screen.
         </h1>
         <p className="mt-5 max-w-xl text-lg text-ink-soft md:text-xl">
-          Adopt one. Dress it. Teach it tricks. Then let it loose on your computer.
+          Adopt one. Dress it. Teach it tricks. Keep them on this website, pin them in a browser (even a locked-down work
+          PC), or optionally wait for a desktop app.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/companions" className="rounded-full bg-ink px-5 py-3 text-paper">
             Meet the companions
           </Link>
-          <Link href="/desktop" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
-            Bring one to desktop
+          <Link href="/live" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
+            Where they can live
           </Link>
         </div>
         <ol className="mt-12 grid gap-4 md:grid-cols-3">
@@ -46,7 +47,7 @@ export default function HomePage() {
               <p className="mt-1 text-sm text-ink-soft">
                 {index === 0 && "Buy an entitlement. It lives in your nest — Roblox-like inventory, never a file download."}
                 {index === 1 && "Try a raincoat. Teach a moonwalk. Save the outfit to one companion."}
-                {index === 2 && "Open the desktop app (soon) or a companions:// link. They already know you."}
+                {index === 2 && "Website first. Browser pin for work computers. Desktop app later, only if you want it."}
               </p>
             </li>
           ))}

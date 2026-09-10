@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { CompanionStudio } from "@/components/studio/CompanionStudio";
+import { liveHref } from "@/lib/catalog-paths";
 import { useNest } from "@/lib/state/nest-context";
 
 function StudioInner() {
@@ -31,6 +32,11 @@ function StudioInner() {
     <>
       <h1 className="mt-2 font-display text-5xl text-ink">{instance.name}</h1>
       <p className="mt-2 text-ink-soft">LOOK · GADGET · SKILLS · PERSONALITY</p>
+      <p className="mt-3">
+        <Link href={liveHref(instance.id)} className="text-sm text-moss underline">
+          Where does {instance.name} live?
+        </Link>
+      </p>
       <div className="mt-8">
         <CompanionStudio instance={instance} />
       </div>

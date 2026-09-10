@@ -5,8 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { companions, items } from "@/data/catalog";
 import { Creature } from "@/components/creatures/Creature";
-import { studioHref } from "@/lib/catalog-paths";
-import { bringToDesktopUrl } from "@/lib/deep-link";
+import { WhereTheyLive } from "@/components/live/WhereTheyLive";
 import { useNest } from "@/lib/state/nest-context";
 
 export function AdoptCeremony() {
@@ -41,7 +40,8 @@ export function AdoptCeremony() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[80vh] max-w-2xl flex-col items-center justify-center px-4 py-16 text-center">
+    <div className="mx-auto flex min-h-[80vh] max-w-6xl flex-col items-center px-4 py-16">
+      <div className="flex w-full max-w-2xl flex-col items-center text-center">
       <p className="text-xs uppercase tracking-[0.22em] text-moss">A parcel for you</p>
       <div className="relative mt-8 flex h-72 w-full items-end justify-center">
         <div className="parcel is-shaking is-open">
@@ -70,14 +70,15 @@ export function AdoptCeremony() {
             That&apos;s their name
           </button>
           {named && <p className="mt-3 text-sm text-moss">Written on the nest tag.</p>}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href={studioHref(instance.id)} className="rounded-full border border-ink/15 px-5 py-3 text-ink">
-              Keep them here
-            </Link>
-            <a href={bringToDesktopUrl(instance.id)} className="rounded-full bg-cream px-5 py-3 text-ink">
-              Bring to computer
-            </a>
-          </div>
+          {!named && (
+            <button
+              type="button"
+              onClick={() => setNamed(true)}
+              className="mt-3 block w-full text-sm text-ink-soft underline"
+            >
+              Skip naming — pick a home
+            </button>
+          )}
         </form>
       ) : (
         <div className="mt-8">
@@ -85,6 +86,13 @@ export function AdoptCeremony() {
           <Link href="/inventory" className="mt-6 inline-block rounded-full bg-ink px-5 py-3 text-paper">
             Open inventory
           </Link>
+        </div>
+      )}
+      </div>
+
+      {(named || !companionItem) && (
+        <div className="mt-14 w-full border-t border-ink/8 pt-12">
+          <WhereTheyLive instanceId={instance?.id} companionName={instance?.name ?? name} />
         </div>
       )}
     </div>

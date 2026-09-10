@@ -1,10 +1,10 @@
 # Sillkin
 
-Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Then let it loose on your computer.
+Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally use a desktop app later.
 
 **Live site:** [https://pinkpelara.github.io/digital-pet/](https://pinkpelara.github.io/digital-pet/)
 
-Sillkin is a **website-first** digital companion studio. Customers buy entitlements (companions, outfits, gadgets, skills, personality packs) that live in an account inventory — like a Roblox backpack, not a file download. This repository is the Next.js world. The Tauri desktop app is intentionally out of scope; download pages are honest stubs with `companions://` deep links.
+Sillkin is a **website-first** digital companion studio. Customers buy entitlements (companions, outfits, gadgets, skills, personality packs) that live in an account inventory — like a Roblox backpack, not a file download. You do **not** need a desktop app. Work computers can pin the site in Chrome/Edge. The Tauri desktop client is an optional, later upgrade; download pages are honest stubs with `companions://` deep links.
 
 ## GitHub Pages
 
@@ -35,7 +35,8 @@ GITHUB_PAGES=false npm run dev
 - Living homepage: a creature on the nav, one behind the headline, one watching the cursor, one causing mild mischief.
 - Store: `/companions`, `/closet`, `/gadgets`, `/skills`, `/personality`, `/drops`
 - Try-on: open Bloop (or any companion) and equip a raincoat / play moonwalk
-- Checkout: **Adopt** grants into the local nest and opens a parcel ceremony
+- Checkout: **Adopt** grants into the local nest and opens a parcel ceremony, then three homes (website / browser / optional desktop)
+- Where they live: `/live` · Add to browser: `/browser` · Desktop (optional): `/desktop`
 - Gift: `/gift/WELCOME-BLOOP`
 - Admin attic: `/admin` password `sillkin-admin`
 - Pause roaming creatures in the header; `prefers-reduced-motion` is respected
@@ -100,13 +101,16 @@ supabase/           schema.sql + RLS.md
 
 **Security:** on a Node deploy, ownership is granted only on the server after a verified purchase (or a signed demo token). RLS denies client inserts on `ownership` and `unlocked_skills`. See `supabase/RLS.md`. The Pages preview stores the same nest shape locally so the UI can be tried without a backend.
 
-**Sitemap:** `/` `/companions` `/companions/[slug]` `/closet` `/gadgets` `/skills` `/personality` `/drops` `/item/[slug]` `/my-companions` `/my-companions/studio` `/inventory` `/gift/[code]` `/profile/[public-id]` `/desktop` `/download/windows` `/download/mac` `/about` `/support` `/privacy` `/terms` `/admin` `/login` `/adopt/success`
+**Sitemap:** `/` `/companions` `/companions/[slug]` `/closet` `/gadgets` `/skills` `/personality` `/drops` `/item/[slug]` `/my-companions` `/my-companions/studio` `/inventory` `/gift/[code]` `/profile/[public-id]` `/live` `/browser` `/desktop` `/download/windows` `/download/mac` `/about` `/support` `/privacy` `/terms` `/admin` `/login` `/adopt/success`
 
-## Desktop stubs
+## Where companions live
 
-- `/desktop`, `/download/windows`, `/download/mac`
-- Deep links: `companions://home`, `companions://adopt/{id}`, `companions://download/{platform}`
-- No Tauri code in this repo
+- **Website (default, live):** `/my-companions` and the studio
+- **Browser (work-friendly, live):** `/browser` — PWA / “Install page as app” / Add to Home Screen. Extension marked coming soon
+- **Desktop (optional, later):** `/desktop`, `/download/windows`, `/download/mac`
+- Deep links: `companions://home`, `companions://adopt/{id}`, `companions://download/{platform}` — only if a test build is already installed
+- Web app manifest + a tiny service worker so Chrome/Edge can offer **Install Sillkin** on the GitHub Pages URL
+- No Tauri binary in this repo
 
 ## Audience & commerce
 

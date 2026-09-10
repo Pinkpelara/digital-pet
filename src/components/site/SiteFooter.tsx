@@ -8,7 +8,7 @@ const footer = [
       { href: "/companions", label: "Companions" },
       { href: "/drops", label: "Limited drops" },
       { href: "/about", label: "About" },
-      { href: "/desktop", label: "Desktop app" },
+      { href: "/live", label: "Where they live" },
     ],
   },
   {

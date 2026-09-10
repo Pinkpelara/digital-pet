@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { brand } from "@/lib/brand";
 
 export const metadata = { title: "About" };
@@ -14,10 +15,16 @@ export default function AboutPage() {
           pulse.
         </p>
         <p>
-          The website is their world. The desktop app (forthcoming) is how they wander your real screen. Same nest.
-          Same ownership. No loot boxes. Fixed prices. Accounts and payments are for adults; the tone is for anyone {brand.ageGate}.
+          The website is their world and the default home. You can also pin Sillkin in a browser — useful on work PCs
+          that will not install a full app. A desktop program is an optional upgrade, later. Same nest. Same ownership.
+          No loot boxes. Fixed prices. Accounts and payments are for adults; the tone is for anyone {brand.ageGate}.
         </p>
         <p>{brand.audienceNote}</p>
+        <p>
+          <Link href="/live" className="text-moss underline">
+            Where can they live?
+          </Link>
+        </p>
       </div>
     </article>
   );

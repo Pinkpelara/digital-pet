@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Nunito } from "next/font/google";
 import { SiteShell } from "@/components/site/SiteShell";
 import { brand } from "@/lib/brand";
+import { publicBasePath } from "@/lib/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -24,6 +25,19 @@ export const metadata: Metadata = {
   description: brand.hero,
   applicationName: brand.name,
   metadataBase: new URL("https://pinkpelara.github.io/digital-pet"),
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: brand.name,
+    statusBarStyle: "default",
+  },
+  icons: {
+    apple: `${publicBasePath()}/apple-touch-icon.png`,
+  },
+};
+
+export const viewport = {
+  themeColor: "#3f6f4e",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

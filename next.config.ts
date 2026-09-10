@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   // Project Pages URL is https://pinkpelara.github.io/digital-pet/
   basePath: usingGitHubPages ? `/${repo}` : "",
   assetPrefix: usingGitHubPages ? `/${repo}` : "",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: usingGitHubPages ? `/${repo}` : "",
+  },
 };
 
 export default nextConfig;

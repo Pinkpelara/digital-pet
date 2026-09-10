@@ -9,6 +9,11 @@ export function studioHref(id: string): string {
   return `/my-companions/studio?id=${encodeURIComponent(id)}`;
 }
 
+export function liveHref(instanceId?: string): string {
+  if (!instanceId) return "/live";
+  return `/live?id=${encodeURIComponent(instanceId)}`;
+}
+
 export function adoptHref(itemIds: string[]): string {
   return `/adopt/success?items=${itemIds.join(",")}`;
 }
