@@ -1,0 +1,89 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - cursor/sillkin-website-mvp-8cd7
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Build static export
+        run: npm run build
+        env:
+          GITHUB_PAGES: "true"
+      - name: Keep Jekyll from hiding _next
+        run: touch out/.nojekyll
+      - name: Configure Pages
+        continue-on-error: true
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+      - name: Upload site for branch publish
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Enable GitHub Pages if needed
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/pages" >/dev/null 2>&1 || \
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/pages" -f build_type=workflow
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  publish-branch:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+      - name: Publish gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
+          force_orphan: true
+          enable_jekyll: false
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
