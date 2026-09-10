@@ -2,7 +2,7 @@ export const brand = {
   name: "Sillkin",
   domain: "sillkin.app",
   tagline: "Soft volume for the edge of the screen.",
-  hero: "Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally bring them to a desktop app.",
+  hero: "Chunky screen companions. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally bring them to a desktop app.",
   concept: ["Adopt", "Customize", "Keep them close"] as const,
   deepLinkScheme: "companions",
   supportEmail: "hello@sillkin.app",

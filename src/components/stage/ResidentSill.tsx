@@ -19,9 +19,9 @@ function Lineup({ pointer }: { pointer: { x: number; y: number } }) {
     group.current.position.x = MathUtils.lerp(group.current.position.x, pointer.x * -0.35, 0.05);
   });
   return (
-    <group ref={group} position={[0, 0.06, 0]}>
+    <group ref={group} position={[0, 0.18, 0]}>
       {lineup.map((species, index) => (
-        <group key={species} position={[(index - 1.5) * 1.9, 0, 0]}>
+        <group key={species} position={[(index - 1.5) * 2.15, 0, 0]}>
           <FigurineMesh species={species} quality="medium" followPointer={false} />
         </group>
       ))}
@@ -35,7 +35,7 @@ export function ResidentSill({ className = "h-full w-full" }: { className?: stri
     <StageCanvas
       className={className}
       alpha={false}
-      camera={{ position: [0, 0.85, 8.6], fov: 28, far: 40 }}
+      camera={{ position: [0, 0.95, 9.2], fov: 28, far: 40 }}
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
