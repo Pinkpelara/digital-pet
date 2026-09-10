@@ -5,16 +5,16 @@ import { items } from "@/data/catalog";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { track } from "@/lib/analytics";
 import { useNest } from "@/lib/state/nest-context";
+import { fullLabels } from "@/lib/personality";
 import type { CompanionInstance, EquipSlot, SkillId } from "@/lib/types";
 
-const tabs = ["LOOK", "GADGET", "SKILLS", "PERSONALITY"] as const;
+const tabs = ["LOOK", "GADGET", "SKILLS"] as const;
 type Tab = (typeof tabs)[number];
 
-const tabKinds: Record<Tab, Array<"outfit" | "drop" | "gadget" | "skill" | "personality">> = {
+const tabKinds: Record<Tab, Array<"outfit" | "drop" | "gadget" | "skill">> = {
   LOOK: ["outfit", "drop"],
   GADGET: ["gadget"],
   SKILLS: ["skill"],
-  PERSONALITY: ["personality"],
 };
 
 export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
@@ -25,10 +25,10 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
   const [saved, setSaved] = useState(false);
 
   const options = useMemo(
-    () =>
-      items.filter((item) => (tabKinds[tab] as readonly string[]).includes(item.kind)),
+    () => items.filter((item) => (tabKinds[tab] as readonly string[]).includes(item.kind)),
     [tab],
   );
+  const remaining = fullLabels(instance.seed).length - instance.discovered.length;
 
   function toggle(itemId: string, slot?: EquipSlot, skillId?: SkillId) {
     if (slot) {
@@ -90,7 +90,9 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
                 >
                   <span>
                     <span className="block font-medium text-ink">{item.name}</span>
-                    <span className="block text-sm text-ink-soft">{item.tagline}</span>
+                    <span className="block text-sm text-ink-soft">
+                      {item.behaviorNote ?? item.tagline}
+                    </span>
                   </span>
                   <span className="text-xs uppercase tracking-wider text-ink-soft">
                     {owned ? (active ? "On" : item.skillId ? "Play" : "Equip") : "Preview"}
@@ -109,18 +111,38 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
             }}
             className="rounded-full bg-ink px-5 py-3 text-paper"
           >
-            Save outfit
+            Save this look
           </button>
-          {saved && <p className="text-sm text-moss">Packed into their nest.</p>}
+          {saved && <p className="text-sm text-moss">Saved to {instance.name}.</p>}
         </div>
-        <dl className="mt-8 grid grid-cols-2 gap-3 text-sm">
-          {Object.entries(instance.stats).map(([key, value]) => (
-            <div key={key} className="rounded-2xl bg-paper px-3 py-2">
-              <dt className="capitalize text-ink-soft">{key}</dt>
-              <dd className="font-display text-2xl text-ink">{value}</dd>
-            </div>
-          ))}
-        </dl>
+
+        <div className="mt-8 rounded-[1.4rem] bg-paper p-5 ring-1 ring-ink/8">
+          <p className="text-xs uppercase tracking-[0.16em] text-ink-soft">Personality discovered</p>
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {instance.discovered.length > 0 ? (
+              instance.discovered.map((entry) => (
+                <li
+                  key={entry.label}
+                  className="rounded-full border border-ink/15 px-3 py-1 text-sm text-ink"
+                >
+                  {entry.label}
+                </li>
+              ))
+            ) : (
+              <li className="text-ink-soft">Nothing obvious yet.</li>
+            )}
+          </ul>
+          <p className="mt-3 text-sm text-ink-soft">
+            {remaining > 0
+              ? `There ${remaining === 1 ? "is" : "are"} ${remaining} more trait${remaining === 1 ? "" : "s"} you have not seen yet. You cannot set them. You cannot buy them.`
+              : "You have seen everything there is to see. For now."}
+          </p>
+        </div>
+
+        <p className="mt-6 text-sm text-ink-soft">
+          Gadgets are not decoration. A skateboard means skating; an umbrella means rain-walks.
+          Personality is not something you can equip.
+        </p>
       </div>
     </div>
   );

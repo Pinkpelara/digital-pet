@@ -22,7 +22,7 @@ export default function InventoryPage() {
       <h1 className="mt-2 font-display text-5xl text-ink">What you own</h1>
       <p className="mt-3 text-ink-soft">
         On this static preview, entitlements live in your browser (localStorage). A later Vercel deploy can grant them
-        from Stripe + Supabase instead — the nest looks the same.
+        from Stripe + Supabase instead — the inventory looks the same. Permanent. Not a file.
       </p>
       {instances.length > 0 && (
         <section className="mt-8">

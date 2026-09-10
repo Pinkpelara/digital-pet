@@ -1,4 +1,4 @@
--- Sillkin schema (Supabase / Postgres)
+-- Companions schema (Supabase / Postgres)
 -- Ownership is NEVER inserted by the anon/authenticated client.
 -- Stripe webhook (service role) is the only production writer for ownership.
 
@@ -32,7 +32,7 @@ create table if not exists items (
   id text primary key,
   sku text unique not null,
   slug text unique not null,
-  kind text not null check (kind in ('companion','outfit','gadget','skill','personality','drop')),
+  kind text not null check (kind in ('companion','outfit','gadget','skill','drop')),
   name text not null,
   tagline text,
   description text,
@@ -40,7 +40,6 @@ create table if not exists items (
   currency text not null default 'usd',
   slot text check (slot in ('head','face','body','hand','back','feet')),
   skill_id text,
-  personality_id text,
   species_id text references companions(id),
   limited boolean not null default false,
   limited_note text,
@@ -69,7 +68,11 @@ create table if not exists companion_instances (
   ownership_id uuid not null references ownership(id) on delete cascade,
   name text not null,
   public_id text unique not null,
+  personality_seed jsonb not null default '{}',
   personality_stats jsonb not null default '{}',
+  discovered jsonb not null default '[]',
+  counters jsonb not null default '{}',
+  secrets jsonb not null default '[]',
   created_at timestamptz not null default now()
 );
 

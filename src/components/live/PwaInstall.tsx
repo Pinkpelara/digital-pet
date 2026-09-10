@@ -57,7 +57,7 @@ export function PwaInstall() {
   if (installed) {
     return (
       <p className="rounded-[1.4rem] bg-moss/10 px-5 py-4 text-ink">
-        Sillkin is already installed on this device. Open it from your home screen or app list — same nest as the website.
+        Already installed on this device. Open it from your home screen or app list — same companions as the website.
       </p>
     );
   }
@@ -71,7 +71,7 @@ export function PwaInstall() {
           disabled={busy}
           className="rounded-full bg-ink px-5 py-3 text-paper disabled:opacity-60"
         >
-          {busy ? "Opening the install card…" : "Install Sillkin"}
+          {busy ? "Opening the install card…" : "Install"}
         </button>
       ) : (
         <p className="text-ink-soft">
@@ -82,7 +82,7 @@ export function PwaInstall() {
       <ol className="space-y-3 text-ink-soft">
         <li>
           <strong className="text-ink">Chrome or Edge (Windows, Mac, Chromebook):</strong> open the menu (three dots) →
-          Cast, save, and share → <em>Install page as app</em> / <em>Install Sillkin</em>. You get a window of this site, not
+          Cast, save, and share → <em>Install page as app</em>. You get a window of this site, not
           a store download.
         </li>
         <li>

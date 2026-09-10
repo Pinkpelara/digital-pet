@@ -11,10 +11,11 @@ export default function CompanionsPage() {
       <section className="mx-auto max-w-7xl px-5 pt-28 md:px-10 md:pt-32">
         <p className="text-[11px] uppercase tracking-[0.32em] text-mist/45">Adopt</p>
         <h1 className="mt-4 max-w-[12ch] font-display text-5xl leading-[0.92] text-paper md:text-7xl">
-          Four volumes. One nest.
+          Meet the companions.
         </h1>
         <p className="mt-5 max-w-xl text-lg text-mist/70">
-          Soft 3D companions that live in your account — on the website, pinned in a browser, or later on the desktop.
+          Pick a species and you get an individual. Its personality is already decided — you just
+          have not met it yet.
         </p>
       </section>
       <div className="mt-8 h-[min(70vh,620px)] w-full">

@@ -12,7 +12,7 @@ const footer = [
     ],
   },
   {
-    title: "Your nest",
+    title: "Yours",
     links: [
       { href: "/my-companions", label: "My companions" },
       { href: "/inventory", label: "Inventory" },

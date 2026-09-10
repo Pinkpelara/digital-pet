@@ -20,7 +20,7 @@ export function ProductCard({
         <div>
           <p className="text-[10px] uppercase tracking-[0.22em] text-ink-soft">
             {item.kind}
-            {owned ? " · in nest" : ""}
+            {owned ? " · owned" : ""}
           </p>
           <h3 className="mt-1 font-display text-3xl text-ink">{item.name}</h3>
           <p className="mt-1 max-w-md text-sm text-ink-soft">{item.tagline}</p>

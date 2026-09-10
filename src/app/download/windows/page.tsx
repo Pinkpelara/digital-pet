@@ -6,12 +6,12 @@ export default function WindowsDownloadPage() {
   return (
     <div className="mx-auto max-w-xl px-4 py-16">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">Windows · optional</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">Installer coming to this sill.</h1>
+      <h1 className="mt-2 font-display text-5xl text-ink">Installer coming later.</h1>
       <p className="mt-4 text-ink-soft">
         You do not need this download to keep a companion. They already live on the website. If your work PC blocks
         installers,{" "}
         <Link href="/browser" className="underline">
-          pin Sillkin in the browser
+          pin this site in the browser
         </Link>{" "}
         instead.
       </p>

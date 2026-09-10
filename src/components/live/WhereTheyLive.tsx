@@ -22,7 +22,7 @@ export function WhereTheyLive({
 
   return (
     <section aria-labelledby="where-they-live-heading">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Three places, same nest</p>
+      <p className="text-xs uppercase tracking-[0.2em] text-moss">Three places, same inventory</p>
       <Heading id="where-they-live-heading" className="mt-2 font-display text-4xl text-ink md:text-5xl">
         {copy.title}
       </Heading>

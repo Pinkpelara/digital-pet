@@ -1,10 +1,12 @@
-# Sillkin
+# Companions
 
-Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally use a desktop app later.
+Tiny creatures that live on your screen. Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be.
+
+**Temporary brand name:** `Companions` — centralized in `src/lib/brand.ts` as `TEMP_BRAND_NAME`. The previous working name was Sillkin; user-visible copy no longer uses it.
 
 **Live site:** [https://pinkpelara.github.io/digital-pet/](https://pinkpelara.github.io/digital-pet/)
 
-Sillkin is a **website-first** digital companion studio. Customers buy entitlements (companions, outfits, gadgets, skills, personality packs) that live in an account inventory — like a Roblox backpack, not a file download. You do **not** need a desktop app. Work computers can pin the site in Chrome/Edge. The Tauri desktop client is an optional, later upgrade; download pages are honest stubs with `companions://` deep links.
+This is a **website-first** digital companion studio. Customers buy entitlements (companions, outfits, gadgets, skills, drops) that live in an account inventory — like a game backpack, not a file download. Personality is **not** sold. You do **not** need a desktop app. Work computers can pin the site in Chrome/Edge. The Tauri desktop client is an optional, later upgrade; download pages are honest stubs with `companions://` deep links.
 
 ## GitHub Pages
 
@@ -32,10 +34,10 @@ Because `basePath` is `/digital-pet` by default, open [http://localhost:3000/dig
 GITHUB_PAGES=false npm run dev
 ```
 
-- Living homepage: a creature on the nav, one behind the headline, one watching the cursor, one causing mild mischief.
-- Store: `/companions`, `/closet`, `/gadgets`, `/skills`, `/personality`, `/drops`
+- Cinematic homepage: dark studio hero, live React Three Fiber figurines, Instrument Serif
+- Store: `/companions`, `/closet`, `/gadgets`, `/skills`, `/drops`
 - Try-on: open Bloop (or any companion) and equip a raincoat / play moonwalk
-- Checkout: **Adopt** grants into the local nest and opens a parcel ceremony, then three homes (website / browser / optional desktop)
+- Checkout: **Adopt** grants into the local inventory and opens a parcel ceremony, then three homes (website / browser / optional desktop)
 - Where they live: `/live` · Add to browser: `/browser` · Desktop (optional): `/desktop`
 - Gift: `/gift/WELCOME-BLOOP`
 - Admin attic: `/admin` password `sillkin-admin`
@@ -50,11 +52,12 @@ npx serve out          # preview the Pages build (not `npm start`)
 
 ## Brand
 
-**Sillkin** — kin that live on the window sill / the edge of your screen.
+**Companions** (temporary) — tiny creatures that live with you. Personality is met, not chosen.
 
 ## Stack
 
 - Next.js App Router + TypeScript (strict) + Tailwind CSS v4
+- React Three Fiber cinematic figurines (soft vinyl materials, studio lighting)
 - SVG/canvas-style creatures with a weighted idle / walk / nap / follow-cursor loop
 - `@rive-app/react-canvas` ready — pass `riveSrc` when you have `.riv` files; SVG is the shipped fallback
 - Supabase-shaped schema + RLS notes in `/supabase`
@@ -68,7 +71,7 @@ npx serve out          # preview the Pages build (not `npm start`)
 | Catalog | Seeded fixtures in `src/data/catalog.ts` | Same seed, admin overlay → Supabase `items` |
 | Auth | Google / Apple / magic-link UI; local demo session | Supabase Auth (those three providers, no password-first) |
 | Checkout | Client grant → `/adopt/success?items=…` | Restore `src/server/api` to `src/app/api`, Stripe Checkout Session |
-| Ownership | `localStorage` key `sillkin.nest.v1` | Stripe webhook + service role insert. Client still never inserts. |
+| Ownership | `localStorage` key `companions.nest.v2` | Stripe webhook + service role insert. Client still never inserts. |
 | Admin | Session unlock + local overlay | Service-role CRUD |
 
 `isDemoMode()` is true unless **both** Supabase public keys and `STRIPE_SECRET_KEY` are set (or `NEXT_PUBLIC_DEMO_MODE=false`).
@@ -92,8 +95,9 @@ See `.env.example`.
 ```
 src/app/            static routes (no Route Handlers while exporting)
 src/server/api/     Stripe/Supabase handlers — copy to src/app/api for Vercel
-src/components/     creatures, store, studio, ceremony
-src/data/catalog.ts seed SKUs and personalities
+src/components/     creatures, store, studio, ceremony, 3D stage
+src/data/catalog.ts seed SKUs (no personality packs)
+src/lib/personality.ts hidden seed + discoverable labels
 src/lib/server/     grants, catalog overlay, HMAC tokens (Node)
 src/lib/state/      nest context (localStorage demo nest)
 supabase/           schema.sql + RLS.md
@@ -101,7 +105,7 @@ supabase/           schema.sql + RLS.md
 
 **Security:** on a Node deploy, ownership is granted only on the server after a verified purchase (or a signed demo token). RLS denies client inserts on `ownership` and `unlocked_skills`. See `supabase/RLS.md`. The Pages preview stores the same nest shape locally so the UI can be tried without a backend.
 
-**Sitemap:** `/` `/companions` `/companions/[slug]` `/closet` `/gadgets` `/skills` `/personality` `/drops` `/item/[slug]` `/my-companions` `/my-companions/studio` `/inventory` `/gift/[code]` `/profile/[public-id]` `/live` `/browser` `/desktop` `/download/windows` `/download/mac` `/about` `/support` `/privacy` `/terms` `/admin` `/login` `/adopt/success`
+**Sitemap:** `/` `/companions` `/companions/[slug]` `/closet` `/gadgets` `/skills` `/drops` `/item/[slug]` `/my-companions` `/my-companions/studio` `/my-companions/profile` `/inventory` `/gift/[code]` `/profile/[public-id]` `/live` `/browser` `/desktop` `/download/windows` `/download/mac` `/about` `/support` `/privacy` `/terms` `/admin` `/login` `/adopt/success`
 
 ## Where companions live
 
@@ -109,12 +113,12 @@ supabase/           schema.sql + RLS.md
 - **Browser (work-friendly, live):** `/browser` — PWA / “Install page as app” / Add to Home Screen. Extension marked coming soon
 - **Desktop (optional, later):** `/desktop`, `/download/windows`, `/download/mac`
 - Deep links: `companions://home`, `companions://adopt/{id}`, `companions://download/{platform}` — only if a test build is already installed
-- Web app manifest + a tiny service worker so Chrome/Edge can offer **Install Sillkin** on the GitHub Pages URL
+- Web app manifest + a tiny service worker so Chrome/Edge can offer **Install** on the GitHub Pages URL
 - No Tauri binary in this repo
 
 ## Audience & commerce
 
-13+ / general. Adult account and payment. No kids chat, no social feed, no loot boxes. Fixed transparent prices. Limited drops are timed listings, not gacha.
+13+ / general. Adult account and payment. No kids chat, no social feed, no loot boxes. Fixed transparent prices. Limited drops are timed listings, not gacha. Personality is not for sale.
 
 ## Deploy
 
