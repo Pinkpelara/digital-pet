@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useSyncExternalStore } from "react";
 import { items } from "@/data/catalog";
 import { track } from "@/lib/analytics";
 import { emptyNest, readNest, writeNest, type PersistedNest } from "@/lib/state/storage";
@@ -42,38 +35,64 @@ const demoUser = (): DemoUser => ({
   provider: "demo",
 });
 
+const listeners = new Set<() => void>();
+
+function emit() {
+  listeners.forEach((listener) => listener());
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  if (typeof window !== "undefined") {
+    window.addEventListener("storage", listener);
+  }
+  return () => {
+    listeners.delete(listener);
+    if (typeof window !== "undefined") {
+      window.removeEventListener("storage", listener);
+    }
+  };
+}
+
+let snapshotCache: { raw: string; value: PersistedNest } | null = null;
+
+function persist(next: PersistedNest) {
+  writeNest(next);
+  snapshotCache = { raw: JSON.stringify(next), value: next };
+  emit();
+}
+
+function getSnapshot(): PersistedNest {
+  const stored = readNest();
+  const raw = JSON.stringify(stored);
+  if (snapshotCache && snapshotCache.raw === raw) return snapshotCache.value;
+  snapshotCache = { raw, value: stored };
+  return stored;
+}
+
 export function NestProvider({ children }: { children: React.ReactNode }) {
-  const [nest, setNest] = useState<PersistedNest>(emptyNest);
-  const [hydrated, setHydrated] = useState(false);
+  const nest = useSyncExternalStore(subscribe, getSnapshot, emptyNest);
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      setNest(readNest());
-      setHydrated(true);
-    });
-    return () => window.cancelAnimationFrame(frame);
+  const update = useCallback((recipe: (prev: PersistedNest) => PersistedNest) => {
+    persist(recipe(getSnapshot()));
   }, []);
-
-  useEffect(() => {
-    if (hydrated) writeNest(nest);
-  }, [hydrated, nest]);
 
   const ownedItemIds = useMemo(() => new Set(nest.ownership.map((row) => row.itemId)), [nest.ownership]);
 
   const signInDemo = useCallback((user?: Partial<DemoUser>) => {
     const next = { ...demoUser(), ...user };
-    setNest((prev) => ({ ...prev, user: next }));
+    update((prev) => ({ ...prev, user: next }));
     track("auth_started", { provider: next.provider });
     return next;
-  }, []);
+  }, [update]);
 
   const signOut = useCallback(() => {
-    setNest((prev) => ({ ...prev, user: null }));
-  }, []);
+    update((prev) => ({ ...prev, user: null }));
+  }, [update]);
 
   const applyGrant = useCallback(
     (input: { user: DemoUser; ownership: OwnershipRecord[]; instances: CompanionInstance[] }) => {
-      setNest((prev) => {
+      update((prev) => {
         const ownershipByItem = new Map(prev.ownership.map((row) => [row.itemId, row]));
         for (const row of input.ownership) ownershipByItem.set(row.itemId, row);
         const instanceById = new Map(prev.instances.map((row) => [row.id, row]));
@@ -86,34 +105,34 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
         };
       });
     },
-    [],
+    [update],
   );
 
   const saveOutfit = useCallback((instanceId: string, equipped: CompanionInstance["equipped"]) => {
-    setNest((prev) => ({
+    update((prev) => ({
       ...prev,
       instances: prev.instances.map((row) => (row.id === instanceId ? { ...row, equipped } : row)),
     }));
     track("outfit_saved", { instanceId });
-  }, []);
+  }, [update]);
 
   const renameCompanion = useCallback((instanceId: string, name: string) => {
-    setNest((prev) => ({
+    update((prev) => ({
       ...prev,
       instances: prev.instances.map((row) => (row.id === instanceId ? { ...row, name } : row)),
     }));
     track("companion_named", { instanceId });
-  }, []);
+  }, [update]);
 
   const setCreaturesEnabled = useCallback((enabled: boolean) => {
-    setNest((prev) => ({ ...prev, creaturesEnabled: enabled }));
+    update((prev) => ({ ...prev, creaturesEnabled: enabled }));
     track("creatures_paused", { enabled });
-  }, []);
+  }, [update]);
 
   const value = useMemo<NestContextValue>(
     () => ({
       ...nest,
-      hydrated,
+      hydrated: true,
       ownedItemIds,
       owns: (itemId: string) => ownedItemIds.has(itemId),
       signInDemo,
@@ -128,7 +147,7 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
         return { slot: item.slot, skillId: item.skillId };
       },
     }),
-    [applyGrant, hydrated, nest, ownedItemIds, renameCompanion, saveOutfit, setCreaturesEnabled, signInDemo, signOut],
+    [applyGrant, nest, ownedItemIds, renameCompanion, saveOutfit, setCreaturesEnabled, signInDemo, signOut],
   );
 
   return <NestContext.Provider value={value}>{children}</NestContext.Provider>;

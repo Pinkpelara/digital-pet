@@ -20,21 +20,12 @@ export function AdoptButton({
   const router = useRouter();
   const { owns, user, signInDemo } = useNest();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const already = itemIds.every((id) => owns(id));
-
-  if (already) {
-    return (
-      <a
-        href="/inventory"
-        className={`inline-flex items-center justify-center rounded-full bg-moss px-5 py-3 text-paper ${className ?? ""}`}
-      >
-        In your nest
-      </a>
-    );
-  }
 
   async function checkout() {
     setBusy(true);
+    setError(null);
     const sessionUser = user ?? signInDemo();
     track("checkout_started", { itemIds: itemIds.join(","), demo: true });
     try {
@@ -47,23 +38,38 @@ export function AdoptButton({
           email: sessionUser.email,
         }),
       });
-      const data = (await response.json()) as { url?: string; error?: string };
-      if (!response.ok || !data.url) throw new Error(data.error ?? "Checkout failed");
-      router.push(data.url);
-    } catch (error) {
-      console.error(error);
+      const data = (await response.json()) as { url?: string; path?: string; error?: string };
+      if (!response.ok || !(data.path || data.url)) throw new Error(data.error ?? "Checkout failed");
+      router.push(data.path ?? data.url!);
+    } catch (err) {
+      console.error(err);
+      setError(err instanceof Error ? err.message : "The parcel would not leave the counter.");
       setBusy(false);
     }
   }
 
+  if (already) {
+    return (
+      <a
+        href="/inventory"
+        className={`inline-flex items-center justify-center rounded-full bg-moss px-5 py-3 text-paper ${className ?? ""}`}
+      >
+        In your nest
+      </a>
+    );
+  }
+
   return (
-    <button
-      type="button"
-      onClick={checkout}
-      disabled={busy}
-      className={`inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper transition hover:bg-ink/90 disabled:opacity-60 ${className ?? ""}`}
-    >
-      {busy ? "Tying the parcel…" : `${label} ${formatPrice(priceCents)}`}
-    </button>
+    <div>
+      <button
+        type="button"
+        onClick={checkout}
+        disabled={busy}
+        className={`inline-flex items-center justify-center rounded-full bg-ink px-5 py-3 text-paper transition hover:bg-ink/90 disabled:opacity-60 ${className ?? ""}`}
+      >
+        {busy ? "Tying the parcel…" : `${label} ${formatPrice(priceCents)}`}
+      </button>
+      {error ? <p className="mt-2 text-sm text-peach">{error}</p> : null}
+    </div>
   );
 }

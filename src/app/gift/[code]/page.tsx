@@ -28,14 +28,14 @@ export default function GiftPage({ params }: { params: Promise<{ code: string }>
         giftCode: code,
       }),
     });
-    const data = (await response.json()) as { url?: string; error?: string };
-    if (!response.ok || !data.url) {
+    const data = (await response.json()) as { url?: string; path?: string; error?: string };
+    if (!response.ok || !(data.path || data.url)) {
       setError(data.error ?? "This ribbon would not untie.");
       setBusy(false);
       return;
     }
     track("gift_redeemed", { code });
-    router.push(data.url);
+    router.push(data.path ?? data.url!);
   }
 
   return (

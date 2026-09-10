@@ -8,21 +8,21 @@ import { useReducedMotion } from "@/components/site/use-reduced-motion";
 const roamers = [
   {
     species: "sprout" as const,
-    start: { x: 72, y: 220 },
+    start: { x: 28, y: 280 },
     size: 88,
     followPointer: true,
     equipped: { back: "gadget-balloon" },
   },
   {
     species: "mochi" as const,
-    start: { x: 980, y: 120 },
-    size: 100,
+    start: { x: 1040, y: 86 },
+    size: 108,
     followPointer: false,
     equipped: { body: "outfit-hoodie" },
   },
   {
     species: "niblet" as const,
-    start: { x: 420, y: 540 },
+    start: { x: 520, y: 620 },
     size: 86,
     followPointer: false,
     mishap: true,
@@ -33,9 +33,8 @@ const roamers = [
 export function WorldLayer({ enabled = true }: { enabled?: boolean }) {
   const { creaturesEnabled } = useNest();
   const reducedMotion = useReducedMotion();
-  const paused = !creaturesEnabled || !enabled;
 
-  if (reducedMotion && paused) return null;
+  if (!enabled || !creaturesEnabled) return null;
 
   return (
     <div aria-hidden="true">
@@ -50,7 +49,7 @@ export function WorldLayer({ enabled = true }: { enabled?: boolean }) {
             equipped={roamer.equipped}
             start={roamer.start}
             size={roamer.size}
-            paused={paused}
+            paused={false}
             reducedMotion={reducedMotion}
             followPointer={roamer.followPointer}
             mishap={roamer.mishap}

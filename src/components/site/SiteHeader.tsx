@@ -55,10 +55,11 @@ export function SiteHeader() {
           <button
             type="button"
             className="rounded-full border border-ink/10 px-3 py-1.5 text-xs text-ink-soft hover:border-ink/30"
+            aria-label={creaturesEnabled ? "Pause roaming creatures" : "Let creatures roam"}
             onClick={() => setCreaturesEnabled(!creaturesEnabled)}
             aria-pressed={!creaturesEnabled}
           >
-            {creaturesEnabled ? "Pause creatures" : "Let them roam"}
+            {creaturesEnabled ? "Pause" : "Roam"}
           </button>
           <Link
             href="/my-companions"

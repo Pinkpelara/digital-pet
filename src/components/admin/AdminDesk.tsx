@@ -6,20 +6,24 @@ import type { CatalogItem } from "@/lib/types";
 type Status = "checking" | "locked" | "open";
 
 export function AdminDesk() {
-  const [status, setStatus] = useState<Status>("checking");
+  const [status, setStatus] = useState<Status>("locked");
   const [password, setPassword] = useState("");
   const [items, setItems] = useState<CatalogItem[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
-    const response = await fetch("/api/admin/products");
-    if (response.status === 401) {
+    try {
+      const response = await fetch("/api/admin/products");
+      if (response.status === 401) {
+        setStatus("locked");
+        return;
+      }
+      const data = (await response.json()) as { items: CatalogItem[] };
+      setItems(data.items);
+      setStatus("open");
+    } catch {
       setStatus("locked");
-      return;
     }
-    const data = (await response.json()) as { items: CatalogItem[] };
-    setItems(data.items);
-    setStatus("open");
   }
 
   useEffect(() => {

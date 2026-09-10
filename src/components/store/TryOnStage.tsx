@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { RiveCreature } from "@/components/creatures/RiveCreature";
+import { Creature } from "@/components/creatures/Creature";
 import { track } from "@/lib/analytics";
 import { AdoptButton } from "@/components/store/AdoptButton";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
@@ -45,10 +45,10 @@ export function TryOnStage({
 
   return (
     <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-      <div className="relative overflow-hidden rounded-[2rem] bg-cream px-6 py-10">
+      <div className="relative z-10 overflow-hidden rounded-[2rem] bg-cream px-6 py-10">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(to_top,#e8d8b8,transparent)]" />
         <div className="flex min-h-[340px] items-end justify-center">
-          <RiveCreature species={species} size={280} equipped={equipped} skill={skill} mood={skill ? "skill" : "idle"} />
+          <Creature species={species} size={280} equipped={equipped} skill={skill} mood={skill ? "skill" : "idle"} />
         </div>
       </div>
       <div>
@@ -67,7 +67,12 @@ export function TryOnStage({
                   key={item.id}
                   type="button"
                   onClick={() => apply(item)}
-                  className="rounded-full border border-ink/10 bg-paper px-3 py-1.5 text-sm text-ink hover:border-ink/30"
+                  aria-pressed={item.slot ? equipped[item.slot] === item.id : skill === item.skillId}
+                  className={`rounded-full border px-3 py-1.5 text-sm ${
+                    (item.slot && equipped[item.slot] === item.id) || skill === item.skillId
+                      ? "border-moss bg-moss text-paper"
+                      : "border-ink/10 bg-paper text-ink hover:border-ink/30"
+                  }`}
                 >
                   {item.name}
                 </button>

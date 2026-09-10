@@ -18,7 +18,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <PageView />
       <div className="flex min-h-full flex-col">
         <SiteHeader />
-        {!isQuiet && <WorldLayer enabled={pathname === "/"} />}
+        {!isQuiet && pathname === "/" && <WorldLayer enabled />}
         <main id="content" className="relative z-10 flex-1">
           {children}
         </main>

@@ -22,7 +22,14 @@ export async function POST(request: Request) {
   }
 
   const userId = body.userId ?? "demo-user";
-  const origin = new URL(request.url).origin;
+  const forwardedHost = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") ?? new URL(request.url).protocol.replace(":", "");
+  const envOrigin = process.env.NEXT_PUBLIC_SITE_URL;
+  const headerOrigin =
+    forwardedHost && !forwardedHost.startsWith("0.0.0.0") && !forwardedHost.startsWith("[::]")
+      ? `${forwardedProto}://${forwardedHost}`
+      : null;
+  const origin = envOrigin || headerOrigin || new URL(request.url).origin.replace("://0.0.0.0", "://127.0.0.1").replace("://[::]", "://127.0.0.1");
   const token = createGrantToken({ userId, itemIds: selected.map((item) => item.id) });
   const successUrl = `${origin}/adopt/success?items=${selected.map((item) => item.id).join(",")}&token=${token}`;
   const cancelUrl = `${origin}/companions`;
@@ -38,6 +45,7 @@ export async function POST(request: Request) {
   if (!getStripeSecret() || isDemoMode() || fromGift) {
     return NextResponse.json({
       url: successUrl,
+      path: `/adopt/success?items=${selected.map((item) => item.id).join(",")}&token=${token}`,
       session,
       demo: true,
     });
