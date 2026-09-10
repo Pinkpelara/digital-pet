@@ -55,7 +55,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
           equipped={equipped}
           skill={skill}
           className="h-full min-h-[52vh] w-full lg:min-h-[64vh]"
-          cameraZ={3.3}
+          cameraZ={5.5}
         />
       </div>
       <div>

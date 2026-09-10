@@ -29,17 +29,18 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   const suggestions = items.filter((item) => product.looksGoodWith.includes(item.id));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <p className="mb-6 text-xs uppercase tracking-[0.2em] text-moss">{product.kind}</p>
+    <div className="bg-void">
       <Suspense>
         <TryOnStage species={species} product={product} suggestions={suggestions} />
       </Suspense>
       {product.unlocksBehavior && (
-        <p className="mt-8 rounded-2xl bg-cream px-4 py-3 text-sm text-ink">
+        <p className="mx-auto max-w-7xl px-5 pb-10 text-sm text-mist/70 md:px-10">
           Gadget behaviour unlocked: {product.unlocksBehavior}
         </p>
       )}
-      {product.limitedNote && <p className="mt-4 text-sm text-ink-soft">{product.limitedNote}</p>}
+      {product.limitedNote && (
+        <p className="mx-auto max-w-7xl px-5 pb-12 text-sm text-mist/50 md:px-10">{product.limitedNote}</p>
+      )}
     </div>
   );
 }

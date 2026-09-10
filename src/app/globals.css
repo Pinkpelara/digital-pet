@@ -10,8 +10,8 @@
   --sky: #7a8b92;
   --blush: #7d746e;
   --gold: #9a8a62;
-  --void: #0a0b0c;
-  --stage: #101214;
+  --void: #070809;
+  --stage: #0c0e10;
   --mist: #c5cbc6;
 }
 
@@ -348,6 +348,11 @@ body {
   background: linear-gradient(#d8c2a0, #c4a57a);
   border-radius: 999px;
   box-shadow: 0 10px 0 #b08958;
+}
+
+.grain-layer {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 @media (prefers-reduced-motion: reduce) {

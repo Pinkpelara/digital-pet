@@ -42,7 +42,7 @@ export default function MyCompanionsPage() {
                     species={instance.speciesId}
                     equipped={instance.equipped}
                     className="h-full w-full"
-                    cameraZ={3.7}
+                    cameraZ={5.5}
                   />
                 </div>
                 <h2 className="mt-3 font-display text-3xl">{instance.name}</h2>

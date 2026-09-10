@@ -11,11 +11,11 @@ export const figurineLook: Record<
 };
 
 export const vinyl = {
-  roughness: 0.4,
-  metalness: 0.05,
-  clearcoat: 0.72,
-  clearcoatRoughness: 0.26,
-  sheen: 0.32,
-  sheenRoughness: 0.7,
+  roughness: 0.32,
+  metalness: 0.04,
+  clearcoat: 0.92,
+  clearcoatRoughness: 0.18,
+  sheen: 0.4,
+  sheenRoughness: 0.62,
   sheenColor: "#eef1ee",
 } as const;

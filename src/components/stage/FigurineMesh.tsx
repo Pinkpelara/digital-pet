@@ -17,78 +17,33 @@ function VinylMaterial({ color }: { color: string }) {
       sheen={vinyl.sheen}
       sheenRoughness={vinyl.sheenRoughness}
       sheenColor={vinyl.sheenColor}
+      envMapIntensity={0.85}
     />
   );
 }
 
-function VinylSphere({
+function Ball({
   color,
   position,
   scale = 1,
-  args = [1, 48, 48],
+  segs = 40,
+  radius = 1,
 }: {
   color: string;
   position?: [number, number, number];
   scale?: number | [number, number, number];
-  args?: [number, number, number];
+  segs?: number;
+  radius?: number;
 }) {
   return (
     <mesh castShadow receiveShadow position={position} scale={scale}>
-      <sphereGeometry args={args} />
+      <sphereGeometry args={[radius, segs, segs]} />
       <VinylMaterial color={color} />
     </mesh>
   );
 }
 
-function extras(species: SpeciesId, look: (typeof figurineLook)[SpeciesId]) {
-  switch (species) {
-    case "bloop":
-      return (
-        <group>
-          <mesh castShadow position={[0, 1.12, 0]}>
-            <cylinderGeometry args={[0.035, 0.04, 0.42, 12]} />
-            <VinylMaterial color={look.shade} />
-          </mesh>
-          <VinylSphere color={look.extra} position={[0, 1.38, 0]} scale={0.16} args={[1, 24, 24]} />
-        </group>
-      );
-    case "mochi":
-      return (
-        <group>
-          <VinylSphere color={look.body} position={[-0.72, 0.28, 0.05]} scale={[0.22, 0.18, 0.16]} />
-          <VinylSphere color={look.body} position={[0.72, 0.28, 0.05]} scale={[0.22, 0.18, 0.16]} />
-        </group>
-      );
-    case "sprout":
-      return (
-        <group position={[0, 0.92, 0]} rotation={[0.15, 0.4, 0.2]}>
-          <mesh castShadow rotation={[0.6, 0, -0.4]} position={[-0.12, 0.08, 0]}>
-            <sphereGeometry args={[0.28, 20, 16]} />
-            <VinylMaterial color={look.extra} />
-          </mesh>
-          <mesh castShadow rotation={[0.5, 0, 0.45]} position={[0.14, 0.1, -0.04]} scale={[1, 0.45, 0.7]}>
-            <sphereGeometry args={[0.26, 20, 16]} />
-            <VinylMaterial color={look.shade} />
-          </mesh>
-        </group>
-      );
-    case "niblet":
-      return (
-        <group>
-          <mesh castShadow position={[-0.55, 0.72, 0]} rotation={[0, 0, 0.55]}>
-            <coneGeometry args={[0.16, 0.42, 4]} />
-            <VinylMaterial color={look.extra} />
-          </mesh>
-          <mesh castShadow position={[0.55, 0.72, 0]} rotation={[0, 0, -0.55]}>
-            <coneGeometry args={[0.16, 0.42, 4]} />
-            <VinylMaterial color={look.extra} />
-          </mesh>
-        </group>
-      );
-  }
-}
-
-function Gear({ equipped }: { equipped: EquipmentLoadout }) {
+function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) {
   const body = equipped.body;
   const face = equipped.face;
   const head = equipped.head;
@@ -98,82 +53,82 @@ function Gear({ equipped }: { equipped: EquipmentLoadout }) {
   return (
     <group>
       {(body === "outfit-raincoat" || body === "drop-starrycoat") && (
-        <mesh castShadow position={[0, -0.12, 0.02]} scale={[1.18, 0.72, 1.12]}>
-          <sphereGeometry args={[0.78, 40, 28, 0, Math.PI * 2, 0, Math.PI * 0.62]} />
-          <VinylMaterial color={body === "drop-starrycoat" ? "#3a4450" : "#c4a24a"} />
+        <mesh castShadow position={[0, -0.22, 0.02]} scale={[1.18, 0.78, 1.14]}>
+          <sphereGeometry args={[0.52, 36, 22, 0, Math.PI * 2, 0, Math.PI * 0.68]} />
+          <VinylMaterial color={body === "drop-starrycoat" ? "#3a4450" : "#c4a24a" } />
         </mesh>
       )}
       {body === "outfit-hoodie" && (
-        <mesh castShadow position={[0, 0.05, 0]} scale={[1.12, 0.85, 1.08]}>
-          <sphereGeometry args={[0.78, 36, 24, 0, Math.PI * 2, 0, Math.PI * 0.7]} />
+        <mesh castShadow position={[0, -0.12, 0]} scale={[1.2, 0.95, 1.16]}>
+          <sphereGeometry args={[0.52, 32, 20, 0, Math.PI * 2, 0, Math.PI * 0.78]} />
           <VinylMaterial color="#4a524e" />
         </mesh>
       )}
       {body === "drop-cape" && (
-        <mesh castShadow position={[0, -0.1, -0.35]} rotation={[0.35, 0, 0]}>
-          <capsuleGeometry args={[0.42, 0.7, 8, 16]} />
+        <mesh castShadow position={[0, -0.18, -0.38]} rotation={[0.38, 0, 0]}>
+          <capsuleGeometry args={[0.34, 0.62, 8, 16]} />
           <VinylMaterial color="#2c3340" />
         </mesh>
       )}
       {face === "outfit-sunglasses" && (
-        <group position={[0, 0.28, 0.72]}>
+        <group position={[0, 0.56, 0.48]}>
           <mesh>
-            <boxGeometry args={[0.72, 0.06, 0.06]} />
+            <boxGeometry args={[0.58, 0.05, 0.05]} />
             <meshStandardMaterial color="#1a1c1b" metalness={0.4} roughness={0.25} />
           </mesh>
-          <mesh position={[-0.2, 0, 0.04]}>
-            <circleGeometry args={[0.14, 20]} />
+          <mesh position={[-0.16, 0, 0.03]}>
+            <circleGeometry args={[0.12, 20]} />
             <meshStandardMaterial color="#111" metalness={0.6} roughness={0.15} />
           </mesh>
-          <mesh position={[0.2, 0, 0.04]}>
-            <circleGeometry args={[0.14, 20]} />
+          <mesh position={[0.16, 0, 0.03]}>
+            <circleGeometry args={[0.12, 20]} />
             <meshStandardMaterial color="#111" metalness={0.6} roughness={0.15} />
           </mesh>
         </group>
       )}
       {head === "outfit-sproutcap" && (
-        <group position={[0, 0.95, 0]}>
+        <group position={[0, 1.02, 0]}>
           <mesh castShadow>
-            <cylinderGeometry args={[0.42, 0.48, 0.22, 24]} />
+            <cylinderGeometry args={[0.38, 0.44, 0.2, 24]} />
             <VinylMaterial color="#5a6848" />
           </mesh>
-          <mesh position={[0, -0.06, 0.28]} rotation={[0.2, 0, 0]}>
-            <boxGeometry args={[0.7, 0.04, 0.28]} />
+          <mesh position={[0, -0.05, 0.24]} rotation={[0.2, 0, 0]}>
+            <boxGeometry args={[0.62, 0.035, 0.24]} />
             <VinylMaterial color="#4a533c" />
           </mesh>
         </group>
       )}
       {head === "outfit-scarf" && (
-        <mesh castShadow position={[0, 0.02, 0.1]} rotation={[0.2, 0.4, 0]}>
-          <torusGeometry args={[0.55, 0.1, 12, 24]} />
+        <mesh castShadow position={[0, 0.22, 0.08]} rotation={[0.18, 0.35, 0]}>
+          <torusGeometry args={[0.42, 0.08, 12, 24]} />
           <VinylMaterial color="#6a7c86" />
         </mesh>
       )}
       {back === "gadget-balloon" && (
-        <group position={[0.55, 1.15, -0.2]}>
-          <VinylSphere color="#8a9aa3" scale={0.28} />
-          <mesh position={[0, -0.42, 0]}>
-            <cylinderGeometry args={[0.012, 0.012, 0.5, 8]} />
+        <group position={[0.58, 1.22, -0.18]}>
+          <Ball color="#8a9aa3" scale={0.24} segs={Math.max(16, segs / 2)} />
+          <mesh position={[0, -0.38, 0]}>
+            <cylinderGeometry args={[0.01, 0.01, 0.46, 8]} />
             <meshStandardMaterial color="#c5c8c2" />
           </mesh>
         </group>
       )}
       {hand === "gadget-umbrella" && (
-        <group position={[0.7, 0.1, 0.35]} rotation={[0.2, 0, -0.4]}>
+        <group position={[0.62, 0.02, 0.32]} rotation={[0.18, 0, -0.38]}>
           <mesh>
-            <cylinderGeometry args={[0.025, 0.025, 0.9, 8]} />
+            <cylinderGeometry args={[0.022, 0.022, 0.82, 8]} />
             <meshStandardMaterial color="#d8d6cf" />
           </mesh>
-          <mesh position={[0, 0.42, 0]}>
-            <coneGeometry args={[0.32, 0.2, 16, 1, true]} />
+          <mesh position={[0, 0.38, 0]}>
+            <coneGeometry args={[0.28, 0.18, 16, 1, true]} />
             <VinylMaterial color="#6a7c86" />
           </mesh>
         </group>
       )}
       {feet === "outfit-rainboots" && (
         <group>
-          <VinylSphere color="#3a3d3b" position={[-0.28, -0.92, 0.12]} scale={[0.2, 0.14, 0.26]} />
-          <VinylSphere color="#3a3d3b" position={[0.28, -0.92, 0.12]} scale={[0.2, 0.14, 0.26]} />
+          <Ball color="#3a3d3b" position={[-0.2, -0.92, 0.12]} scale={[0.18, 0.13, 0.24]} segs={20} />
+          <Ball color="#3a3d3b" position={[0.2, -0.92, 0.12]} scale={[0.18, 0.13, 0.24]} segs={20} />
         </group>
       )}
     </group>
@@ -187,6 +142,7 @@ export function FigurineMesh({
   skill = null,
   followPointer = false,
   pointer,
+  quality = "high",
 }: {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
@@ -194,69 +150,126 @@ export function FigurineMesh({
   skill?: SkillId | null;
   followPointer?: boolean;
   pointer?: { x: number; y: number };
+  quality?: "high" | "medium";
 }) {
   const root = useRef<Group>(null);
   const look = figurineLook[species];
-  const bodyScale = useMemo<[number, number, number]>(() => {
-    if (species === "mochi") return [1.18, 0.92, 1.12];
-    if (species === "sprout") return [0.92, 1.08, 0.95];
-    if (species === "niblet") return [0.95, 0.9, 1];
-    return [1, 1.02, 1];
+  const segs = quality === "high" ? 48 : 28;
+  const proportions = useMemo(() => {
+    if (species === "mochi") return { body: [1.22, 0.88, 1.12] as const, head: [1.12, 0.92, 1.08] as const };
+    if (species === "sprout") return { body: [0.9, 1.08, 0.92] as const, head: [0.92, 1.04, 0.95] as const };
+    if (species === "niblet") return { body: [0.95, 0.9, 1] as const, head: [1.02, 0.95, 1] as const };
+    return { body: [1, 1, 1] as const, head: [1, 1.02, 1] as const };
   }, [species]);
 
   useFrame((state) => {
     const group = root.current;
     if (!group) return;
     const t = state.clock.elapsedTime;
-    const targetY = followPointer ? (pointer?.x ?? 0) * 0.45 : Math.sin(t * 0.35) * 0.08;
-    const targetX = followPointer ? (pointer?.y ?? 0) * -0.18 : Math.sin(t * 0.27) * 0.04;
-    group.rotation.y += (targetY - group.rotation.y) * 0.06;
-    group.rotation.x += (targetX - group.rotation.x) * 0.06;
+    const maxY = 0.38;
+    const targetY = followPointer ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.07;
+    const targetX = followPointer ? (pointer?.y ?? 0) * -0.14 : Math.sin(t * 0.24) * 0.035;
+    group.rotation.y += (targetY - group.rotation.y) * 0.07;
+    group.rotation.x += (targetX - group.rotation.x) * 0.07;
     const nap = mood === "nap" || skill === "nap";
-    group.position.y = nap ? -0.08 : Math.sin(t * (skill ? 3.2 : 1.15)) * (skill ? 0.08 : 0.045);
-    if (skill === "moonwalk") group.position.x = Math.sin(t * 2) * 0.12;
-    if (skill === "dance") group.rotation.z = Math.sin(t * 6) * 0.08;
+    group.position.y = nap ? -0.06 : Math.sin(t * (skill ? 3.1 : 1.05)) * (skill ? 0.07 : 0.04);
+    if (skill === "moonwalk") group.position.x = Math.sin(t * 2) * 0.1;
+    if (skill === "dance") group.rotation.z = Math.sin(t * 6) * 0.07;
   });
 
   const napping = mood === "nap" || skill === "nap";
 
   return (
-    <group ref={root} position={[0, 0.15, 0]}>
-      <group scale={bodyScale}>
-        {extras(species, look)}
-        <VinylSphere color={look.body} scale={0.82} />
-        <VinylSphere color={look.belly} position={[0, -0.12, 0.38]} scale={[0.48, 0.38, 0.32]} />
-        <VinylSphere color={look.gloss} position={[-0.28, 0.18, 0.55]} scale={0.12} args={[1, 16, 16]} />
-        <VinylSphere color={look.shade} position={[-0.28, -0.78, 0.08]} scale={[0.18, 0.12, 0.16]} />
-        <VinylSphere color={look.shade} position={[0.28, -0.78, 0.08]} scale={[0.18, 0.12, 0.16]} />
-        <group position={[0, 0.22, 0.62]}>
-          {napping ? (
+    <group ref={root}>
+      <group position={[0, -0.02, 0]}>
+        <group scale={proportions.body}>
+          <Ball color={look.body} position={[0, -0.16, 0]} scale={0.54} segs={segs} />
+          <Ball color={look.belly} position={[0, -0.22, 0.28]} scale={[0.34, 0.28, 0.22]} segs={segs} />
+          <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, -0.12, 0]} castShadow>
+            <torusGeometry args={[0.42, 0.012, 8, 28]} />
+            <meshStandardMaterial color={look.shade} roughness={0.55} metalness={0.04} />
+          </mesh>
+          <Ball color={look.shade} position={[-0.2, -0.88, 0.06]} scale={[0.16, 0.11, 0.15]} segs={20} />
+          <Ball color={look.shade} position={[0.2, -0.88, 0.06]} scale={[0.16, 0.11, 0.15]} segs={20} />
+          <Ball color={look.body} position={[-0.48, -0.08, 0.08]} scale={[0.14, 0.16, 0.14]} segs={24} />
+          <Ball color={look.body} position={[0.48, -0.08, 0.08]} scale={[0.14, 0.16, 0.14]} segs={24} />
+          {species === "mochi" && (
             <>
-              <mesh position={[-0.18, 0, 0]} rotation={[0, 0, 0.2]}>
-                <boxGeometry args={[0.16, 0.025, 0.02]} />
-                <meshStandardMaterial color="#1c1e1d" />
-              </mesh>
-              <mesh position={[0.18, 0, 0]} rotation={[0, 0, -0.2]}>
-                <boxGeometry args={[0.16, 0.025, 0.02]} />
-                <meshStandardMaterial color="#1c1e1d" />
-              </mesh>
-            </>
-          ) : (
-            <>
-              <VinylSphere color="#161816" position={[-0.18, 0.02, 0.02]} scale={[0.09, 0.11, 0.08]} args={[1, 16, 16]} />
-              <VinylSphere color="#161816" position={[0.18, 0.02, 0.02]} scale={[0.09, 0.11, 0.08]} args={[1, 16, 16]} />
-              <mesh position={[-0.16, 0.05, 0.08]}>
-                <sphereGeometry args={[0.025, 10, 10]} />
-                <meshStandardMaterial color="#f4f6f3" emissive="#f4f6f3" emissiveIntensity={0.4} />
-              </mesh>
-              <mesh position={[0.2, 0.05, 0.08]}>
-                <sphereGeometry args={[0.025, 10, 10]} />
-                <meshStandardMaterial color="#f4f6f3" emissive="#f4f6f3" emissiveIntensity={0.4} />
-              </mesh>
+              <Ball color={look.body} position={[-0.62, 0.08, 0.04]} scale={[0.2, 0.16, 0.14]} segs={segs} />
+              <Ball color={look.body} position={[0.62, 0.08, 0.04]} scale={[0.2, 0.16, 0.14]} segs={segs} />
             </>
           )}
         </group>
-        <Gear equipped={equipped} />
+
+        <group position={[0, 0.52, 0]} scale={proportions.head}>
+          <Ball color={look.body} scale={0.5} segs={segs} />
+          <Ball color={look.gloss} position={[-0.18, 0.12, 0.32]} scale={0.09} segs={16} />
+          <group position={[0, 0.04, 0.42]}>
+            {napping ? (
+              <>
+                <mesh position={[-0.14, 0, 0]} rotation={[0, 0, 0.18]}>
+                  <boxGeometry args={[0.13, 0.022, 0.02]} />
+                  <meshStandardMaterial color="#1c1e1d" />
+                </mesh>
+                <mesh position={[0.14, 0, 0]} rotation={[0, 0, -0.18]}>
+                  <boxGeometry args={[0.13, 0.022, 0.02]} />
+                  <meshStandardMaterial color="#1c1e1d" />
+                </mesh>
+              </>
+            ) : (
+              <>
+                <Ball color="#141615" position={[-0.15, 0.02, 0.02]} scale={[0.09, 0.115, 0.08]} segs={16} />
+                <Ball color="#141615" position={[0.15, 0.02, 0.02]} scale={[0.09, 0.115, 0.08]} segs={16} />
+                <mesh position={[-0.13, 0.055, 0.08]}>
+                  <sphereGeometry args={[0.028, 10, 10]} />
+                  <meshStandardMaterial color="#f4f6f3" emissive="#f4f6f3" emissiveIntensity={0.45} />
+                </mesh>
+                <mesh position={[0.17, 0.055, 0.08]}>
+                  <sphereGeometry args={[0.028, 10, 10]} />
+                  <meshStandardMaterial color="#f4f6f3" emissive="#f4f6f3" emissiveIntensity={0.45} />
+                </mesh>
+                <mesh position={[0, -0.12, 0.02]}>
+                  <sphereGeometry args={[0.035, 10, 8]} />
+                  <meshStandardMaterial color={look.shade} roughness={0.5} />
+                </mesh>
+              </>
+            )}
+          </group>
+          {species === "bloop" && (
+            <group position={[0, 0.52, 0]}>
+              <mesh castShadow>
+                <cylinderGeometry args={[0.03, 0.038, 0.34, 12]} />
+                <VinylMaterial color={look.shade} />
+              </mesh>
+              <Ball color={look.extra} position={[0, 0.24, 0]} scale={0.13} segs={Math.max(16, segs / 2)} />
+            </group>
+          )}
+          {species === "sprout" && (
+            <group position={[0, 0.48, -0.02]} rotation={[0.2, 0.35, 0.15]}>
+              <mesh castShadow rotation={[0.55, 0, -0.35]} position={[-0.1, 0.08, 0]}>
+                <sphereGeometry args={[0.24, 20, 16]} />
+                <VinylMaterial color={look.extra} />
+              </mesh>
+              <mesh castShadow rotation={[0.45, 0, 0.4]} position={[0.12, 0.1, -0.04]} scale={[1, 0.42, 0.68]}>
+                <sphereGeometry args={[0.22, 20, 16]} />
+                <VinylMaterial color={look.shade} />
+              </mesh>
+            </group>
+          )}
+          {species === "niblet" && (
+            <group>
+              <mesh castShadow position={[-0.32, 0.32, 0]} rotation={[0, 0, 0.48]}>
+                <coneGeometry args={[0.13, 0.36, 4]} />
+                <VinylMaterial color={look.extra} />
+              </mesh>
+              <mesh castShadow position={[0.32, 0.32, 0]} rotation={[0, 0, -0.48]}>
+                <coneGeometry args={[0.13, 0.36, 4]} />
+                <VinylMaterial color={look.extra} />
+              </mesh>
+            </group>
+          )}
+        </group>
+        <Gear equipped={equipped} segs={segs} />
       </group>
     </group>
   );

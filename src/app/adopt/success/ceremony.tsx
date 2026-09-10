@@ -48,7 +48,7 @@ export function AdoptCeremony() {
           species={species}
           className="h-full w-full"
           mood="happy"
-          cameraZ={3.4}
+          cameraZ={5.5}
         />
       </div>
 

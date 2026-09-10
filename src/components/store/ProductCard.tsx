@@ -1,58 +1,32 @@
 import Link from "next/link";
-import { LiveStage } from "@/components/stage/LiveStage";
 import { formatPrice } from "@/lib/format";
-import type { CatalogItem, EquipmentLoadout, SpeciesId } from "@/lib/types";
-
-function previewLoadout(item: CatalogItem): { species: SpeciesId; equipped: EquipmentLoadout } {
-  const species = item.speciesId ?? (item.id.includes("mochi") ? "mochi" : item.id.includes("sprout") ? "sprout" : item.id.includes("niblet") ? "niblet" : "bloop");
-  const equipped: EquipmentLoadout = {};
-  if (item.slot) equipped[item.slot] = item.id;
-  return { species, equipped };
-}
+import type { CatalogItem } from "@/lib/types";
 
 export function ProductCard({
   item,
   href,
-  owned = false,
+  owned,
 }: {
   item: CatalogItem;
   href: string;
   owned?: boolean;
 }) {
-  const preview = previewLoadout(item);
   return (
-    <Link
-      href={href}
-      className="group block"
-    >
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-void">
-        <LiveStage
-          species={preview.species}
-          equipped={preview.equipped}
-          mood={item.skillId === "nap" ? "nap" : "idle"}
-          skill={item.skillId}
-          className="h-full w-full"
-          followPointer
-          cameraZ={3.9}
-        />
-        {item.limited && (
-          <span className="absolute left-3 top-3 rounded-full bg-ink px-2 py-1 text-[10px] uppercase tracking-wider text-paper">
-            Limited
-          </span>
-        )}
-        {owned && (
-          <span className="absolute right-3 top-3 rounded-full bg-moss px-2 py-1 text-[10px] uppercase tracking-wider text-paper">
-            In nest
-          </span>
-        )}
-      </div>
-      <div className="mt-4 flex items-start justify-between gap-3">
+    <article>
+      <Link
+        href={href}
+        className="group flex items-end justify-between gap-6 border-b border-ink/10 py-6 transition-colors hover:border-ink/40"
+      >
         <div>
-          <p className="font-display text-2xl text-ink">{item.name}</p>
-          <p className="mt-1 text-sm text-ink-soft">{item.tagline}</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-ink-soft">
+            {item.kind}
+            {owned ? " · in nest" : ""}
+          </p>
+          <h3 className="mt-1 font-display text-3xl text-ink">{item.name}</h3>
+          <p className="mt-1 max-w-md text-sm text-ink-soft">{item.tagline}</p>
         </div>
-        <p className="rounded-full bg-cream px-3 py-1 text-sm text-ink">{formatPrice(item.priceCents)}</p>
-      </div>
-    </Link>
+        <span className="shrink-0 text-sm tabular-nums text-ink-soft">{formatPrice(item.priceCents)}</span>
+      </Link>
+    </article>
   );
 }
