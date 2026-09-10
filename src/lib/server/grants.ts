@@ -22,10 +22,31 @@ type GrantResult = {
   discoveries: Discovery[];
 };
 
-const ownership = new Map<string, OwnershipRecord>();
-const instances = new Map<string, CompanionInstance>();
-const discoveries = new Map<string, Discovery>();
-const processedEvents = new Set<string>();
+type Store = {
+  ownership: Map<string, OwnershipRecord>;
+  instances: Map<string, CompanionInstance>;
+  discoveries: Map<string, Discovery>;
+  processedEvents: Set<string>;
+};
+
+const globalStore = globalThis as typeof globalThis & { __sillkinGrants?: Store };
+
+function store(): Store {
+  if (!globalStore.__sillkinGrants) {
+    globalStore.__sillkinGrants = {
+      ownership: new Map(),
+      instances: new Map(),
+      discoveries: new Map(),
+      processedEvents: new Set(),
+    };
+  }
+  return globalStore.__sillkinGrants;
+}
+
+const ownership = () => store().ownership;
+const instances = () => store().instances;
+const discoveries = () => store().discoveries;
+const processedEvents = () => store().processedEvents;
 
 function keyFor(userId: string, itemId: string): string {
   return `${userId}:${itemId}`;
@@ -46,28 +67,28 @@ function applyPack(stats: PersonalityStats, itemId: string): PersonalityStats {
 }
 
 export function listOwnership(userId: string): OwnershipRecord[] {
-  return [...ownership.values()].filter((row) => row.userId === userId);
+  return [...ownership().values()].filter((row) => row.userId === userId);
 }
 
 export function listInstances(userId: string): CompanionInstance[] {
-  return [...instances.values()].filter((row) => row.userId === userId);
+  return [...instances().values()].filter((row) => row.userId === userId);
 }
 
 export function listDiscoveries(userId: string): Discovery[] {
-  return [...discoveries.values()].filter((row) => row.userId === userId);
+  return [...discoveries().values()].filter((row) => row.userId === userId);
 }
 
 export function getInstance(id: string): CompanionInstance | undefined {
-  return instances.get(id);
+  return instances().get(id);
 }
 
 export function saveInstance(instance: CompanionInstance): CompanionInstance {
-  instances.set(instance.id, instance);
+  instances().set(instance.id, instance);
   return instance;
 }
 
 export function grantOwnership(input: GrantInput): GrantResult {
-  if (input.stripeEventId && processedEvents.has(input.stripeEventId)) {
+  if (input.stripeEventId && processedEvents().has(input.stripeEventId)) {
     return {
       alreadyGranted: true,
       ownership: listOwnership(input.userId),
@@ -84,7 +105,7 @@ export function grantOwnership(input: GrantInput): GrantResult {
     const item = items.find((entry) => entry.id === itemId);
     if (!item || !item.active) continue;
 
-    const existing = ownership.get(keyFor(input.userId, itemId));
+    const existing = ownership().get(keyFor(input.userId, itemId));
     if (existing) continue;
 
     const record: OwnershipRecord = {
@@ -95,7 +116,7 @@ export function grantOwnership(input: GrantInput): GrantResult {
       stripeEventId: input.stripeEventId,
       grantedAt: new Date().toISOString(),
     };
-    ownership.set(keyFor(input.userId, itemId), record);
+    ownership().set(keyFor(input.userId, itemId), record);
     granted.push(record);
 
     if (item.kind === "companion" && item.speciesId) {
@@ -114,7 +135,7 @@ export function grantOwnership(input: GrantInput): GrantResult {
           personalityPacks: [],
           createdAt: record.grantedAt,
         };
-        instances.set(instance.id, instance);
+        instances().set(instance.id, instance);
         newInstances.push(instance);
         const discovery: Discovery = {
           id: crypto.randomUUID(),
@@ -124,7 +145,7 @@ export function grantOwnership(input: GrantInput): GrantResult {
           note: `${species.name} crawled out of a parcel.`,
           createdAt: record.grantedAt,
         };
-        discoveries.set(discovery.id, discovery);
+        discoveries().set(discovery.id, discovery);
         newDiscoveries.push(discovery);
       }
     }
@@ -137,17 +158,17 @@ export function grantOwnership(input: GrantInput): GrantResult {
     for (const instance of userInstances) {
       if (item.skillId && !instance.unlockedSkills.includes(item.skillId)) {
         instance.unlockedSkills = [...instance.unlockedSkills, item.skillId];
-        instances.set(instance.id, instance);
+        instances().set(instance.id, instance);
       }
       if (item.personalityId && !instance.personalityPacks.includes(item.personalityId)) {
         instance.personalityPacks = [...instance.personalityPacks, item.personalityId];
         instance.stats = applyPack(instance.stats, item.id);
-        instances.set(instance.id, instance);
+        instances().set(instance.id, instance);
       }
     }
   }
 
-  if (input.stripeEventId) processedEvents.add(input.stripeEventId);
+  if (input.stripeEventId) processedEvents().add(input.stripeEventId);
 
   return {
     alreadyGranted: granted.length === 0 && Boolean(input.stripeEventId),
@@ -162,12 +183,12 @@ export function replaceUserState(input: {
   ownership: OwnershipRecord[];
   instances: CompanionInstance[];
 }): void {
-  for (const [key, row] of ownership) {
-    if (row.userId === input.userId) ownership.delete(key);
+  for (const [key, row] of ownership()) {
+    if (row.userId === input.userId) ownership().delete(key);
   }
-  for (const [key, row] of instances) {
-    if (row.userId === input.userId) instances.delete(key);
+  for (const [key, row] of instances()) {
+    if (row.userId === input.userId) instances().delete(key);
   }
-  for (const row of input.ownership) ownership.set(keyFor(row.userId, row.itemId), row);
-  for (const row of input.instances) instances.set(row.id, row);
+  for (const row of input.ownership) ownership().set(keyFor(row.userId, row.itemId), row);
+  for (const row of input.instances) instances().set(row.id, row);
 }
