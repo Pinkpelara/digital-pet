@@ -89,7 +89,7 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
                   autoPlay="party"
                   playAction="party"
                   companionName="Bloop"
-                  hint="Party hat + confetti. Balloon Bunch is free for 24 hours."
+                  hint="Party hat. Confetti. They already knew."
                   className="h-full"
                   cameraZ={5.4}
                 />
@@ -102,7 +102,7 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
           <ul className="space-y-4 text-ink-soft">
             <li>
               <span className="font-medium text-ink">Work-with-you.</span> They live in the corner
-              while you study or take calls — presence, not a productivity coach.
+              while you study or take calls.
             </li>
             <li>
               <span className="font-medium text-ink">Sulk when ignored.</span> Look away long enough
@@ -127,20 +127,14 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
           </div>
           {open || hasBalloonBunch() ? (
             <p className="mt-4 text-sm text-moss">
-              Balloon Bunch is a free 24-hour Teach — we sell the{" "}
-              <Link href="/item/party-hat" className="underline underline-offset-4">
-                Party Hat
-              </Link>
-              , not the cake.{" "}
+              The party hat is on.{" "}
               <Link href="/item/balloon-bunch" className="underline underline-offset-4">
-                See the Teach
-              </Link>
-              .
+                Balloon Bunch
+              </Link>{" "}
+              came with it.
             </p>
           ) : null}
-          <p className="mt-4 text-xs text-ink-soft">
-            Demo uses a local birthday flag. Nothing is sent anywhere. No wellness scores.
-          </p>
+          <p className="mt-4 text-xs text-ink-soft">Demo only. Nothing is sent anywhere.</p>
         </div>
       </div>
     </section>

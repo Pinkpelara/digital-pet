@@ -41,7 +41,7 @@ export function ProductCard({
                 cameraZ={5.55}
                 followPointer={false}
                 quality="medium"
-                dprMax={1.2}
+                dprMax={1}
                 loop
               />
             </div>

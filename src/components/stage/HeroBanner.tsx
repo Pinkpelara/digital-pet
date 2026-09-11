@@ -34,23 +34,17 @@ export function HeroBanner() {
 
   useEffect(() => {
     let cancelled = false;
-    const onReady = () => {
-      if (!cancelled) setStageReady(true);
-    };
-    let idleId = 0;
-    let timeoutId = 0;
-    const raf = window.requestAnimationFrame(() => {
-      if (typeof window.requestIdleCallback === "function") {
-        idleId = window.requestIdleCallback(onReady, { timeout: 280 });
-        return;
-      }
-      timeoutId = window.setTimeout(onReady, 120);
+    let second = 0;
+    // After first HTML paint — one hero canvas, nothing else competing.
+    const first = window.requestAnimationFrame(() => {
+      second = window.requestAnimationFrame(() => {
+        if (!cancelled) setStageReady(true);
+      });
     });
     return () => {
       cancelled = true;
-      window.cancelAnimationFrame(raf);
-      if (idleId) window.cancelIdleCallback(idleId);
-      if (timeoutId) window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(first);
+      if (second) window.cancelAnimationFrame(second);
     };
   }, []);
 

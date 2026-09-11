@@ -6,7 +6,6 @@ import { PlayableStage } from "@/components/stage/PlayableStage";
 import { catalogById } from "@/data/catalog";
 import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
 import { brand } from "@/lib/brand";
-import { KineticTitle } from "@/components/site/KineticTitle";
 import { useNest } from "@/lib/state/nest-context";
 import type { DemoActionId, EquipmentLoadout, SkillId } from "@/lib/types";
 
@@ -60,13 +59,7 @@ export function MakeYoursDemo() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">Their stuff</p>
-      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
-        Try it on. It’s theirs.
-      </KineticTitle>
-      <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
-      <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <div className="stage-frame min-h-[460px] overflow-hidden rounded-[1.8rem] md:min-h-[560px]">
           <PlayableStage
             key={look.id}
@@ -82,6 +75,7 @@ export function MakeYoursDemo() {
             className="h-full min-h-[460px] w-full md:min-h-[560px]"
             cameraZ={5.6}
             quality="medium"
+            dprMax={1}
           />
         </div>
         <div>
@@ -138,7 +132,6 @@ export function MakeYoursDemo() {
             </Link>
           </p>
         </div>
-      </div>
-    </section>
+    </div>
   );
 }
