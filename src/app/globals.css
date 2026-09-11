@@ -338,7 +338,7 @@ body {
 .action-wheel {
   position: absolute;
   inset: 0;
-  z-index: 24;
+  z-index: 40;
 }
 
 .action-wheel-scrim {
