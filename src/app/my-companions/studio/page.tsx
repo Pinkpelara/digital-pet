@@ -22,7 +22,7 @@ function StudioInner() {
       <div className="mt-8">
         <p className="font-display text-3xl text-ink">Nobody to dress yet.</p>
         <Link href="/companions" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
-          Meet the companions
+          Adopt one
         </Link>
       </div>
     );

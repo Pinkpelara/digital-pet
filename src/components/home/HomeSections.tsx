@@ -111,35 +111,69 @@ export function TwinBloops() {
         You cannot buy, set, or edit any of this. You find out by living with them.
       </p>
       <Link href="/companions/bloop" className="mt-8 inline-block rounded-full bg-ink px-6 py-3 text-sm text-paper">
-        Meet Bloop
+        Adopt one
       </Link>
     </section>
   );
 }
 
-const tryLooks: Array<{
+type ToyLook = {
   id: string;
   label: string;
   equipped: EquipmentLoadout;
   skill: SkillId | null;
   demo: DemoActionId | null;
-}> = [
-  { id: "plain", label: "Just them", equipped: {}, skill: null, demo: null },
-  { id: "coat", label: "Yellow raincoat", equipped: { body: "outfit-raincoat" }, skill: null, demo: null },
-  { id: "umbrella", label: "Pocket umbrella", equipped: { body: "outfit-raincoat", hand: "gadget-umbrella" }, skill: null, demo: "rain-walk" },
+  line: string;
+};
+
+const tryLooks: ToyLook[] = [
+  {
+    id: "coat",
+    label: "Raincoat",
+    equipped: { body: "outfit-raincoat" },
+    skill: null,
+    demo: null,
+    line: "A raincoat is a shape. Visible in a second.",
+  },
+  {
+    id: "board",
+    label: "Skateboard",
+    equipped: { feet: "gadget-skateboard" },
+    skill: null,
+    demo: "skate",
+    line: "Click the board. They skate.",
+  },
+  {
+    id: "moonwalk",
+    label: "Moonwalk",
+    equipped: { face: "outfit-sunglasses" },
+    skill: "moonwalk",
+    demo: "moonwalk",
+    line: "Moonwalk. Backward, smooth, slightly illegal.",
+  },
 ];
 
+const takenBack: ToyLook = {
+  id: "plain",
+  label: "Take it back",
+  equipped: {},
+  skill: null,
+  demo: null,
+  line: "Same creature. The toy is off.",
+};
+
 export function MakeYoursDemo() {
-  const [look, setLook] = useState(tryLooks[1]);
+  const [look, setLook] = useState<ToyLook>(tryLooks[0]);
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">In the shop now</p>
+      <p className="text-sm font-medium text-moss">Toys you can see</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
-        Dress it. Hand it an umbrella.
+        Raincoat. Skateboard. Moonwalk.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Shop line: Yellow Raincoat · Pocket Umbrella. If you cannot see it in a second, we do not sell it.
+        If you cannot see it in a second, we do not sell it. Birthday and the day they notice you are
+        free magic — not shop items.
       </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <StageBox
@@ -167,13 +201,14 @@ export function MakeYoursDemo() {
               </button>
             ))}
           </div>
-          <p className="mt-6 text-ink-soft">
-            {look.id === "umbrella"
-              ? "An umbrella means rain-walks. Gadgets change what they do, not who they are."
-              : look.id === "coat"
-                ? "A raincoat is just a raincoat. Personality stays hidden."
-                : "Same Bloop. You have not met the individual yet."}
-          </p>
+          <p className="mt-6 text-ink-soft">{look.line}</p>
+          <button
+            type="button"
+            onClick={() => setLook(takenBack)}
+            className="mt-4 rounded-full border border-ink/15 px-4 py-2 text-sm text-ink"
+          >
+            Take it back
+          </button>
           <div className="mt-8 flex flex-wrap gap-3">
             {FEATURED_SHOP_IDS.map((id, index) => {
               const item = catalogById.get(id);
@@ -224,7 +259,7 @@ export function ThingsChange() {
             onClick={() => setOn((prev) => !prev)}
             className="rounded-full bg-ink px-6 py-3 text-sm text-paper"
           >
-            {on ? "Close the umbrella" : "Open the umbrella"}
+            {on ? "Take it back" : "Open the umbrella"}
           </button>
           <p className="mt-5 text-ink-soft">
             {on ? "Same Bloop. Wetter priorities." : "Same Bloop. Coat still on."}
@@ -335,13 +370,13 @@ export function LetLoose() {
 export function LiveYourDay() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">They live your day with you</p>
+      <p className="text-sm font-medium text-moss">Free magic — not for sale</p>
       <h2 className="mt-3 max-w-[18ch] font-display text-4xl text-ink md:text-5xl">
-        They study when you study. Birthday cake appears before you remember.
+        They notice your day. Birthday cake appears before you remember.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Attachment first. Soft presence, not a streak. You meet one individual — you do not buy a
-        personality. They sulk if you vanish. They never starve.
+        Homework, a mood dip, an evening streak, a birthday — those moments stay free. We do not
+        paywall the cake. You meet one individual. You do not buy a personality.
       </p>
       <CareChips className="mt-6" />
 
@@ -350,17 +385,13 @@ export function LiveYourDay() {
       </div>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-          Meet Bloop
-        </Link>
-        <Link href="/companions" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
-          Adopt one individual
+        <Link href="/companions" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+          Adopt one
         </Link>
         <Link href="/browser" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
           Pin the browser
         </Link>
       </div>
-      <p className="mt-4 text-sm text-ink-soft">Teach moonwalk. Backward, smooth, slightly illegal.</p>
     </section>
   );
 }

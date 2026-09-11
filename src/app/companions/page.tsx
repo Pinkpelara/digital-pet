@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { companions, items } from "@/data/catalog";
+import { companions, items, adoptFromCents } from "@/data/catalog";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { formatPrice } from "@/lib/format";
+import { brand } from "@/lib/brand";
 
 export const metadata = { title: "Companions" };
 
@@ -9,14 +10,12 @@ export default function CompanionsPage() {
   return (
     <div className="bg-paper">
       <section className="mx-auto max-w-6xl px-5 pt-12 md:px-10 md:pt-16">
-        <p className="text-sm font-medium text-moss">Adopt</p>
+        <p className="text-sm font-medium text-moss">Adopt from {formatPrice(adoptFromCents())}</p>
         <h1 className="mt-3 max-w-[14ch] font-display text-5xl leading-[0.98] text-ink md:text-7xl">
-          Meet the companions.
+          Adopt one
         </h1>
-        <p className="mt-5 max-w-xl text-lg text-ink-soft">
-          Pick a species and you get an individual. Its personality is already decided — you just
-          have not met it yet.
-        </p>
+        <p className="mt-5 max-w-xl text-lg text-ink-soft">{brand.bottomSupport}</p>
+        <p className="mt-3 max-w-xl text-ink-soft">{brand.heroSupport}</p>
       </section>
 
       <ol className="mx-auto grid max-w-6xl gap-6 px-5 py-12 md:grid-cols-2 md:px-10">
@@ -32,7 +31,7 @@ export default function CompanionsPage() {
                   <h2 className="font-display text-3xl text-ink">{companion.name}</h2>
                   <p className="mt-2 text-ink-soft">{companion.title}</p>
                   <p className="mt-4 text-sm text-ink">
-                    {product ? formatPrice(product.priceCents) : ""} · Meet them
+                    {product ? formatPrice(product.priceCents) : ""} · Adopt
                   </p>
                 </div>
               </Link>

@@ -654,6 +654,12 @@ export function itemsByKind(kind: CatalogItem["kind"]): CatalogItem[] {
   return items.filter((item) => item.kind === kind && item.active);
 }
 
+/** Lowest live companion price. Use for “Adopt from $X” — never invent a number. */
+export function adoptFromCents(): number {
+  const prices = items.filter((item) => item.kind === "companion" && item.active).map((item) => item.priceCents);
+  return Math.min(...prices);
+}
+
 export function skillName(id: string): string {
   return items.find((item) => item.skillId === id)?.name ?? id;
 }

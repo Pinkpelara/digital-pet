@@ -10,7 +10,7 @@
   <path d="M790 410 Q820 438 850 410" stroke="#241c16" stroke-width="10" fill="none" stroke-linecap="round"/>
   <line x1="820" y1="252" x2="820" y2="188" stroke="#2a8f88" stroke-width="12"/>
   <circle cx="820" cy="172" r="32" fill="#8ee6df"/>
-  <text x="110" y="250" fill="#241c16" font-family="Georgia, serif" font-size="52" font-weight="700">Meet a Companion</text>
-  <text x="110" y="318" fill="#241c16" font-family="Georgia, serif" font-size="42">with a mind of their own.</text>
-  <text x="110" y="400" fill="#5c574f" font-family="Georgia, serif" font-size="28">You do not choose its personality. You meet it.</text>
+  <text x="110" y="250" fill="#241c16" font-family="Georgia, serif" font-size="48" font-weight="700">Someone small lives</text>
+  <text x="110" y="318" fill="#241c16" font-family="Georgia, serif" font-size="42">on your screen now.</text>
+  <text x="110" y="400" fill="#5c574f" font-family="Georgia, serif" font-size="24">You do not choose its personality. You meet it.</text>
 </svg>
