@@ -36,7 +36,7 @@ const BEATS: Array<{
   {
     id: "adventure",
     label: "Evening streak",
-    body: "They come back from a tiny adventure with a sticker. You did not send them. They went.",
+    body: "They come back from an evening streak with a sticker. You did not send them. They went.",
     demo: "adventure",
     equipped: { face: "outfit-sunglasses" },
     ms: 3500,

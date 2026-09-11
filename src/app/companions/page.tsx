@@ -13,7 +13,13 @@ export default function CompanionsPage() {
       <PageHero
         kicker={`Adopt from ${formatPrice(adoptFromCents())}. Start with Bloop.`}
         title="Adopt one"
-        lede={brand.meetBody}
+        lede={
+          <>
+            <p>{brand.meetBody}</p>
+            <p className="mt-2">{brand.heroSupport}</p>
+            <p className="mt-3 font-display text-2xl text-ink">{brand.closer}</p>
+          </>
+        }
       >
         <p className="mt-6 text-sm text-ink-soft">
           {companions.length} species. Personality is not for sale.

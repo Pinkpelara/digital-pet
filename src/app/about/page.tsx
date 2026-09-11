@@ -9,8 +9,12 @@ export default function AboutPage() {
     <article className="bg-paper pb-20">
       <PageHero
         kicker="About"
-        title="Tiny creatures that actually live with you."
-        lede="You adopt one, give it a name, and then find out who it is. Its personality was decided when you adopted it — you did not choose it, and you cannot edit it. You meet it."
+        title="Companions that actually live with you."
+        lede={
+          <>
+            {brand.meetBody} {brand.heroSupport}
+          </>
+        }
       />
       <div className="mx-auto max-w-2xl space-y-4 px-5 text-lg text-ink-soft md:px-10">
         <p>
@@ -20,8 +24,7 @@ export default function AboutPage() {
         </p>
         <p>
           Dress it, hand it objects that change what it gets up to, teach it tricks. Two people can
-          adopt the same species and end up with completely different problems. That comparison is
-          the fun part.
+          adopt the same species and end up with completely different problems. {brand.closer}
         </p>
         <p>
           Today they live on this website. You can also add the site to your browser where supported.

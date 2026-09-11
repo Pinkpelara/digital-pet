@@ -7,7 +7,6 @@ import { ActionWheel } from "@/components/stage/ActionWheel";
 import { Creature } from "@/components/creatures/Creature";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
-import { KineticTitle } from "@/components/site/KineticTitle";
 import { brand } from "@/lib/brand";
 import { adoptFromCents } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
@@ -67,13 +66,8 @@ export function HeroBanner() {
 
       <div className="pointer-events-none relative z-20 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-24 md:justify-center md:px-10 md:pb-24 md:pt-20">
         <p className="kicker">{brand.tagline}</p>
-        <h1 className="relative mt-5 max-w-[13ch]">
-          <KineticTitle
-            as="span"
-            className="block text-5xl leading-[0.9] text-ink md:text-7xl lg:text-[5.6rem]"
-          >
-            {headline}
-          </KineticTitle>
+        <h1 className="relative mt-5 max-w-[11ch] font-display text-5xl leading-[0.9] text-ink md:text-7xl lg:text-[5.4rem]">
+          {headline}
           <span className="headline-peek pointer-events-none absolute -right-8 -top-8 hidden md:block" aria-hidden>
             <Creature species="niblet" size={72} mood="climb" decorative equipped={{ face: "outfit-sunglasses" }} />
           </span>
@@ -82,9 +76,6 @@ export function HeroBanner() {
         <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
           <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
             Adopt from {adoptFrom}. Start with Bloop.
-          </Link>
-          <Link href="/companions" className="rounded-full border border-ink/20 bg-void/40 px-6 py-3 text-sm text-ink backdrop-blur">
-            Adopt one
           </Link>
         </div>
         <p className="mt-5 max-w-md text-sm text-ink-soft">{brand.heroSupport}</p>

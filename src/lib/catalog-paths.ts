@@ -5,7 +5,7 @@ import type { CatalogItem } from "@/lib/types";
 /** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
 export const FEATURED_SHOP_IDS = ["outfit-raincoat", "gadget-umbrella"] as const;
 
-/** Toy-first names on shop cards and PDPs. Radial / studio may still say Teach X. */
+/** Visible names on shop cards and PDPs. Radial / studio may still say Teach X. */
 export function shopTitle(item: CatalogItem): string {
   return item.name;
 }
@@ -20,7 +20,7 @@ export function isShopSafe(item: CatalogItem): boolean {
   return true;
 }
 
-/** Unified PDP checkout label: Adopt / Add + name — price. Shop stays toy-first. */
+/** Unified PDP checkout label: Adopt / Add + name — price. */
 export function pdpCtaLabel(item: CatalogItem): string {
   const price = formatPrice(item.priceCents);
   if (item.kind === "companion") return `Adopt ${item.name} — ${price}`;

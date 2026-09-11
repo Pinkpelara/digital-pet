@@ -1,12 +1,13 @@
 import { brand } from "@/lib/brand";
+import { PageHero } from "@/components/site/KineticTitle";
 
 export const metadata = { title: "Privacy" };
 
 export default function PrivacyPage() {
   return (
-    <article className="mx-auto max-w-2xl px-4 py-16">
-      <h1 className="font-display text-5xl text-ink">Privacy</h1>
-      <div className="mt-6 space-y-4 text-ink-soft">
+    <article className="bg-paper pb-20">
+      <PageHero kicker="Care" title="Privacy" />
+      <div className="mx-auto max-w-2xl space-y-4 px-5 text-ink-soft md:px-10">
         <p>
           {brand.name} collects the minimum needed to run an account, an inventory, and a payment:
           email, auth provider, what you own, and companion customization. We do not run a social
