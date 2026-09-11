@@ -7,6 +7,8 @@ export type PresenceState = {
   birthdaySeenAt: string | null;
   /** Seeded once so the demo surprise can fire without a real birth date. */
   seededBirthday: boolean;
+  /** Free 24h Balloon Bunch Teach around a birthday. */
+  balloonBunchUntil: number;
 };
 
 const DEFAULT: PresenceState = {
@@ -14,6 +16,7 @@ const DEFAULT: PresenceState = {
   birthdayForce: false,
   birthdaySeenAt: null,
   seededBirthday: false,
+  balloonBunchUntil: 0,
 };
 
 function read(): PresenceState {
@@ -71,4 +74,16 @@ export function forceBirthday(on = true): PresenceState {
   const next = { ...read(), birthdayForce: on, birthdaySeenAt: on ? null : read().birthdaySeenAt };
   write(next);
   return next;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function grantBalloonBunch(from = Date.now()): PresenceState {
+  const next = { ...read(), balloonBunchUntil: from + DAY_MS };
+  write(next);
+  return next;
+}
+
+export function hasBalloonBunch(state: PresenceState = read()): boolean {
+  return state.balloonBunchUntil > Date.now();
 }

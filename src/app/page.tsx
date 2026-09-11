@@ -75,13 +75,15 @@ export default function HomePage() {
       </section>
 
       <TwinBloops />
-      <LiveYourDay />
-      <MakeYoursDemo />
-      <ThingsChange />
-      <TheyNotice />
-      <SomethingHappened />
-      <TinyProblem />
-      <LetLoose />
+      <div className="below-fold">
+        <LiveYourDay />
+        <MakeYoursDemo />
+        <ThingsChange />
+        <TheyNotice />
+        <SomethingHappened />
+        <TinyProblem />
+        <LetLoose />
+      </div>
 
       <section className="mx-auto max-w-6xl px-5 pb-24 pt-8 text-center md:px-10">
         <h2 className="font-display text-4xl text-ink md:text-6xl">Meet one individual</h2>

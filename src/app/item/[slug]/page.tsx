@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { items } from "@/data/catalog";
 import { TryOnStage } from "@/components/store/TryOnStage";
+import { ProductJsonLd } from "@/components/store/ProductJsonLd";
 
 export function generateStaticParams() {
   return items.filter((item) => item.kind !== "companion").map((item) => ({ slug: item.slug }));
@@ -30,6 +31,7 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="bg-paper">
+      <ProductJsonLd item={product} />
       <Suspense>
         <TryOnStage species={species} product={product} suggestions={suggestions} />
       </Suspense>

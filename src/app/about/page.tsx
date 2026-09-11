@@ -14,6 +14,11 @@ export default function AboutPage() {
           when you adopted it — you did not choose it, and you cannot edit it. You meet it.
         </p>
         <p>
+          They sulk if you disappear. They wait. There is no lethal neglect. Mute chaos is one tap;
+          Goose-mode is an opt-in Teach, never the default. We are not promising a robot that lives
+          in your house.
+        </p>
+        <p>
           Dress it, hand it objects that change what it gets up to, teach it tricks. Two people can
           adopt the same species and end up with completely different problems. That comparison is
           the fun part.

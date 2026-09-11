@@ -15,7 +15,7 @@ export function StageFx({ demo }: { demo: DemoActionId | null }) {
   if (demo === "photo-pose") {
     return <div className="stage-flash" aria-hidden />;
   }
-  if (demo === "gift") {
+  if (demo === "gift" || demo === "party" || demo === "balloon-bunch") {
     return (
       <div className="stage-confetti" aria-hidden>
         {Array.from({ length: 10 }, (_, index) => (
@@ -23,6 +23,9 @@ export function StageFx({ demo }: { demo: DemoActionId | null }) {
         ))}
       </div>
     );
+  }
+  if (demo === "stretch") {
+    return <div className="stage-bubble" aria-hidden />;
   }
   return null;
 }

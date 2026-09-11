@@ -41,7 +41,11 @@ export type WheelIconId =
   | "mood"
   | "gift"
   | "study"
-  | "mad";
+  | "mad"
+  | "focus"
+  | "stretch"
+  | "party"
+  | "chaos";
 
 export type ResolvedWheelItem = WheelAction & {
   preview: boolean;
@@ -54,6 +58,8 @@ const ACTION_BY_ITEM: Record<string, DemoActionId> = {
   "gadget-camera": "photo-pose",
   "gadget-balloon": "hover",
   "gadget-broom": "tidy",
+  "gadget-headphones": "focus",
+  "gadget-partyhat": "party",
   "outfit-raincoat": "twirl",
   "outfit-hoodie": "twirl",
   "outfit-sunglasses": "twirl",
@@ -70,6 +76,9 @@ const ACTION_BY_ITEM: Record<string, DemoActionId> = {
   "skill-hide": "hide",
   "skill-juggle": "juggle",
   "skill-skate": "skate",
+  "skill-focus": "focus",
+  "skill-balloon-bunch": "balloon-bunch",
+  "skill-chaos": "chaos",
 };
 
 const ICON_BY_ACTION: Record<DemoActionId, WheelIconId> = {
@@ -90,6 +99,12 @@ const ICON_BY_ACTION: Record<DemoActionId, WheelIconId> = {
   gift: "gift",
   study: "study",
   mad: "mad",
+  focus: "focus",
+  stretch: "stretch",
+  adventure: "gift",
+  party: "party",
+  "balloon-bunch": "balloon",
+  chaos: "chaos",
 };
 
 /** Loops forever on a live stage. Moonwalk is three steps, then a hold. */
@@ -104,6 +119,9 @@ const LOOPING: Set<DemoActionId> = new Set([
   "tidy",
   "photo-pose",
   "study",
+  "focus",
+  "balloon-bunch",
+  "party",
 ]);
 
 /** Equip is the demo. If a board is on the feet, they skate this frame — no effect delay. */
@@ -120,6 +138,8 @@ export function actionFromLoadout(
   if (equipped.hand === "gadget-camera") return "photo-pose";
   if (equipped.back === "gadget-balloon") return "hover";
   if (equipped.hand === "gadget-broom") return "tidy";
+  if (equipped.head === "gadget-headphones") return "focus";
+  if (equipped.head === "gadget-partyhat") return "party";
   return null;
 }
 
@@ -137,7 +157,19 @@ export function isDemoActionId(value: string | null | undefined): value is DemoA
 
 export function skillFromDemo(action: DemoActionId | null): SkillId | null {
   if (!action) return null;
-  const skills: SkillId[] = ["moonwalk", "cartwheel", "climb", "dance", "hide", "juggle", "skate", "nap"];
+  const skills: SkillId[] = [
+    "moonwalk",
+    "cartwheel",
+    "climb",
+    "dance",
+    "hide",
+    "juggle",
+    "skate",
+    "nap",
+    "focus",
+    "balloon-bunch",
+    "chaos",
+  ];
   return skills.includes(action as SkillId) ? (action as SkillId) : null;
 }
 
@@ -150,7 +182,10 @@ export function moodFromDemo(action: DemoActionId | null): "idle" | "nap" | "cli
     return "happy";
   }
   if (action === "mad") return "idle";
-  if (action === "study") return "follow";
+  if (action === "study" || action === "focus") return "follow";
+  if (action === "stretch") return "idle";
+  if (action === "adventure" || action === "party" || action === "balloon-bunch") return "happy";
+  if (action === "chaos") return "skill";
   return "skill";
 }
 
@@ -161,6 +196,10 @@ export function demoDurationMs(action: DemoActionId): number {
   if (action === "mood-peek") return 1600;
   if (action === "gift") return 2000;
   if (action === "mad") return 1500;
+  if (action === "stretch") return 2800;
+  if (action === "adventure") return 3200;
+  if (action === "party") return 0;
+  if (action === "chaos") return 2400;
   if (action === "cartwheel") return 1400;
   if (action === "photo-pose") return 2600;
   if (action === "juggle") return 3200;
@@ -189,9 +228,13 @@ export function loadoutForAction(item: CatalogItem | null, action: DemoActionId)
   if (action === "hover") loadout.back = "gadget-balloon";
   if (action === "tidy") loadout.hand = "gadget-broom";
   if (action === "nap") loadout.body = "outfit-hoodie";
+  if (action === "focus") loadout.head = "gadget-headphones";
+  if (action === "party") loadout.head = "gadget-partyhat";
+  if (action === "balloon-bunch") loadout.back = "gadget-balloon";
+  if (action === "study") loadout.head = loadout.head ?? "gadget-headphones";
   if (action === "twirl" && item?.slot === "body") loadout.body = item.id;
-  if (action === "gift") loadout.back = "gadget-balloon";
-  if (action === "study") loadout.body = loadout.body ?? "outfit-hoodie";
+  if (action === "gift") loadout.back = loadout.back ?? "gadget-balloon";
+  if (action === "adventure") loadout.face = "outfit-sunglasses";
   return loadout;
 }
 
@@ -322,16 +365,16 @@ export function presencePieForCompanion(input: {
     slot(
       {
         itemId: "presence-gift",
-        action: "gift",
+        action: "party",
         kind: "presence",
         label: "Gift",
         shortLabel: "Gift",
         caption: "A parcel. Birthday and habit magic stay free.",
         accent: "#E86B6B",
-        icon: "gift",
-        equip: { back: "gadget-balloon" },
-        skill: null,
-        loops: false,
+        icon: "party",
+        equip: { head: "gadget-partyhat", back: "gadget-balloon" },
+        skill: "balloon-bunch",
+        loops: true,
       },
       owned,
       unlocked,
@@ -347,15 +390,15 @@ export function presencePieForCompanion(input: {
     slot(
       {
         itemId: "presence-study",
-        action: "study",
+        action: "focus",
         kind: "presence",
         label: "Study",
         shortLabel: "Study together",
-        caption: "They study when you study.",
+        caption: "They study when you study. Headphones on.",
         accent: "#6a7c86",
-        icon: "study",
-        equip: { body: "outfit-hoodie" },
-        skill: null,
+        icon: "focus",
+        equip: { head: "gadget-headphones" },
+        skill: "focus",
         loops: true,
       },
       owned,

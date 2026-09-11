@@ -6,6 +6,7 @@ import { LiveStage } from "@/components/stage/LiveStage";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { StageFx } from "@/components/stage/StageFx";
 import { CareChips } from "@/components/home/CareChips";
+import { DayVignette } from "@/components/home/DayVignette";
 import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
 import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
@@ -202,12 +203,13 @@ export function ThingsChange() {
   const [on, setOn] = useState(true);
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Things change what they do</p>
+      <p className="text-sm font-medium text-moss">If you cannot see it in a second, it is not a gadget</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
         Umbrella on. Now it rain-walks.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        A raincoat is a silhouette. An umbrella is a walk. Personality is not for sale.
+        Silhouette or motion in under a second — or we do not sell it. A raincoat is a shape. An
+        umbrella is a walk. Personality is not for sale.
       </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-2">
         <StageBox
@@ -311,7 +313,12 @@ export function LetLoose() {
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
         The real now-path on a work machine is a pinned browser window — they sit in the corner
-        while you write. A full OS desktop app is a stub until it exists. We are not pretending.
+        while you write. Happy-Dog energy: always there, never a second job. A full OS desktop app
+        is a stub until it exists. We are not selling a robot body.
+      </p>
+      <p className="mt-3 max-w-xl text-ink-soft">
+        Mute chaos is one tap. Goose-mode is an opt-in Teach, never the default. They sulk when
+        ignored. They do not die.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/browser" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
@@ -334,40 +341,12 @@ export function LiveYourDay() {
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
         Attachment first. Soft presence, not a streak. You meet one individual — you do not buy a
-        personality.
+        personality. They sulk if you vanish. They never starve.
       </p>
       <CareChips className="mt-6" />
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2">
-        <article>
-          <StageBox species="bloop" demo="study" equipped={{ body: "outfit-hoodie" }} loop className="aspect-[5/4]" />
-          <h3 className="mt-4 font-display text-2xl text-ink">Work / study together</h3>
-          <p className="mt-2 text-sm text-ink-soft">They sit in the corner while you write. Presence, not a coach.</p>
-        </article>
-        <article>
-          <StageBox species="bloop" sulk className="aspect-[5/4]" />
-          <h3 className="mt-4 font-display text-2xl text-ink">Sulk when ghosted</h3>
-          <p className="mt-2 text-sm text-ink-soft">Look away long enough and they turn their back. Tap them. They come back.</p>
-        </article>
-        <article>
-          <StageBox species="bloop" demo="mad" loop className="aspect-[5/4]" />
-          <h3 className="mt-4 font-display text-2xl text-ink">A little mad</h3>
-          <p className="mt-2 text-sm text-ink-soft">They get a little mad. It’s allowed. Still not a wellness score.</p>
-        </article>
-        <article>
-          <StageBox
-            species="bloop"
-            demo="gift"
-            equipped={{ body: "outfit-raincoat", back: "gadget-balloon" }}
-            loop
-            className="aspect-[5/4]"
-          />
-          <h3 className="mt-4 font-display text-2xl text-ink">Birthday surprise</h3>
-          <p className="mt-2 text-sm text-ink-soft">
-            Cake appears before you remember. Habit magic stays free — we sell the outfit around the
-            moment.
-          </p>
-        </article>
+      <div className="mt-10">
+        <DayVignette />
       </div>
 
       <div className="mt-10 flex flex-wrap gap-3">

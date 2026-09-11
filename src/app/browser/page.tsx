@@ -9,8 +9,9 @@ export default function BrowserPage() {
       <p className="text-xs uppercase tracking-[0.2em] text-moss">The real now-path · work machines</p>
       <h1 className="mt-2 font-display text-5xl text-ink">Lives in the corner while you work.</h1>
       <p className="mt-4 text-lg text-ink-soft">
-        Pin this site in Chrome or Edge and they sit beside your tabs — a co-presence, not another
-        app to install. You write, they nap. You ignore them, they sulk. You look back, they noticed.
+        Pin this site in Chrome or Edge and they sit beside your tabs — Happy Dog energy: always
+        there, never a second job. You write, they nap. You ignore them, they sulk. You look back,
+        they noticed. Mute chaos anytime in the header.
       </p>
       <p className="mt-3 text-ink-soft">
         This is the honest path for a locked-down work computer. No IT ticket. Same inventory as the

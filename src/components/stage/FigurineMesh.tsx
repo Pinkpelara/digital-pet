@@ -125,6 +125,34 @@ function Gear({
           <ClayMaterial color="#6a7c86" />
         </mesh>
       )}
+      {head === "gadget-headphones" && (
+        <group position={[0, 0.58, 0.04]}>
+          <mesh rotation={[0, 0, Math.PI / 2]} position={[0, 0.16, -0.04]}>
+            <torusGeometry args={[0.38, 0.035, 8, 18, Math.PI]} />
+            <meshStandardMaterial color="#2a2a2a" roughness={0.4} />
+          </mesh>
+          <mesh castShadow position={[-0.42, 0.04, 0.12]} rotation={[0, 0.4, 0]}>
+            <cylinderGeometry args={[0.16, 0.16, 0.09, 16]} />
+            <ClayMaterial color="#1a1a1a" />
+          </mesh>
+          <mesh castShadow position={[0.42, 0.04, 0.12]} rotation={[0, -0.4, 0]}>
+            <cylinderGeometry args={[0.16, 0.16, 0.09, 16]} />
+            <ClayMaterial color="#1a1a1a" />
+          </mesh>
+        </group>
+      )}
+      {head === "gadget-partyhat" && (
+        <group position={[0, 1.08, 0]} rotation={[0.12, 0.2, -0.08]}>
+          <mesh castShadow>
+            <coneGeometry args={[0.24, 0.5, 8]} />
+            <ClayMaterial color="#E86B6B" />
+          </mesh>
+          <mesh position={[0, 0.28, 0]}>
+            <sphereGeometry args={[0.06, 10, 10]} />
+            <ClayMaterial color="#F2C14E" />
+          </mesh>
+        </group>
+      )}
       {back === "gadget-balloon" && (
         <group position={[0.58, 1.22, -0.18]}>
           <Ball color="#E86B6B" scale={0.24} segs={Math.max(16, segs / 2)} />
@@ -310,10 +338,11 @@ export function FigurineMesh({
       return;
     }
     if (action === "skate") {
-      group.position.x = Math.sin(local * 2.8) * 0.42;
-      group.rotation.z = Math.sin(local * 2.8) * 0.22;
-      group.rotation.y += (0.45 - group.rotation.y) * 0.18;
-      group.position.y = 0.16 + Math.abs(Math.sin(local * 5.6)) * 0.07;
+      group.position.x = Math.sin(local * 3.2) * 0.55;
+      group.rotation.z = Math.sin(local * 3.2) * 0.32;
+      group.rotation.y += (0.55 - group.rotation.y) * 0.22;
+      group.position.y = 0.2 + Math.abs(Math.sin(local * 6.4)) * 0.1;
+      group.scale.setScalar(1.04);
       return;
     }
     if (action === "rain-walk") {
@@ -366,6 +395,43 @@ export function FigurineMesh({
       group.position.y = Math.abs(Math.sin(t * 10)) * 0.03;
       return;
     }
+    if (action === "focus") {
+      group.position.y = -0.04 + Math.sin(local * 0.9) * 0.015;
+      group.rotation.x += (0.08 - group.rotation.x) * 0.1;
+      group.rotation.y += (-0.12 - group.rotation.y) * 0.08;
+      return;
+    }
+    if (action === "stretch") {
+      const duration = 2.8;
+      const t = loop ? local % duration : Math.min(local, duration);
+      const reach = Math.sin((t / duration) * Math.PI);
+      group.scale.set(1, 1 + reach * 0.18, 1);
+      group.position.y = reach * 0.12;
+      group.rotation.x += ((-0.22 * reach) - group.rotation.x) * 0.12;
+      return;
+    }
+    if (action === "adventure") {
+      const duration = 3.2;
+      const t = loop ? local % duration : Math.min(local, duration);
+      const enter = Math.min(1, t / 0.7);
+      group.position.x = (1 - enter) * 1.1;
+      group.position.y = 0.08 + Math.abs(Math.sin(t * 8)) * 0.05 * enter;
+      group.rotation.y += (0.4 - group.rotation.y) * 0.12;
+      return;
+    }
+    if (action === "party") {
+      group.position.y = Math.abs(Math.sin(local * 7)) * 0.12;
+      group.rotation.z = Math.sin(local * 7) * 0.14;
+      group.rotation.y += (Math.sin(local * 2.4) * 0.4 - group.rotation.y) * 0.12;
+      return;
+    }
+    if (action === "chaos") {
+      group.position.x = Math.sin(local * 9) * 0.28;
+      group.position.y = Math.abs(Math.sin(local * 11)) * 0.14;
+      group.rotation.z = Math.sin(local * 13) * 0.28;
+      group.rotation.y += (Math.sin(local * 4) * 0.8 - group.rotation.y) * 0.2;
+      return;
+    }
     if (action === "climb" || climbing) {
       group.position.y = 0.22 + Math.sin(local * 2.5) * 0.14;
       group.rotation.z = Math.sin(local * 2.5) * 0.1;
@@ -380,23 +446,25 @@ export function FigurineMesh({
       return;
     }
     if (action === "photo-pose") {
-      const snap = Math.sin(local * 5.2) > 0.65 ? 1.08 : 1;
-      group.rotation.y += (0.55 - group.rotation.y) * 0.22;
-      group.rotation.z += (-0.12 - group.rotation.z) * 0.22;
-      group.position.y = 0.08;
+      const snap = Math.sin(local * 6.4) > 0.5 ? 1.14 : 1;
+      group.rotation.y += (0.7 - group.rotation.y) * 0.28;
+      group.rotation.z += (-0.18 - group.rotation.z) * 0.28;
+      group.position.y = 0.1;
       group.scale.setScalar(snap);
       return;
     }
-    if (action === "hover") {
-      group.position.y = 0.32 + Math.sin(local * 1.55) * 0.09;
-      group.rotation.z = Math.sin(local * 1.2) * 0.06;
-      group.rotation.y += (Math.sin(local * 0.7) * 0.2 - group.rotation.y) * 0.08;
+    if (action === "hover" || action === "balloon-bunch") {
+      const lift = action === "balloon-bunch" ? 0.55 : 0.42;
+      group.position.y = lift + Math.sin(local * 1.8) * 0.12;
+      group.rotation.z = Math.sin(local * 1.5) * 0.1;
+      group.rotation.y += (Math.sin(local * 0.9) * 0.28 - group.rotation.y) * 0.1;
       return;
     }
     if (action === "tidy") {
-      group.rotation.z = Math.sin(local * 6.2) * 0.2;
-      group.position.x = Math.sin(local * 3.1) * 0.1;
-      group.position.y = Math.abs(Math.sin(local * 6.2)) * 0.03;
+      group.rotation.z = Math.sin(local * 8) * 0.32;
+      group.position.x = Math.sin(local * 4) * 0.16;
+      group.position.y = Math.abs(Math.sin(local * 8)) * 0.06;
+      group.scale.setScalar(1.05);
       return;
     }
     if (action === "dance") {
@@ -433,8 +501,10 @@ export function FigurineMesh({
   const skating = liveAction === "skate";
   const photographing = liveAction === "photo-pose";
   const raining = liveAction === "rain-walk";
-  const studying = liveAction === "study";
+  const studying = liveAction === "study" || liveAction === "focus";
   const gifting = liveAction === "gift";
+  const bunch = liveAction === "balloon-bunch" || liveAction === "party";
+  const sticker = liveAction === "adventure";
 
   return (
     <group ref={root}>
@@ -561,6 +631,19 @@ export function FigurineMesh({
               <ClayMaterial color="#F2C14E" />
             </mesh>
           </group>
+        )}
+        {bunch && (
+          <group position={[-0.5, 1.05, -0.12]}>
+            <Ball color="#E86B6B" position={[0, 0, 0]} scale={0.18} segs={12} />
+            <Ball color="#5B8DEF" position={[0.22, 0.08, -0.06]} scale={0.15} segs={12} />
+            <Ball color="#F2C14E" position={[-0.16, 0.14, 0.08]} scale={0.14} segs={12} />
+          </group>
+        )}
+        {sticker && (
+          <mesh position={[0.18, -0.08, 0.48]} rotation={[0.2, -0.3, 0.15]}>
+            <circleGeometry args={[0.12, 6]} />
+            <meshStandardMaterial color="#F2C14E" emissive="#F2C14E" emissiveIntensity={0.25} />
+          </mesh>
         )}
         {juggling && (
           <group position={[0, 0.7, 0.35]}>

@@ -331,8 +331,9 @@ body {
   animation: letter-tip 1.2s ease;
 }
 
-.playable-stage {
-  isolation: isolate;
+.below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
 }
 
 .action-wheel {
@@ -496,6 +497,48 @@ body {
   background: #5b8def;
 }
 
+.stage-bubble {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  z-index: 8;
+  width: 7.5rem;
+  height: 4.2rem;
+  transform: translateX(-50%);
+  border-radius: 1.6rem;
+  background: rgba(250, 246, 239, 0.92);
+  box-shadow: 0 8px 20px rgba(34, 30, 26, 0.1);
+  animation: bubble-pop 2.8s ease infinite;
+}
+
+.stage-bubble::after {
+  content: "a little stretch";
+  display: grid;
+  height: 100%;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #3a3530;
+}
+
+@keyframes bubble-pop {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.7);
+  }
+  28%,
+  72% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.9);
+  }
+}
+
 .show-off-stack {
   position: relative;
   min-height: 3.2rem;
@@ -621,6 +664,7 @@ body {
   .stage-rain span,
   .stage-flash,
   .stage-confetti span,
+  .stage-bubble,
   .show-off-wait,
   .show-off-cta,
   .parcel.is-shaking,

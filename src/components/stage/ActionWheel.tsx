@@ -127,6 +127,33 @@ function Icon({ id }: { id: WheelIconId }) {
           <path {...common} d="M8 10l2.5 1.2M16 10l-2.5 1.2M9 16c1.4-1 4.6-1 6 0" />
         </svg>
       );
+    case "focus":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <path {...common} d="M7 12a4 4 0 0 1 0-8M17 4a4 4 0 0 1 0 8" />
+          <path {...common} d="M7 8h10" />
+        </svg>
+      );
+    case "stretch":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <circle cx="12" cy="7" r="2.2" {...common} />
+          <path {...common} d="M12 10v5M8 12h8M9 22l3-7 3 7" />
+        </svg>
+      );
+    case "party":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <path {...common} d="M12 4l6 14H6L12 4Z" />
+          <path {...common} d="M12 4v3" />
+        </svg>
+      );
+    case "chaos":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <path {...common} d="M5 19c4-10 10-10 14 0M7 8l3 3M17 8l-3 3" />
+        </svg>
+      );
   }
 }
 

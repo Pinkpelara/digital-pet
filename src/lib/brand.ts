@@ -15,10 +15,10 @@ export const brand = {
   name: TEMP_BRAND_NAME,
   domain: "companions.app",
   tagline: "Tiny creatures that live with you.",
-  heroHeadline: "A tiny creature that lives on your screen.",
-  heroSupport:
-    "Meet one individual. Dress it, teach it tricks, and discover who it turns out to be. You do not choose its personality. You meet it.",
-  hero: "A tiny creature that lives on your screen. Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be. No two grow up exactly alike.",
+  heroHeadline: "Meet a Companion with a mind of their own — and a backpack of skills you can unlock.",
+  heroSupport: "You do not choose its personality. You meet it.",
+  hero:
+    "Meet a Companion with a mind of their own — and a backpack of skills you can unlock. You do not choose its personality. You meet it.",
   concept: ["Adopt", "Discover", "Make it yours", "Let it loose"] as const,
   deepLinkScheme: "companions",
   supportEmail: "hello@companions.app",
