@@ -161,18 +161,6 @@ function watchPose(t: number, pointer?: { x: number; y: number } | null): IdlePo
   };
 }
 
-function bobPose(t: number, happy: boolean): IdlePose {
-  return {
-    x: 0,
-    y: Math.sin(t * 1.15) * 0.045 + (happy ? Math.abs(Math.sin(t * 4)) * 0.05 : 0),
-    z: 0,
-    rx: Math.sin(t * 0.24) * 0.04,
-    ry: Math.sin(t * 0.32) * 0.09,
-    rz: 0,
-    scale: 1,
-  };
-}
-
 /**
  * Unprompted, species-distinct place on the stage.
  * Seed only picks which wall / corner / edge / perch this individual prefers.
