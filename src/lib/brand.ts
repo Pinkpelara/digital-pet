@@ -5,8 +5,8 @@
  * source of truth: replace TEMP_BRAND_NAME (and, if needed, the strings below)
  * and every visible surface updates.
  *
- * Migration note: the previous working name was "Sillkin" and its "sill /
- * vinyl presence / residents / volumes" language is intentionally gone.
+ * Migration note: the previous working name was "Sillkin". User-visible copy
+ * no longer uses that name or its abstract language.
  */
 
 export const TEMP_BRAND_NAME = "Companions";
@@ -15,6 +15,9 @@ export const brand = {
   name: TEMP_BRAND_NAME,
   domain: "companions.app",
   tagline: "Tiny creatures that live with you.",
+  heroHeadline: "A tiny creature that lives on your screen.",
+  heroSupport:
+    "Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be. No two grow up exactly alike.",
   hero: "A tiny creature that lives on your screen. Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be. No two grow up exactly alike.",
   concept: ["Adopt", "Discover", "Make it yours", "Let it loose"] as const,
   deepLinkScheme: "companions",

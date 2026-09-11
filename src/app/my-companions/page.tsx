@@ -14,11 +14,11 @@ export default function MyCompanionsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Your companions</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">Your companions</h1>
+      <p className="text-sm font-medium text-moss">Your companions</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">Who lives with you</h1>
       <p className="mt-3 max-w-xl text-ink-soft">
-        Each one is an individual with its own hidden personality. Everything you own stays in your
-        account — nothing here is a file you can lose.
+        This is their home. Each one is an individual. Everything you own stays in your account —
+        nothing here is a file you can lose.
       </p>
       <p className="mt-3">
         <Link href="/live" className="text-sm text-moss underline">
@@ -28,8 +28,8 @@ export default function MyCompanionsPage() {
 
       {instances.length === 0 ? (
         <div className="mt-10 overflow-hidden rounded-[2rem] bg-paper ring-1 ring-ink/8">
-          <div className="h-72 bg-void">
-            <div className="flex h-full items-center justify-center text-mist/50">Nobody lives here yet.</div>
+          <div className="h-72 bg-cream">
+            <div className="flex h-full items-center justify-center text-ink-soft">Nobody lives here yet.</div>
           </div>
           <div className="p-8">
             <p className="text-lg text-ink">Nobody lives here yet.</p>

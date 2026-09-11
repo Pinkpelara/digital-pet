@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping, SRGBColorSpace, type WebGLRenderer } from "three";
+import { STAGE_BG } from "@/lib/stage-theme";
 
 type StageCanvasProps = {
   children: ReactNode;
@@ -55,7 +56,7 @@ export function StageCanvas({
       ref={host}
       className={className}
       onPointerMove={onPointerMove}
-      style={alpha ? undefined : { background: "#070809" }}
+      style={alpha ? undefined : { background: STAGE_BG }}
     >
       {visible ? (
         <Canvas

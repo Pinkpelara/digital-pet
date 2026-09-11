@@ -3,21 +3,21 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
-import { figurineLook, vinyl } from "@/lib/figurine-look";
+import { clay, figurineLook } from "@/lib/figurine-look";
 import type { CreatureMood, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
-function VinylMaterial({ color }: { color: string }) {
+function ClayMaterial({ color }: { color: string }) {
   return (
     <meshPhysicalMaterial
       color={color}
-      roughness={vinyl.roughness}
-      metalness={vinyl.metalness}
-      clearcoat={vinyl.clearcoat}
-      clearcoatRoughness={vinyl.clearcoatRoughness}
-      sheen={vinyl.sheen}
-      sheenRoughness={vinyl.sheenRoughness}
-      sheenColor={vinyl.sheenColor}
-      envMapIntensity={0.85}
+      roughness={clay.roughness}
+      metalness={clay.metalness}
+      clearcoat={clay.clearcoat}
+      clearcoatRoughness={clay.clearcoatRoughness}
+      sheen={clay.sheen}
+      sheenRoughness={clay.sheenRoughness}
+      sheenColor={clay.sheenColor}
+      envMapIntensity={0.55}
     />
   );
 }
@@ -38,7 +38,7 @@ function Ball({
   return (
     <mesh castShadow receiveShadow position={position} scale={scale}>
       <sphereGeometry args={[radius, segs, segs]} />
-      <VinylMaterial color={color} />
+      <ClayMaterial color={color} />
     </mesh>
   );
 }
@@ -55,19 +55,19 @@ function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) 
       {(body === "outfit-raincoat" || body === "drop-starrycoat") && (
         <mesh castShadow position={[0, -0.22, 0.02]} scale={[1.18, 0.78, 1.14]}>
           <sphereGeometry args={[0.52, 36, 22, 0, Math.PI * 2, 0, Math.PI * 0.68]} />
-          <VinylMaterial color={body === "drop-starrycoat" ? "#3a4450" : "#c4a24a" } />
+          <ClayMaterial color={body === "drop-starrycoat" ? "#3a4a72" : "#F2C14E"} />
         </mesh>
       )}
       {body === "outfit-hoodie" && (
         <mesh castShadow position={[0, -0.12, 0]} scale={[1.2, 0.95, 1.16]}>
           <sphereGeometry args={[0.52, 32, 20, 0, Math.PI * 2, 0, Math.PI * 0.78]} />
-          <VinylMaterial color="#4a524e" />
+          <ClayMaterial color="#C5D4E0" />
         </mesh>
       )}
       {body === "drop-cape" && (
         <mesh castShadow position={[0, -0.18, -0.38]} rotation={[0.38, 0, 0]}>
           <capsuleGeometry args={[0.34, 0.62, 8, 16]} />
-          <VinylMaterial color="#2c3340" />
+          <ClayMaterial color="#3a3a5c" />
         </mesh>
       )}
       {face === "outfit-sunglasses" && (
@@ -90,23 +90,23 @@ function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) 
         <group position={[0, 1.02, 0]}>
           <mesh castShadow>
             <cylinderGeometry args={[0.38, 0.44, 0.2, 24]} />
-            <VinylMaterial color="#5a6848" />
+            <ClayMaterial color="#6AA33A" />
           </mesh>
           <mesh position={[0, -0.05, 0.24]} rotation={[0.2, 0, 0]}>
             <boxGeometry args={[0.62, 0.035, 0.24]} />
-            <VinylMaterial color="#4a533c" />
+            <ClayMaterial color="#5A8A2C" />
           </mesh>
         </group>
       )}
       {head === "outfit-scarf" && (
         <mesh castShadow position={[0, 0.22, 0.08]} rotation={[0.18, 0.35, 0]}>
           <torusGeometry args={[0.42, 0.08, 12, 24]} />
-          <VinylMaterial color="#6a7c86" />
+          <ClayMaterial color="#6a7c86" />
         </mesh>
       )}
       {back === "gadget-balloon" && (
         <group position={[0.58, 1.22, -0.18]}>
-          <Ball color="#8a9aa3" scale={0.24} segs={Math.max(16, segs / 2)} />
+          <Ball color="#E86B6B" scale={0.24} segs={Math.max(16, segs / 2)} />
           <mesh position={[0, -0.38, 0]}>
             <cylinderGeometry args={[0.01, 0.01, 0.46, 8]} />
             <meshStandardMaterial color="#c5c8c2" />
@@ -121,7 +121,7 @@ function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) 
           </mesh>
           <mesh position={[0, 0.38, 0]}>
             <coneGeometry args={[0.28, 0.18, 16, 1, true]} />
-            <VinylMaterial color="#6a7c86" />
+            <ClayMaterial color="#5B8DEF" />
           </mesh>
         </group>
       )}
@@ -166,15 +166,34 @@ export function FigurineMesh({
     const group = root.current;
     if (!group) return;
     const t = state.clock.elapsedTime;
-    const maxY = 0.38;
-    const targetY = followPointer ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.07;
-    const targetX = followPointer ? (pointer?.y ?? 0) * -0.14 : Math.sin(t * 0.24) * 0.035;
-    group.rotation.y += (targetY - group.rotation.y) * 0.07;
-    group.rotation.x += (targetX - group.rotation.x) * 0.07;
+    const maxY = 0.42;
+    const watching = followPointer || mood === "follow";
     const nap = mood === "nap" || skill === "nap";
-    group.position.y = nap ? -0.06 : Math.sin(t * (skill ? 3.1 : 1.05)) * (skill ? 0.07 : 0.04);
-    if (skill === "moonwalk") group.position.x = Math.sin(t * 2) * 0.1;
-    if (skill === "dance") group.rotation.z = Math.sin(t * 6) * 0.07;
+    const climbing = mood === "climb" || skill === "climb";
+    const hiding = mood === "hide" || skill === "hide";
+    const targetY = watching ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.09;
+    const targetX = watching ? (pointer?.y ?? 0) * -0.16 : Math.sin(t * 0.24) * 0.04;
+    group.rotation.y += (targetY - group.rotation.y) * 0.08;
+    group.rotation.x += (targetX - group.rotation.x) * 0.08;
+    group.position.y = nap
+      ? -0.1 + Math.sin(t * 0.8) * 0.01
+      : climbing
+        ? 0.18 + Math.sin(t * 2.4) * 0.1
+        : hiding
+          ? -0.18
+          : Math.sin(t * (skill ? 3.2 : 1.15)) * (skill ? 0.08 : 0.045);
+    group.scale.setScalar(hiding ? 0.72 : nap ? 0.94 : 1);
+    group.position.x = 0;
+    group.rotation.z = 0;
+    if (skill === "moonwalk") group.position.x = Math.sin(t * 2.2) * 0.16;
+    if (skill === "skate") {
+      group.position.x = Math.sin(t * 2.6) * 0.22;
+      group.rotation.z = Math.sin(t * 2.6) * 0.12;
+    }
+    if (skill === "dance") group.rotation.z = Math.sin(t * 7) * 0.12;
+    if (skill === "cartwheel") group.rotation.z = t * 4.2;
+    if (skill === "juggle") group.position.y += Math.abs(Math.sin(t * 5)) * 0.04;
+    if (mood === "happy") group.position.y += Math.abs(Math.sin(t * 4)) * 0.05;
   });
 
   const napping = mood === "nap" || skill === "nap";
@@ -239,7 +258,7 @@ export function FigurineMesh({
             <group position={[0, 0.52, 0]}>
               <mesh castShadow>
                 <cylinderGeometry args={[0.03, 0.038, 0.34, 12]} />
-                <VinylMaterial color={look.shade} />
+                <ClayMaterial color={look.shade} />
               </mesh>
               <Ball color={look.extra} position={[0, 0.24, 0]} scale={0.13} segs={Math.max(16, segs / 2)} />
             </group>
@@ -248,11 +267,11 @@ export function FigurineMesh({
             <group position={[0, 0.48, -0.02]} rotation={[0.2, 0.35, 0.15]}>
               <mesh castShadow rotation={[0.55, 0, -0.35]} position={[-0.1, 0.08, 0]}>
                 <sphereGeometry args={[0.24, 20, 16]} />
-                <VinylMaterial color={look.extra} />
+                <ClayMaterial color={look.extra} />
               </mesh>
               <mesh castShadow rotation={[0.45, 0, 0.4]} position={[0.12, 0.1, -0.04]} scale={[1, 0.42, 0.68]}>
                 <sphereGeometry args={[0.22, 20, 16]} />
-                <VinylMaterial color={look.shade} />
+                <ClayMaterial color={look.shade} />
               </mesh>
             </group>
           )}
@@ -260,11 +279,11 @@ export function FigurineMesh({
             <group>
               <mesh castShadow position={[-0.32, 0.32, 0]} rotation={[0, 0, 0.48]}>
                 <coneGeometry args={[0.13, 0.36, 4]} />
-                <VinylMaterial color={look.extra} />
+                <ClayMaterial color={look.extra} />
               </mesh>
               <mesh castShadow position={[0.32, 0.32, 0]} rotation={[0, 0, -0.48]}>
                 <coneGeometry args={[0.13, 0.36, 4]} />
-                <VinylMaterial color={look.extra} />
+                <ClayMaterial color={look.extra} />
               </mesh>
             </group>
           )}

@@ -84,14 +84,14 @@ export function AdoptCeremony() {
       ) : null}
 
       {stage === "emerge" && (
-        <div className="creature-crawl mt-4 h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+        <div className="creature-crawl mt-4 h-72 w-full max-w-md overflow-hidden rounded-2xl bg-cream">
           <LiveStage species={species} className="h-full w-full" mood="happy" cameraZ={5.5} />
         </div>
       )}
 
       {stage === "name" && companionItem && instance && (
         <>
-          <div className="h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+          <div className="h-72 w-full max-w-md overflow-hidden rounded-2xl bg-cream">
             <LiveStage species={instance.speciesId} className="h-full w-full" mood="happy" cameraZ={5.5} />
           </div>
           <h1 className="mt-6 font-display text-4xl text-ink md:text-5xl">
@@ -126,7 +126,7 @@ export function AdoptCeremony() {
 
       {stage === "moved" && (
         <div className="w-full">
-          <div className="mx-auto h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+          <div className="mx-auto h-72 w-full max-w-md overflow-hidden rounded-2xl bg-cream">
             <LiveStage
               species={instance?.speciesId ?? species}
               className="h-full w-full"

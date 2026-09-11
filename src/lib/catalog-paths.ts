@@ -42,7 +42,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Things you teach them. Moonwalk, cartwheel, climb. Fixed prices, yours permanently.",
+        lede: "Teach them something. Teach moonwalk. Teach cartwheel. Teach climb. Fixed prices, yours permanently.",
       };
     case "drop":
       return {

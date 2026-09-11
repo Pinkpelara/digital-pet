@@ -49,7 +49,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-      <div className="min-h-[52vh] overflow-hidden rounded-2xl bg-void lg:min-h-[64vh]">
+      <div className="min-h-[52vh] overflow-hidden rounded-2xl bg-cream lg:min-h-[64vh]">
         <LiveStage
           species={instance.speciesId}
           equipped={equipped}

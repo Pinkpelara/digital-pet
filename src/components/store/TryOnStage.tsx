@@ -15,12 +15,14 @@ export function TryOnStage({
   suggestions,
   initialEquipped = {},
   initialSkill = null,
+  oneLiner,
 }: {
   species: SpeciesId;
   product: CatalogItem;
   suggestions: CatalogItem[];
   initialEquipped?: EquipmentLoadout;
   initialSkill?: SkillId | null;
+  oneLiner?: string;
 }) {
   const [equipped, setEquipped] = useState<EquipmentLoadout>(() =>
     Object.keys(initialEquipped).length
@@ -54,73 +56,72 @@ export function TryOnStage({
   }
 
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
+  const heading =
+    product.kind === "skill" ? `Teach ${product.name}` : product.kind === "companion" ? `Meet ${product.name}.` : product.name;
+  const cta =
+    product.kind === "companion"
+      ? `Adopt ${formatPrice(product.priceCents)}`
+      : product.kind === "skill"
+        ? `Teach ${product.name} ${formatPrice(product.priceCents)}`
+        : `Add to inventory ${formatPrice(product.priceCents)}`;
 
   return (
-    <div className="relative isolate min-h-[100svh] overflow-hidden bg-void text-mist">
-      <div className="absolute inset-0">
-        <LiveStage
-          species={species}
-          equipped={equipped}
-          skill={skill}
-          mood={skill ? "skill" : "idle"}
-          className="h-full min-h-[100svh] w-full"
-          cameraZ={5.75}
-          placement="stage-right"
-        />
-      </div>
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,8,9,0.82)_0%,rgba(7,8,9,0.28)_42%,transparent_68%)] max-md:bg-[linear-gradient(180deg,transparent_38%,rgba(7,8,9,0.9)_100%)]" />
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-10 md:pb-24">
-        <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">
-          {product.kind === "companion" ? "Live companion" : "Live try-on"}
-        </p>
-        <h1 className="mt-4 max-w-[12ch] font-display text-5xl leading-[0.92] text-paper md:text-7xl">
-          {product.kind === "skill" ? `Teach ${product.name}` : product.name}
-        </h1>
-        <p className="mt-4 max-w-md text-base leading-relaxed text-mist/75 md:text-lg">{product.description}</p>
-        <div className="pointer-events-auto mt-8">
-          <Link
-            href={adoptHref([product.id])}
-            onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-            className="inline-flex items-center justify-center rounded-full bg-paper px-6 py-3 text-void hover:bg-mist"
-          >
-            {product.kind === "companion"
-              ? `Adopt ${formatPrice(product.priceCents)}`
-              : product.kind === "skill"
-                ? `Teach ${formatPrice(product.priceCents)}`
-                : `Add to inventory ${formatPrice(product.priceCents)}`}
-          </Link>
+    <div className="bg-paper">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
+        <div className="-mx-2 min-h-[56vh] overflow-hidden rounded-[2rem] bg-cream md:mx-0 md:-ml-6 md:min-h-[68vh]">
+          <LiveStage
+            species={species}
+            equipped={equipped}
+            skill={skill}
+            mood={skill ? "skill" : "idle"}
+            className="h-full min-h-[56vh] w-full md:min-h-[68vh]"
+            cameraZ={5.65}
+          />
         </div>
-        {tryOns.length > 0 && (
-          <div className="pointer-events-auto mt-10 max-w-lg">
-            <p className="text-sm text-mist/55">Dress and teach on this stage</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {tryOns.map((item) => {
-                const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
-                const href = item.skillId
-                  ? `?wear=${wearParam || ""}&play=${item.skillId}`
-                  : `?wear=${item.id}`;
-                return (
-                  <Link
-                    key={item.id}
-                    href={href}
-                    scroll={false}
-                    onClick={() => apply(item)}
-                    aria-pressed={active}
-                    className={`rounded-full border px-3 py-1.5 text-sm ${
-                      active
-                        ? "border-paper bg-paper text-void"
-                        : "border-mist/20 bg-transparent text-mist hover:border-mist/50"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </div>
+        <div>
+          <p className="text-sm font-medium text-moss">
+            {product.kind === "companion" ? "Live companion" : "Live try-on"}
+          </p>
+          <h1 className="mt-3 max-w-[12ch] font-display text-4xl leading-[1.02] text-ink md:text-6xl">{heading}</h1>
+          <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
+          <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
+          <div className="mt-8">
+            <Link
+              href={adoptHref([product.id])}
+              onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+              className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
+            >
+              {cta}
+            </Link>
           </div>
-        )}
-        <div className="pointer-events-auto max-w-lg">
-          <LooksGoodWith ids={product.looksGoodWith} tone="dark" />
+          {tryOns.length > 0 && (
+            <div className="mt-10">
+              <p className="text-sm text-ink-soft">Try a look on this one</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {tryOns.map((item) => {
+                  const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
+                  const href = item.skillId
+                    ? `?wear=${wearParam || ""}&play=${item.skillId}`
+                    : `?wear=${item.id}`;
+                  return (
+                    <Link
+                      key={item.id}
+                      href={href}
+                      scroll={false}
+                      onClick={() => apply(item)}
+                      aria-pressed={active}
+                      className={`rounded-full border px-3 py-1.5 text-sm ${
+                        active ? "border-ink bg-ink text-paper" : "border-ink/15 bg-paper text-ink hover:border-ink/40"
+                      }`}
+                    >
+                      {item.kind === "skill" ? `Teach ${item.name}` : item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          <LooksGoodWith ids={product.looksGoodWith} tone="light" />
         </div>
       </div>
     </div>

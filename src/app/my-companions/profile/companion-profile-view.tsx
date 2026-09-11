@@ -81,7 +81,7 @@ export function CompanionProfileView() {
   return (
     <div className="mx-auto max-w-5xl px-5 py-12 md:px-10">
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
-        <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-void">
+        <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
           <LiveStage
             species={instance.speciesId}
             equipped={instance.equipped}

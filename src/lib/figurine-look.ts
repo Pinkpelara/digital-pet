@@ -1,21 +1,23 @@
 import type { SpeciesId } from "@/lib/types";
 
+/** Soft toy colours — saturated enough to lead the page, not preschool neon. */
 export const figurineLook: Record<
   SpeciesId,
   { body: string; belly: string; shade: string; gloss: string; extra: string }
 > = {
-  bloop: { body: "#5e8f8a", belly: "#c5d9d5", shade: "#3d6561", gloss: "#9ec4bf", extra: "#8fb8b2" },
-  mochi: { body: "#b59a8c", belly: "#d9cfc6", shade: "#8a7368", gloss: "#e4dbd4", extra: "#c4b1a6" },
-  sprout: { body: "#6d7a58", belly: "#c9d0b8", shade: "#4a533c", gloss: "#a3ad88", extra: "#7f8a62" },
-  niblet: { body: "#c49a5c", belly: "#e6d3b0", shade: "#8f6d38", gloss: "#e8c98a", extra: "#d4b06e" },
+  bloop: { body: "#3EC8BE", belly: "#E7FFFB", shade: "#2A9A92", gloss: "#B8FFF6", extra: "#7EEDE4" },
+  mochi: { body: "#F0A3AC", belly: "#FFE8EA", shade: "#D47A84", gloss: "#FFF0F2", extra: "#FFC4CA" },
+  sprout: { body: "#7FBF3A", belly: "#E8F6C8", shade: "#5A8A28", gloss: "#C8E878", extra: "#9AD44A" },
+  niblet: { body: "#F0B03A", belly: "#FFF0C8", shade: "#C48420", gloss: "#FFE08A", extra: "#FFD060" },
 };
 
-export const vinyl = {
-  roughness: 0.32,
-  metalness: 0.04,
-  clearcoat: 0.92,
-  clearcoatRoughness: 0.18,
-  sheen: 0.4,
-  sheenRoughness: 0.62,
-  sheenColor: "#eef1ee",
+/** Soft clay / toy plastic. Some sheen, not luxury clearcoat. */
+export const clay = {
+  roughness: 0.4,
+  metalness: 0,
+  clearcoat: 0.26,
+  clearcoatRoughness: 0.52,
+  sheen: 0.68,
+  sheenRoughness: 0.78,
+  sheenColor: "#fff4e8",
 } as const;

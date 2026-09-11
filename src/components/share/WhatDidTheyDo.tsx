@@ -51,13 +51,13 @@ export function WhatDidTheyDo({ instance }: { instance: CompanionInstance }) {
       </div>
 
       {open && (
-        <div className="mt-6 overflow-hidden rounded-2xl bg-void p-6 text-mist">
+        <div className="mt-6 overflow-hidden rounded-2xl bg-cream p-6 text-ink">
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs uppercase tracking-[0.2em] text-moss">Just now</p>
-            <p className="text-xs text-mist/60">{brand.domain}</p>
+            <p className="text-xs text-ink-soft">{brand.domain}</p>
           </div>
           <div className="mt-4 flex items-center gap-4">
-            <div className="flex h-24 w-24 items-end justify-center overflow-hidden rounded-xl">
+            <div className="flex h-24 w-24 items-end justify-center overflow-hidden rounded-xl bg-paper">
               <LiveStage
                 species={instance.speciesId}
                 equipped={instance.equipped}
@@ -65,16 +65,16 @@ export function WhatDidTheyDo({ instance }: { instance: CompanionInstance }) {
                 mood="happy"
               />
             </div>
-            <p className="font-display text-2xl leading-tight text-paper">
+            <p className="font-display text-2xl leading-tight text-ink">
               {instance.name} {latestBehaviour(instance)}.
             </p>
           </div>
-          <p className="mt-4 text-sm text-mist/60">
+          <p className="mt-4 text-sm text-ink-soft">
             Clip rendering is coming. Today this card is built from real behaviour counters —
             nothing is invented.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <button type="button" onClick={() => void share()} className="rounded-full bg-paper px-5 py-2.5 text-sm text-void">
+            <button type="button" onClick={() => void share()} className="rounded-full bg-ink px-5 py-2.5 text-sm text-paper">
               Share
             </button>
             {copied && <span className="text-sm text-moss">Copied to your clipboard.</span>}

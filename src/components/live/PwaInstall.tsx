@@ -89,7 +89,7 @@ export function PwaInstall() {
           <strong className="text-ink">Safari on iPhone or iPad:</strong> tap Share → Add to Home Screen.{mounted && isIos() ? " You are on iOS — that Share button is at the bottom (or top) of Safari." : ""}
         </li>
         <li>
-          <strong className="text-ink">Safari on a Mac:</strong> File → Add to Dock. The nest stays in the browser; nothing extra is installed from us.
+          <strong className="text-ink">Safari on a Mac:</strong> File → Add to Dock. Your companions stay in the browser; nothing extra is installed from us.
         </li>
         <li>
           <strong className="text-ink">Firefox:</strong> bookmark this page or pin the tab. Firefox does not always offer “Install app.”
@@ -97,7 +97,7 @@ export function PwaInstall() {
       </ol>
       <p className="text-sm text-ink-soft">
         The site address stays {publicBasePath() ? "pinkpelara.github.io/digital-pet" : "this same origin"}. Pinning does not
-        move your nest off this computer’s browser storage in demo mode.
+        move your companions off this computer’s browser storage in demo mode.
       </p>
     </div>
   );
