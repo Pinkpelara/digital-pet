@@ -202,7 +202,7 @@ export function ActionWheel({
             );
           })}
         </ul>
-        <p className="action-wheel-center">They’re listening</p>
+        <p className="action-wheel-center">Hey</p>
       </div>
     </div>
   );

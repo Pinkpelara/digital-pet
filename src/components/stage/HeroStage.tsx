@@ -9,7 +9,7 @@ import { FollowLight } from "@/components/stage/FollowLight";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows } from "@/components/stage/StudioKit";
 import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
-import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId } from "@/lib/types";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 const moods: CreatureMood[] = ["follow", "climb", "happy", "follow", "nap", "follow"];
 
@@ -22,6 +22,7 @@ function Rig({
   demo,
   sulk,
   equipped,
+  species,
 }: {
   pointer: { x: number; y: number };
   scroll: number;
@@ -31,6 +32,7 @@ function Rig({
   demo: DemoActionId | null;
   sulk: boolean;
   equipped: EquipmentLoadout;
+  species: SpeciesId;
 }) {
   const group = useRef<Group>(null);
   useFrame((state) => {
@@ -50,7 +52,7 @@ function Rig({
   return (
     <group ref={group} position={mobile ? [0, 0.04, 0] : [0.48, 0.02, 0]} scale={mobile ? 1.28 : 1.48}>
       <FigurineMesh
-        species="bloop"
+        species={species}
         followPointer={!demo && !sulk}
         pointer={pointer}
         quality={mobile ? "medium" : "high"}
@@ -70,12 +72,14 @@ export function HeroStage({
   demo = null,
   sulk = false,
   equipped = {},
+  species = "bloop",
 }: {
   mood?: CreatureMood;
   skill?: SkillId | null;
   demo?: DemoActionId | null;
   sulk?: boolean;
   equipped?: EquipmentLoadout;
+  species?: SpeciesId;
 }) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scroll, setScroll] = useState(0);
@@ -97,7 +101,7 @@ export function HeroStage({
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    if (!reduce.current && !demo) {
+    if (!reduce.current && !demo && !moodOverride) {
       let index = 0;
       const timer = window.setInterval(() => {
         index = (index + 1) % moods.length;
@@ -113,7 +117,7 @@ export function HeroStage({
       window.removeEventListener("scroll", onScroll);
       mq.removeEventListener("change", syncMobile);
     };
-  }, [demo]);
+  }, [demo, moodOverride]);
 
   return (
     <StageCanvas
@@ -141,6 +145,7 @@ export function HeroStage({
         demo={demo}
         sulk={sulk}
         equipped={equipped}
+        species={species}
       />
       <StudioShadows position={[0, -0.96, 0]} scale={12} />
     </StageCanvas>

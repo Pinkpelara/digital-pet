@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
-import { PersonalityReveal } from "@/components/share/PersonalityReveal";
 import { WhatDidTheyDo } from "@/components/share/WhatDidTheyDo";
-import { liveHref, studioHref } from "@/lib/catalog-paths";
+import { studioHref } from "@/lib/catalog-paths";
 import {
   daysTogether,
   favouriteGadget,
@@ -38,16 +37,10 @@ export function CompanionProfileView() {
   const id = params.get("id");
   const { instances, hydrated, recordBehaviour } = useNest();
   const instance = instances.find((row) => row.id === id) ?? instances[0] ?? null;
-  const [revealed, setRevealed] = useState<string | null>(null);
-
   const onBehaviour = useCallback(
     (kind: keyof BehaviourCounters) => {
       if (!instance) return;
-      const label = recordBehaviour(instance.id, kind);
-      if (label) {
-        setRevealed(label);
-        window.setTimeout(() => setRevealed(null), 6000);
-      }
+      recordBehaviour(instance.id, kind);
     },
     [instance, recordBehaviour],
   );
@@ -87,7 +80,9 @@ export function CompanionProfileView() {
             equipped={instance.equipped}
             unlockedSkills={instance.unlockedSkills}
             companionName={instance.name}
-            hint="Tap them — Moonwalk, Skateboard, Umbrella."
+            instanceId={instance.id}
+            seed={instance.seed}
+            persistEquip
             className="h-full w-full"
             cameraZ={5.5}
           />
@@ -98,32 +93,7 @@ export function CompanionProfileView() {
           <h1 className="mt-2 font-display text-5xl text-ink md:text-6xl">{instance.name}</h1>
           <p className="mt-2 text-ink-soft">Together for {daysTogether(instance)} days</p>
 
-          {revealed && (
-            <p className="mt-4 rounded-2xl bg-moss/12 px-4 py-3 text-ink">
-              You figured something out: {instance.name} is <strong>{revealed}</strong>.
-            </p>
-          )}
-
           <dl className="mt-6 space-y-4">
-            <div>
-              <dt className="text-sm font-semibold uppercase tracking-wider text-ink-soft">
-                Personality discovered
-              </dt>
-              <dd className="mt-2 flex flex-wrap gap-2">
-                {instance.discovered.length > 0 ? (
-                  instance.discovered.map((entry) => (
-                    <span
-                      key={entry.label}
-                      className="rounded-full border border-ink/15 px-3 py-1 text-sm text-ink"
-                    >
-                      {entry.label}
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-ink-soft">Nothing obvious yet. Keep living together.</span>
-                )}
-              </dd>
-            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <dt className="text-sm font-semibold uppercase tracking-wider text-ink-soft">Knows</dt>
@@ -158,11 +128,8 @@ export function CompanionProfileView() {
             <Link href={studioHref(instance.id)} className="rounded-full bg-ink px-6 py-3 text-paper">
               Customize {instance.name}
             </Link>
-            <Link
-              href={liveHref(instance.id)}
-              className="rounded-full border border-ink/15 px-6 py-3 text-ink"
-            >
-              Where does {instance.name} live?
+            <Link href="/browser" className="rounded-full border border-ink/15 px-6 py-3 text-ink">
+              Keep them in the corner
             </Link>
           </div>
         </div>
@@ -170,7 +137,6 @@ export function CompanionProfileView() {
 
       <div className="mt-10 grid gap-6">
         <WhatDidTheyDo instance={instance} />
-        <PersonalityReveal instance={instance} />
       </div>
 
       <p className="mt-10 text-sm text-ink-soft">

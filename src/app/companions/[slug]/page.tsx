@@ -61,10 +61,7 @@ export default async function CompanionPage({ params }: { params: Promise<{ slug
               <li>??? still undiscovered</li>
               <li>??? still undiscovered</li>
             </ul>
-            <p className="mt-3 text-sm text-ink-soft">
-              {companion.secrets.length} hidden behaviours exist. You find them by living together,
-              not by paying.
-            </p>
+            <p className="mt-3 text-sm text-ink-soft">They keep a few things to themselves.</p>
           </div>
         </div>
       </section>

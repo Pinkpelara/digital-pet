@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@/lib/analytics";
+import { ambientPlaylist, patReaction } from "@/lib/ambient";
 import {
   demoDurationMs,
   loadoutForAction,
@@ -12,47 +13,90 @@ import {
 } from "@/lib/demo-actions";
 import { grantBalloonBunch, markPresenceInteract } from "@/lib/state/presence";
 import { useNest } from "@/lib/state/nest-context";
-import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
-
-const SULK_AFTER_MS = 14000;
+import type {
+  CreatureMood,
+  DemoActionId,
+  EquipmentLoadout,
+  PersonalitySeed,
+  SkillId,
+  SpeciesId,
+} from "@/lib/types";
 
 export function usePlayableCompanion(input: {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
   unlockedSkills?: SkillId[];
+  instanceId?: string;
+  seed?: PersonalitySeed;
+  persistEquip?: boolean;
+  holdAction?: DemoActionId | null;
 }) {
   const nest = useNest();
   const [open, setOpen] = useState(false);
   const [demo, setDemo] = useState<DemoActionId | null>(null);
   const [demoEquip, setDemoEquip] = useState<EquipmentLoadout>({});
-  const [sulk, setSulk] = useState(false);
-  const [caption, setCaption] = useState("Tap them.");
+  const [ambientIndex, setAmbientIndex] = useState(0);
+  const [held, setHeld] = useState(false);
   const lastAt = useRef(0);
+  const demoTimer = useRef<number | null>(null);
+
+  const instance = nest.instances.find((row) => row.id === input.instanceId) ?? nest.instances[0];
+  const seed = input.seed ?? instance?.seed;
+  const baseEquip = useMemo(
+    () => input.equipped ?? instance?.equipped ?? {},
+    [input.equipped, instance?.equipped],
+  );
+
+  const playlist = useMemo(
+    () => ambientPlaylist(input.species, seed, baseEquip),
+    [baseEquip, input.species, seed],
+  );
+  const beat = playlist[ambientIndex % playlist.length] ?? playlist[0];
 
   const wheel = useMemo(
     () =>
       wheelForCompanion({
         species: input.species,
         ownedItemIds: nest.ownedItemIds,
-        unlockedSkills: input.unlockedSkills,
-        equipped: input.equipped,
+        unlockedSkills: input.unlockedSkills ?? instance?.unlockedSkills,
+        equipped: baseEquip,
       }),
-    [input.equipped, input.species, input.unlockedSkills, nest.ownedItemIds],
+    [baseEquip, input.species, input.unlockedSkills, instance?.unlockedSkills, nest.ownedItemIds],
   );
 
   const equipped = useMemo(
-    () => ({ ...input.equipped, ...demoEquip }),
-    [demoEquip, input.equipped],
+    () => ({ ...baseEquip, ...demoEquip }),
+    [baseEquip, demoEquip],
   );
 
-  const mood: CreatureMood = sulk && !demo ? "idle" : moodFromDemo(demo);
-  const skill: SkillId | null = skillFromDemo(demo);
+  const userBusy = held || Boolean(input.holdAction) || Boolean(demo) || open;
+  const liveAction = input.holdAction ?? demo ?? (userBusy ? null : beat?.action ?? null);
+  const mood: CreatureMood = liveAction
+    ? moodFromDemo(liveAction)
+    : userBusy
+      ? "happy"
+      : (beat?.mood ?? "idle");
+  const skill: SkillId | null = skillFromDemo(liveAction);
 
   const poke = useCallback(() => {
     lastAt.current = Date.now();
     markPresenceInteract();
-    setSulk(false);
   }, []);
+
+  const persistIfOwned = useCallback(
+    (loadout: EquipmentLoadout) => {
+      if (!input.persistEquip) return;
+      const target = input.instanceId ?? instance?.id;
+      if (!target) return;
+      const next = { ...baseEquip };
+      for (const [slot, itemId] of Object.entries(loadout)) {
+        if (!itemId) continue;
+        if (nest.owns(itemId)) next[slot as keyof EquipmentLoadout] = itemId;
+      }
+      nest.saveOutfit(target, next);
+    },
+    [baseEquip, input.instanceId, input.persistEquip, instance?.id, nest],
+  );
 
   const toggleWheel = useCallback(() => {
     setOpen((prev) => {
@@ -64,27 +108,26 @@ export function usePlayableCompanion(input: {
   }, [input.species, poke]);
 
   const closeWheel = useCallback(() => setOpen(false), []);
-  const demoTimer = useRef<number | null>(null);
 
   const play = useCallback(
     (item: ResolvedWheelItem) => {
       poke();
       setOpen(false);
+      setHeld(true);
       setDemo(item.action);
       setDemoEquip(item.equip);
-      setCaption(item.caption ?? item.label);
+      persistIfOwned(item.equip);
       track("demo_played", { action: item.action, itemId: item.itemId, preview: item.preview });
       if (item.action === "party" || item.action === "balloon-bunch") grantBalloonBunch();
       if (demoTimer.current) window.clearTimeout(demoTimer.current);
-      const duration = demoDurationMs(item.action);
-      if (duration > 0) {
-        demoTimer.current = window.setTimeout(() => {
-          setDemo(null);
-          setDemoEquip({});
-        }, duration);
-      }
+      const duration = demoDurationMs(item.action) || 4200;
+      demoTimer.current = window.setTimeout(() => {
+        setDemo(null);
+        setDemoEquip({});
+        setHeld(false);
+      }, duration);
     },
-    [poke],
+    [persistIfOwned, poke],
   );
 
   const applyExternal = useCallback(
@@ -95,32 +138,42 @@ export function usePlayableCompanion(input: {
         return;
       }
       poke();
+      setHeld(true);
       setDemo(action);
-      setDemoEquip(loadout ?? loadoutForAction(null, action));
+      const gear = loadout ?? loadoutForAction(null, action);
+      setDemoEquip(gear);
+      persistIfOwned(gear);
       if (action === "party" || action === "balloon-bunch") grantBalloonBunch();
       if (demoTimer.current) window.clearTimeout(demoTimer.current);
-      const duration = demoDurationMs(action);
-      if (duration > 0) {
-        demoTimer.current = window.setTimeout(() => {
-          setDemo(null);
-          setDemoEquip({});
-        }, duration);
-      }
+      const duration = demoDurationMs(action) || 4200;
+      demoTimer.current = window.setTimeout(() => {
+        setDemo(null);
+        setDemoEquip({});
+        setHeld(false);
+      }, duration);
     },
-    [play, poke, wheel],
+    [persistIfOwned, play, poke, wheel],
   );
 
+  const pat = useCallback(() => {
+    poke();
+    setHeld(true);
+    const reaction = patReaction(input.species);
+    setDemo(reaction.action);
+    if (demoTimer.current) window.clearTimeout(demoTimer.current);
+    demoTimer.current = window.setTimeout(() => {
+      setDemo(null);
+      setHeld(false);
+    }, reaction.ms);
+  }, [input.species, poke]);
+
   useEffect(() => {
-    if (!lastAt.current) lastAt.current = Date.now();
-    const timer = window.setInterval(() => {
-      if (!lastAt.current) lastAt.current = Date.now();
-      if (Date.now() - lastAt.current > SULK_AFTER_MS && !open) {
-        setSulk(true);
-        setCaption("They’re waiting.");
-      }
-    }, 1500);
-    return () => window.clearInterval(timer);
-  }, [open]);
+    if (userBusy || input.holdAction) return;
+    const timer = window.setTimeout(() => {
+      setAmbientIndex((current) => current + 1);
+    }, beat?.ms ?? 10000);
+    return () => window.clearTimeout(timer);
+  }, [beat?.ms, input.holdAction, userBusy]);
 
   useEffect(() => {
     if (!open) return;
@@ -134,16 +187,18 @@ export function usePlayableCompanion(input: {
   return {
     wheel,
     open,
-    demo,
+    demo: liveAction,
     equipped,
     mood,
     skill,
-    sulk,
-    caption,
+    sulk: false,
+    caption: liveAction ? (wheel.find((row) => row.action === liveAction)?.caption ?? "") : "",
+    followPointer: mood === "follow" || mood === "idle" || mood === "happy",
     toggleWheel,
     closeWheel,
     play,
     applyExternal,
     poke,
+    pat,
   };
 }

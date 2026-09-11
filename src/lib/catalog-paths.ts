@@ -11,7 +11,7 @@ export const FEATURED_SHOP_IDS = [
 ] as const;
 
 /** Names-only shop headline. Full sentence lives in brand.shopBody. */
-export const SHOP_NOW_NAMES = "Raincoat · Pocket Umbrella · Skateboard · Moonwalk";
+export const SHOP_NOW_NAMES = "Raincoat. Umbrella. Skateboard. Moonwalk.";
 
 /** Shop-safe first, featured SKUs at the front of their kind. */
 export function orderForShop(items: CatalogItem[]): CatalogItem[] {
@@ -78,7 +78,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "outfit":
       return {
         title: "Closet",
-        lede: "Raincoat. Visible in a second. Birthday and the day they notice you stay free — we sell the coat, not the cake.",
+        lede: "Raincoat. Try it on. It’s theirs.",
       };
     case "gadget":
       return {
@@ -88,7 +88,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Moonwalk. Backward, smooth, slightly illegal. If you can’t see it in a second, we don’t sell it.",
+        lede: "Moonwalk. Try it on. It’s theirs.",
       };
     case "drop":
       return {

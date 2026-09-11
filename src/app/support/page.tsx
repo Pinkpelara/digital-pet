@@ -21,8 +21,8 @@ const faqs = [
     a: "Never. Limited drops are timed, priced, and listed. What you see is what you pay.",
   },
   {
-    q: "Can I buy a personality?",
-    a: "No. Personality is decided when you adopt. Gadgets and skills change what they do. Personality is not for sale.",
+    q: "Can I name them?",
+    a: "Yes. A box arrives, they climb out, you name them, they’re yours.",
   },
 ];
 

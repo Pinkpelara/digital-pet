@@ -6,8 +6,7 @@ import { LiveStage } from "@/components/stage/LiveStage";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
 import type { CreatureStageProps } from "@/components/stage/CreatureStage";
-import { actionFromLoadout } from "@/lib/demo-actions";
-import type { DemoActionId, SkillId } from "@/lib/types";
+import type { DemoActionId, PersonalitySeed, SkillId } from "@/lib/types";
 
 type PlayableStageProps = Omit<CreatureStageProps, "onStageClick" | "demo" | "sulk"> & {
   unlockedSkills?: SkillId[];
@@ -15,6 +14,9 @@ type PlayableStageProps = Omit<CreatureStageProps, "onStageClick" | "demo" | "su
   hint?: string;
   autoPlay?: DemoActionId | null;
   playAction?: DemoActionId | null;
+  instanceId?: string;
+  seed?: PersonalitySeed;
+  persistEquip?: boolean;
 };
 
 export function PlayableStage({
@@ -26,11 +28,22 @@ export function PlayableStage({
   equipped,
   species,
   className,
+  instanceId,
+  seed,
+  persistEquip = false,
   ...stage
 }: PlayableStageProps) {
-  const playable = usePlayableCompanion({ species, equipped, unlockedSkills });
+  const playable = usePlayableCompanion({
+    species,
+    equipped,
+    unlockedSkills,
+    instanceId,
+    seed,
+    persistEquip,
+    holdAction: playAction ?? autoPlay ?? null,
+  });
   const lastExternal = useRef<DemoActionId | null>(null);
-  const hintText = hint ?? (playable.open ? "" : playable.sulk ? playable.caption : "Tap them for tricks.");
+  const hintText = hint ?? (playable.open ? "" : "");
 
   const applyExternal = playable.applyExternal;
   const playedAuto = useRef(false);
@@ -50,13 +63,7 @@ export function PlayableStage({
     if (!playAction && !stage.skill) lastExternal.current = null;
   }, [applyExternal, playAction, stage.skill]);
 
-  const liveDemo =
-    playable.demo ??
-    playAction ??
-    stage.skill ??
-    actionFromLoadout(playable.equipped, null, null) ??
-    autoPlay ??
-    null;
+  const liveDemo = playable.demo ?? playAction ?? stage.skill ?? autoPlay ?? null;
 
   return (
     <div className={`playable-stage relative h-full w-full ${className ?? ""}`}>
@@ -67,17 +74,26 @@ export function PlayableStage({
         mood={playable.mood}
         skill={playable.skill ?? stage.skill}
         demo={liveDemo}
-        sulk={playable.sulk}
+        sulk={false}
+        followPointer={playable.followPointer}
         className="h-full w-full"
       />
       <StageFx demo={liveDemo} />
       <button
         type="button"
         className={`absolute inset-0 z-[5] cursor-pointer bg-transparent ${playable.open ? "pointer-events-none" : ""}`}
-        onClick={playable.toggleWheel}
-        aria-label={`Open ${companionName}’s day`}
-        aria-expanded={playable.open}
+        onClick={playable.pat}
+        aria-label={`Pat ${companionName}`}
       />
+      <button
+        type="button"
+        className="absolute bottom-4 right-4 z-20 rounded-full bg-ink/80 px-3 py-1 text-xs text-paper"
+        onClick={playable.toggleWheel}
+        aria-label={`Tricks for ${companionName}`}
+        aria-expanded={playable.open}
+      >
+        Tricks
+      </button>
       <ActionWheel
         items={playable.wheel}
         open={playable.open}
