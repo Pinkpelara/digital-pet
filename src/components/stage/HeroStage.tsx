@@ -6,7 +6,7 @@ import type { Group } from "three";
 import { MathUtils } from "three";
 import { FigurineMesh } from "@/components/stage/FigurineMesh";
 import { StageCanvas } from "@/components/stage/StageCanvas";
-import { StudioLights, StudioShadows, StudioSill } from "@/components/stage/StudioKit";
+import { StudioLights, StudioShadows } from "@/components/stage/StudioKit";
 import type { CreatureMood } from "@/lib/types";
 
 const moods: CreatureMood[] = ["follow", "climb", "happy", "follow", "nap", "follow"];
@@ -94,9 +94,8 @@ export function HeroStage() {
       }}
     >
       <StudioLights />
-      <StudioSill width={12} position={[0.4, -1.1, 0.15]} />
       <Rig pointer={pointer} scroll={scroll} mobile={mobile} mood={mood} />
-      <StudioShadows position={[0, -0.96, 0]} scale={12} />
+      <StudioShadows position={[0, -0.96, 0]} scale={10} />
     </StageCanvas>
   );
 }

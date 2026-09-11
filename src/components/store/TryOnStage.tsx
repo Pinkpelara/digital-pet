@@ -68,14 +68,14 @@ export function TryOnStage({
   return (
     <div className="bg-paper">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
-        <div className="-mx-2 min-h-[56vh] overflow-hidden rounded-[2rem] bg-cream md:mx-0 md:-ml-6 md:min-h-[68vh]">
+        <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
           <LiveStage
             species={species}
             equipped={equipped}
             skill={skill}
             mood={skill ? "skill" : "idle"}
-            className="h-full min-h-[56vh] w-full md:min-h-[68vh]"
-            cameraZ={5.65}
+            className="h-full w-full"
+            cameraZ={5.15}
           />
         </div>
         <div>

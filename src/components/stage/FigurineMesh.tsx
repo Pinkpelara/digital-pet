@@ -53,10 +53,16 @@ function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) 
   return (
     <group>
       {(body === "outfit-raincoat" || body === "drop-starrycoat") && (
-        <mesh castShadow position={[0, -0.22, 0.02]} scale={[1.18, 0.78, 1.14]}>
-          <sphereGeometry args={[0.52, 36, 22, 0, Math.PI * 2, 0, Math.PI * 0.68]} />
-          <ClayMaterial color={body === "drop-starrycoat" ? "#3a4a72" : "#F2C14E"} />
-        </mesh>
+        <group>
+          <mesh castShadow position={[0, -0.2, 0.03]} scale={[1.24, 1.02, 1.2]}>
+            <sphereGeometry args={[0.52, 36, 22, 0, Math.PI * 2, 0.12, Math.PI * 0.78]} />
+            <ClayMaterial color={body === "drop-starrycoat" ? "#3a4a72" : "#F2C14E"} />
+          </mesh>
+          <mesh castShadow position={[0, 0.48, -0.16]} rotation={[0.35, 0, 0]} scale={[0.62, 0.5, 0.55]}>
+            <sphereGeometry args={[0.42, 20, 16, 0, Math.PI * 2, 0, Math.PI * 0.62]} />
+            <ClayMaterial color={body === "drop-starrycoat" ? "#2c3a5c" : "#E8B43C"} />
+          </mesh>
+        </group>
       )}
       {body === "outfit-hoodie" && (
         <mesh castShadow position={[0, -0.12, 0]} scale={[1.2, 0.95, 1.16]}>
