@@ -84,11 +84,12 @@ export function TwinBloops() {
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">Same species. Different little weirdos.</p>
-      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
-        Two Bloops. Completely different problems.
+      <p className="kicker">Meet</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[14ch] text-4xl text-ink md:text-6xl">
+        {brand.closer}
       </KineticTitle>
-      <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
+      <p className="mt-4 max-w-xl text-ink-soft">Two Bloops. Completely different problems.</p>
+      <p className="mt-2 max-w-xl text-ink-soft">{brand.heroSupport}</p>
 
       <div className="mt-12">
         <article className="poster-card rounded-[1.7rem]">
@@ -127,7 +128,7 @@ export function TwinBloops() {
   );
 }
 
-type ToyLook = {
+type StageLook = {
   id: string;
   label: string;
   equipped: EquipmentLoadout;
@@ -136,7 +137,7 @@ type ToyLook = {
   line: string;
 };
 
-const tryLooks: ToyLook[] = [
+const tryLooks: StageLook[] = [
   {
     id: "coat",
     label: "Raincoat",
@@ -155,17 +156,17 @@ const tryLooks: ToyLook[] = [
   },
 ];
 
-const takenBack: ToyLook = {
+const takenBack: StageLook = {
   id: "plain",
   label: "Take it back",
   equipped: {},
   skill: null,
   demo: null,
-  line: "Same creature. The toy is off.",
+  line: "Same companion. Gear off.",
 };
 
 export function MakeYoursDemo() {
-  const [look, setLook] = useState<ToyLook>(tryLooks[0]);
+  const [look, setLook] = useState<StageLook>(tryLooks[0]);
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
@@ -270,6 +271,9 @@ export function ThingsChange() {
             <Link href="/item/yellow-raincoat" className="text-sm text-moss underline underline-offset-4">
               Add Yellow Raincoat
             </Link>
+            <Link href="/gadgets" className="text-sm text-moss underline underline-offset-4">
+              Gadget showreel
+            </Link>
           </div>
         </div>
       </div>
@@ -280,7 +284,7 @@ export function ThingsChange() {
 export function TheyNotice() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">They notice each other</p>
+      <p className="kicker">Live with you</p>
       <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Two in a room is not two solos.
       </KineticTitle>
@@ -302,7 +306,7 @@ export function TheyNotice() {
 export function SomethingHappened() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">Something happened while you were gone</p>
+      <p className="kicker">Live with you</p>
       <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         They keep secrets. You find them later.
       </KineticTitle>
@@ -321,10 +325,10 @@ export function SomethingHappened() {
   );
 }
 
-export function TinyProblem() {
+export function SendAGift() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">Send someone a tiny problem</p>
+      <p className="kicker">Live with you</p>
       <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         A gift is a parcel. Then it is their problem.
       </KineticTitle>
@@ -344,7 +348,7 @@ export function TinyProblem() {
 export function LetLoose() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">Always-there path</p>
+      <p className="kicker">Live with you</p>
       <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Pin the browser. They stay in the corner.
       </KineticTitle>
@@ -372,7 +376,7 @@ export function LetLoose() {
 export function LiveYourDay() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">Free magic</p>
+      <p className="kicker">Live with you</p>
       <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
         They notice your day. Birthday cake appears before you remember.
       </KineticTitle>

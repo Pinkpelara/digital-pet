@@ -1,12 +1,13 @@
 import { brand } from "@/lib/brand";
+import { PageHero } from "@/components/site/KineticTitle";
 
 export const metadata = { title: "Terms" };
 
 export default function TermsPage() {
   return (
-    <article className="mx-auto max-w-2xl px-4 py-16">
-      <h1 className="font-display text-5xl text-ink">Terms</h1>
-      <div className="mt-6 space-y-4 text-ink-soft">
+    <article className="bg-paper pb-20">
+      <PageHero kicker="Care" title="Terms" />
+      <div className="mx-auto max-w-2xl space-y-4 px-5 text-ink-soft md:px-10">
         <p>
           You are buying a license to use digital companions and items in {brand.name} products.
           Ownership is an entitlement we grant after a verified purchase — not a transfer of

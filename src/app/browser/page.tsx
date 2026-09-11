@@ -37,7 +37,7 @@ export default function BrowserPage() {
           <span className="mr-2 rounded-full bg-cream px-2 py-0.5 text-xs uppercase tracking-wider text-ink">
             Coming later
           </span>
-          A tiny extension could sit a companion on any tab. It is not built yet. You do not need it
+          A browser extension could sit a companion on any tab. It is not built yet. You do not need it
           to have them in the corner today.
         </p>
       </section>

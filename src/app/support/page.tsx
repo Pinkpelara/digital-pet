@@ -1,11 +1,12 @@
 import { brand } from "@/lib/brand";
+import { PageHero } from "@/components/site/KineticTitle";
 
 export const metadata = { title: "Support" };
 
 const faqs = [
   {
     q: "Did I buy a file?",
-    a: "No. You bought a digital entitlement stored on your account. The creature is not a downloadable asset you copy around.",
+    a: "No. You bought a digital entitlement stored on your account. The companion is not a downloadable asset you copy around.",
   },
   {
     q: "Do I have to install something?",
@@ -27,15 +28,15 @@ const faqs = [
 
 export default function SupportPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Support</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">We are here.</h1>
-      <p className="mt-3 text-ink-soft">
-        Write {brand.supportEmail}. Demo mode needs no ticket — it runs without Stripe or Supabase keys.
-      </p>
-      <dl className="mt-10 space-y-6">
+    <div className="bg-paper pb-20">
+      <PageHero
+        kicker="Support"
+        title="We are here."
+        lede={`Write ${brand.supportEmail}. Demo mode needs no ticket — it runs without Stripe or Supabase keys.`}
+      />
+      <dl className="mx-auto max-w-2xl space-y-8 px-5 md:px-10">
         {faqs.map((faq) => (
-          <div key={faq.q}>
+          <div key={faq.q} className="rounded-[1.4rem] bg-mist px-6 py-6 ring-1 ring-ink/10">
             <dt className="font-display text-2xl text-ink">{faq.q}</dt>
             <dd className="mt-2 text-ink-soft">{faq.a}</dd>
           </div>

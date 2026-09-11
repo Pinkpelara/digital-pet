@@ -374,7 +374,7 @@ export function presencePieForCompanion(input: {
         kind: "presence",
         label: "Mood peek",
         shortLabel: "Mood peek",
-        caption: "They’re a little curious. Soft, not a health bar.",
+        caption: "They’re curious. Soft, not a health bar.",
         accent: "#C5D4E0",
         icon: "mood",
         equip: {},

@@ -1,6 +1,6 @@
 # Companions
 
-Tiny creatures that live on your screen. Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be.
+Companions that live with you. Adopt one. Name it. Who they are shows up while you live together.
 
 **Temporary brand name:** `Companions` — centralized in `src/lib/brand.ts` as `TEMP_BRAND_NAME`. The previous working name was Sillkin; user-visible copy no longer uses it.
 
@@ -52,7 +52,7 @@ npx serve out          # preview the Pages build (not `npm start`)
 
 ## Brand
 
-**Companions** (temporary) — tiny creatures that live with you. Personality is met, not chosen.
+**Companions** (temporary) — companions that live with you. Personality is met, not chosen.
 
 ## Stack
 
@@ -113,7 +113,7 @@ supabase/           schema.sql + RLS.md
 - **Browser (work-friendly, live):** `/browser` — PWA / “Install page as app” / Add to Home Screen. Extension marked coming soon
 - **Desktop (optional, later):** `/desktop`, `/download/windows`, `/download/mac`
 - Deep links: `companions://home`, `companions://adopt/{id}`, `companions://download/{platform}` — only if a test build is already installed
-- Web app manifest + a tiny service worker so Chrome/Edge can offer **Install** on the GitHub Pages URL
+- Web app manifest + a service worker so Chrome/Edge can offer **Install** on the GitHub Pages URL
 - No Tauri binary in this repo
 
 ## Audience & commerce

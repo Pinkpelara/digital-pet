@@ -23,12 +23,12 @@ export function ProfileView({ publicId }: { publicId: string }) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Public profile · {publicId}</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">{user?.displayName ?? "Someone"}&apos;s companions</h1>
+      <p className="kicker">Public profile · {publicId}</p>
+      <h1 className="mt-3 font-display text-5xl leading-[0.92] text-ink md:text-6xl">{user?.displayName ?? "Someone"}&apos;s companions</h1>
       <p className="mt-3 text-ink-soft">
-        A quiet showcase — no comments, no feed, no kids chat. Just a creature you can look at.
+        A quiet showcase — no comments, no feed, no kids chat. Just a companion you can look at.
       </p>
-      <div className="mt-8 rounded-[2rem] bg-paper p-8 ring-1 ring-ink/8">
+      <div className="mt-8 rounded-[2rem] bg-mist p-8 ring-1 ring-ink/10">
         <Creature species={showcase.speciesId} size={240} equipped={showcase.equipped} name={showcase.name} />
         <p className="mt-3 font-display text-3xl">{showcase.name}</p>
       </div>

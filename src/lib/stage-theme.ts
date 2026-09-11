@@ -1,4 +1,4 @@
-/** Cinematic void stage — My Pet Hooligan density, still a toy on a stage. */
+/** Cinematic void stage — My Pet Hooligan density. */
 export const STAGE_BG = "#0C0021";
 export const STAGE_FOG = "#0C0021";
 export const STAGE_PLATFORM = "#1A0838";

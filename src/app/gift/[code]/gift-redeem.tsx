@@ -15,11 +15,11 @@ export function GiftRedeem({ code }: { code: string }) {
 
   return (
     <div className="mx-auto max-w-xl px-4 py-16 text-center">
-      <p className="text-sm font-medium text-moss">A gift</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">{code}</h1>
+      <p className="kicker">A gift</p>
+      <h1 className="mt-3 font-display text-5xl leading-[0.92] text-ink md:text-7xl">{code}</h1>
       {gift ? (
         <>
-          <div className="mx-auto mt-8 h-72 w-full overflow-hidden rounded-[1.8rem] bg-cream">
+          <div className="stage-frame mx-auto mt-8 h-80 w-full overflow-hidden rounded-[1.8rem]">
             <LiveStage species={species} className="h-full w-full" mood="happy" cameraZ={5.5} />
           </div>
           <p className="mt-4 text-lg text-ink-soft">{gift.note}</p>

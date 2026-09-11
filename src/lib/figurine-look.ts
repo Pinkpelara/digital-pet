@@ -1,6 +1,6 @@
 import type { SpeciesId } from "@/lib/types";
 
-/** Soft toy colours — saturated enough to lead the page, not preschool neon. */
+/** Soft clay colours — saturated enough to lead the page, not preschool neon. */
 export const figurineLook: Record<
   SpeciesId,
   { body: string; belly: string; shade: string; gloss: string; extra: string }
@@ -11,7 +11,7 @@ export const figurineLook: Record<
   niblet: { body: "#F0B03A", belly: "#FFF0C8", shade: "#C48420", gloss: "#FFE08A", extra: "#FFD060" },
 };
 
-/** Soft clay / toy plastic — more stage light, still a companion not chrome. */
+/** Soft clay — more stage light, still a companion not chrome. */
 export const clay = {
   roughness: 0.32,
   metalness: 0.04,
