@@ -63,13 +63,14 @@ export function RoamingCreature({
           stats,
           paused: Boolean(paused),
           reducedMotion: Boolean(reducedMotion),
+          species,
         }),
       );
       frame.current = window.requestAnimationFrame(tick);
     };
     frame.current = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(frame.current);
-  }, [followPointer, paused, reducedMotion, stats]);
+  }, [followPointer, paused, reducedMotion, species, stats]);
 
   return (
     <div

@@ -29,6 +29,7 @@ export function HeroLiving({ onReady }: { onReady?: () => void }) {
         skill={playable.skill}
         demo={playable.demo}
         equipped={playable.equipped}
+        seed={roommate?.seed}
         onReady={onReady}
       />
       <StageFx demo={playable.demo} />

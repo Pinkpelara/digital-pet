@@ -5,7 +5,8 @@ import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
 import { clay, figurineLook } from "@/lib/figurine-look";
 import { actionFromLoadout } from "@/lib/demo-actions";
-import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import { idlePose, poseLerp, type IdlePose } from "@/lib/idle-pose";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, PersonalitySeed, SkillId, SpeciesId } from "@/lib/types";
 
 type MeshQuality = "high" | "medium" | "low";
 
@@ -270,6 +271,7 @@ export function FigurineMesh({
   pointer,
   quality = "high",
   loop = false,
+  seed,
 }: {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
@@ -280,11 +282,13 @@ export function FigurineMesh({
   pointer?: { x: number; y: number };
   quality?: MeshQuality;
   loop?: boolean;
+  seed?: PersonalitySeed;
 }) {
   const root = useRef<Group>(null);
   const umbrella = useRef<Group>(null);
   const actionStarted = useRef(0);
   const lastAction = useRef<string | null>(null);
+  const hold = useRef<IdlePose>({ x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, scale: 1 });
   const look = figurineLook[species];
   const segs = quality === "high" ? 48 : quality === "medium" ? 28 : 16;
   const proportions = useMemo(() => {
@@ -311,35 +315,22 @@ export function FigurineMesh({
       umbrella.current.scale.setScalar(open);
       umbrella.current.visible = open > 0.02;
     }
-    const maxY = 0.42;
-    const watching = !action && (followPointer || mood === "follow");
-    const nap = !action && (mood === "nap" || skill === "nap");
-    const climbing = action === "climb" || (!action && mood === "climb");
-    const hiding = action === "hide" || (!action && mood === "hide");
-    const walking = !action && mood === "walk";
+    if (!action) {
+      const target = idlePose(species, mood, t, seed, followPointer || mood === "follow" ? pointer : null);
+      const next = poseLerp(hold.current, target, mood === "follow" ? 0.08 : 0.045);
+      hold.current = next;
+      group.position.set(next.x, next.y, next.z);
+      group.rotation.x += (next.rx - group.rotation.x) * 0.1;
+      group.rotation.y += (next.ry - group.rotation.y) * 0.1;
+      group.rotation.z += (next.rz - group.rotation.z) * 0.1;
+      group.scale.setScalar(next.scale);
+      return;
+    }
 
     group.position.x = 0;
     group.position.z = 0;
     group.rotation.z = 0;
     group.scale.setScalar(1);
-
-    const lookY = watching ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.09;
-    const lookX = watching ? (pointer?.y ?? 0) * -0.16 : Math.sin(t * 0.24) * 0.04;
-    if (!action) {
-      if (walking) {
-        // Their own little patrol: two detuned sine waves so the pace varies.
-        const drift = Math.sin(t * 0.31) * 0.9 + Math.sin(t * 0.113 + 1.7) * 0.35;
-        const heading = Math.cos(t * 0.31) * 0.279 + Math.cos(t * 0.113 + 1.7) * 0.0396;
-        group.position.x = drift;
-        group.position.y = Math.abs(Math.sin(t * 3.4)) * 0.045;
-        group.rotation.y += ((heading >= 0 ? 0.5 : -0.5) - group.rotation.y) * 0.06;
-        group.rotation.x += (0.04 - group.rotation.x) * 0.06;
-        group.rotation.z = Math.sin(t * 3.4) * 0.04;
-        return;
-      }
-      group.rotation.y += (lookY - group.rotation.y) * 0.08;
-      group.rotation.x += (lookX - group.rotation.x) * 0.08;
-    }
 
     if (action === "moonwalk") {
       const walk = 1.65;
@@ -449,17 +440,19 @@ export function FigurineMesh({
       group.rotation.y += (Math.sin(local * 4) * 0.8 - group.rotation.y) * 0.2;
       return;
     }
-    if (action === "climb" || climbing) {
+    if (action === "climb") {
       group.position.y = 0.22 + Math.sin(local * 2.5) * 0.14;
       group.rotation.z = Math.sin(local * 2.5) * 0.1;
       group.rotation.x += (-0.12 - group.rotation.x) * 0.08;
+      hold.current = { x: group.position.x, y: group.position.y, z: group.position.z, rx: group.rotation.x, ry: group.rotation.y, rz: group.rotation.z, scale: 1 };
       return;
     }
-    if (action === "nap" || nap) {
+    if (action === "nap") {
       group.position.y = -0.14 + Math.sin(t * 0.8) * 0.012;
       group.rotation.z += (0.62 - group.rotation.z) * 0.1;
       group.rotation.y += (0.2 - group.rotation.y) * 0.08;
       group.scale.setScalar(0.94);
+      hold.current = { x: group.position.x, y: group.position.y, z: group.position.z, rx: group.rotation.x, ry: group.rotation.y, rz: group.rotation.z, scale: 0.94 };
       return;
     }
     if (action === "photo-pose") {
@@ -500,16 +493,18 @@ export function FigurineMesh({
       group.rotation.z = Math.sin(local * 5.4) * 0.05;
       return;
     }
-    if (action === "hide" || hiding) {
+    if (action === "hide") {
       group.scale.setScalar(0.7);
       group.position.y = -0.2;
       group.position.x = 0.2;
       group.rotation.y += (0.8 - group.rotation.y) * 0.1;
+      hold.current = { x: group.position.x, y: group.position.y, z: group.position.z, rx: group.rotation.x, ry: group.rotation.y, rz: group.rotation.z, scale: 0.7 };
       return;
     }
 
     group.position.y =
       Math.sin(t * 1.15) * 0.045 + (mood === "happy" ? Math.abs(Math.sin(t * 4)) * 0.05 : 0);
+    hold.current = { x: group.position.x, y: group.position.y, z: group.position.z, rx: group.rotation.x, ry: group.rotation.y, rz: group.rotation.z, scale: 1 };
   });
 
   const napping = mood === "nap" || skill === "nap" || demo === "nap";

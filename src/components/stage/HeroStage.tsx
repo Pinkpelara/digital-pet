@@ -9,9 +9,7 @@ import { FollowLight } from "@/components/stage/FollowLight";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows } from "@/components/stage/StudioKit";
 import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
-import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
-
-const moods: CreatureMood[] = ["follow", "climb", "happy", "follow", "nap", "follow"];
+import type { CreatureMood, DemoActionId, EquipmentLoadout, PersonalitySeed, SkillId, SpeciesId } from "@/lib/types";
 
 function Rig({
   pointer,
@@ -22,6 +20,7 @@ function Rig({
   demo,
   equipped,
   species,
+  seed,
 }: {
   pointer: { x: number; y: number };
   scroll: number;
@@ -31,6 +30,7 @@ function Rig({
   demo: DemoActionId | null;
   equipped: EquipmentLoadout;
   species: SpeciesId;
+  seed?: PersonalitySeed;
 }) {
   const group = useRef<Group>(null);
   useFrame((state) => {
@@ -42,7 +42,7 @@ function Rig({
     cam.position.y = MathUtils.lerp(cam.position.y, targetY, 0.05);
     cam.position.z = MathUtils.lerp(cam.position.z, targetZ, 0.055);
     cam.lookAt(mobile ? 0 : 0.42, 0.16, 0);
-    if (group.current && !demo) {
+    if (group.current && !demo && mood === "follow") {
       group.current.rotation.y = MathUtils.lerp(group.current.rotation.y, pointer.x * 0.28, 0.055);
       group.current.rotation.x = MathUtils.lerp(group.current.rotation.x, pointer.y * -0.08, 0.05);
     }
@@ -51,13 +51,14 @@ function Rig({
     <group ref={group} position={mobile ? [0, 0.04, 0] : [0.48, 0.02, 0]} scale={mobile ? 1.28 : 1.48}>
       <FigurineMesh
         species={species}
-        followPointer={!demo}
+        followPointer={!demo && mood === "follow"}
         pointer={pointer}
         quality={mobile ? "medium" : "high"}
         mood={mood}
         skill={skill}
         demo={demo}
         equipped={equipped}
+        seed={seed}
       />
     </group>
   );
@@ -69,6 +70,7 @@ export function HeroStage({
   demo = null,
   equipped = {},
   species = "bloop",
+  seed,
   onReady,
 }: {
   mood?: CreatureMood;
@@ -76,12 +78,14 @@ export function HeroStage({
   demo?: DemoActionId | null;
   equipped?: EquipmentLoadout;
   species?: SpeciesId;
+  seed?: PersonalitySeed;
   onReady?: () => void;
 }) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scroll, setScroll] = useState(0);
   const [mobile, setMobile] = useState(true);
-  const [mood, setMood] = useState<CreatureMood>("follow");
+  const mood: CreatureMood =
+    species === "mochi" ? "nap" : species === "sprout" ? "walk" : species === "niblet" ? "happy" : "climb";
   const [reducedMotion, setReducedMotion] = useState(false);
   const reduce = useRef(false);
 
@@ -102,23 +106,11 @@ export function HeroStage({
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    if (!reduce.current && !demo) {
-      let index = 0;
-      const timer = window.setInterval(() => {
-        index = (index + 1) % moods.length;
-        setMood(moods[index]);
-      }, 4200);
-      return () => {
-        window.removeEventListener("scroll", onScroll);
-        mq.removeEventListener("change", syncMobile);
-        window.clearInterval(timer);
-      };
-    }
     return () => {
       window.removeEventListener("scroll", onScroll);
       mq.removeEventListener("change", syncMobile);
     };
-  }, [demo]);
+  }, []);
 
   return (
     <StageCanvas
@@ -146,6 +138,7 @@ export function HeroStage({
         demo={demo}
         equipped={equipped}
         species={species}
+        seed={seed}
       />
       <StudioShadows position={[0, -0.96, 0]} scale={12} />
     </StageCanvas>

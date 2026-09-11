@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@/lib/analytics";
-import { moodDuration, pickMood } from "@/components/creatures/behavior";
-import { patReaction } from "@/lib/ambient";
+import { ambientDuration, pickAmbientMood, patReaction } from "@/lib/ambient";
 import { catalogById, companions, items } from "@/data/catalog";
 import {
   demoDurationMs,
@@ -44,6 +43,7 @@ const BEHAVIOUR_FOR_MOOD: Partial<Record<CreatureMood, keyof BehaviourCounters>>
   climb: "climbed",
   walk: "explored",
   hide: "hid",
+  happy: "played",
 };
 
 const BEHAVIOUR_FOR_ACTION: Partial<Record<DemoActionId, keyof BehaviourCounters>> = {
@@ -139,7 +139,9 @@ export function usePlayableCompanion(input: {
   const [open, setOpen] = useState(false);
   const [demo, setDemo] = useState<DemoActionId | null>(null);
   const [demoEquip, setDemoEquip] = useState<EquipmentLoadout>({});
-  const [ambientMood, setAmbientMood] = useState<CreatureMood>("idle");
+  const [ambientMood, setAmbientMood] = useState<CreatureMood>(() =>
+    input.species === "mochi" ? "nap" : input.species === "sprout" ? "walk" : input.species === "niblet" ? "happy" : "climb",
+  );
   const [caption, setCaption] = useState("");
 
   const instance = nest.instances.find((row) => row.id === input.instanceId) ?? nest.instances[0];
@@ -237,6 +239,7 @@ export function usePlayableCompanion(input: {
   const untilRef = useRef(0);
   const moodSinceRef = useRef(0);
   const nextShowRef = useRef(0);
+  const startedRef = useRef(false);
 
   const persistIfOwned = useCallback(
     (loadout: EquipmentLoadout) => {
@@ -331,6 +334,12 @@ export function usePlayableCompanion(input: {
 
     const timer = window.setInterval(() => {
       const now = Date.now();
+      if (!startedRef.current) {
+        startedRef.current = true;
+        moodSinceRef.current = now;
+        untilRef.current = now + ambientDuration(input.species, ambientMoodRef.current, seed);
+        nextShowRef.current = now + 28000 + Math.random() * 14000;
+      }
       if (liveDemo || open) {
         untilRef.current = now + 1200;
         return;
@@ -339,24 +348,24 @@ export function usePlayableCompanion(input: {
         if (untilRef.current > 0 && now - moodSinceRef.current > 2600) {
           report(BEHAVIOUR_FOR_MOOD[ambientMoodRef.current]);
         }
-        const next = pickMood(statsRef.current);
+        const next = pickAmbientMood(input.species, seed, statsRef.current);
         setAmbientMood(next);
         ambientMoodRef.current = next;
         moodSinceRef.current = now;
-        untilRef.current = now + moodDuration(next, statsRef.current);
+        untilRef.current = now + ambientDuration(input.species, next, seed);
       }
       if (nextShowRef.current === 0) {
-        nextShowRef.current = now + 7000 + Math.random() * 9000;
+        nextShowRef.current = now + 28000 + Math.random() * 14000;
       }
       if (now > nextShowRef.current) {
         const pick = pickSpontaneous(skillsRef.current, equippedRef.current);
         const showmanship = (statsRef.current.drama + statsRef.current.chaos) / 200;
-        nextShowRef.current = now + 16000 + Math.random() * 26000 * (1 - showmanship * 0.4);
+        nextShowRef.current = now + 28000 + Math.random() * 22000 * (1 - showmanship * 0.35);
         if (pick) fireDemo(pick.action, pick.item, pick.caption, oneShotMs(pick.action));
       }
     }, 900);
     return () => window.clearInterval(timer);
-  }, [liveDemo, fireDemo, open, report]);
+  }, [input.species, liveDemo, fireDemo, open, report, seed]);
 
   useEffect(() => {
     if (!open) return;

@@ -84,6 +84,8 @@ export function PlayableStage({
         mood={playable.mood}
         skill={playable.skill ?? stage.skill}
         demo={liveDemo}
+        seed={seed}
+        followPointer={playable.mood === "follow"}
         className="h-full w-full"
       />
       <StageFx demo={liveDemo} />

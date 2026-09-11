@@ -8,7 +8,7 @@ import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows, StudioSill } from "@/components/stage/StudioKit";
 import { useBudgetGpu } from "@/components/site/use-budget-gpu";
 import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
-import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, PersonalitySeed, SkillId, SpeciesId } from "@/lib/types";
 
 export type CreatureStageProps = {
   species: SpeciesId;
@@ -25,6 +25,7 @@ export type CreatureStageProps = {
   quality?: "high" | "medium" | "low";
   dprMax?: number;
   loop?: boolean;
+  seed?: PersonalitySeed;
 };
 
 function Aim({
@@ -62,6 +63,7 @@ export function CreatureStage({
   quality = "high",
   dprMax,
   loop = false,
+  seed,
 }: CreatureStageProps) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const budget = useBudgetGpu();
@@ -94,10 +96,11 @@ export function CreatureStage({
           mood={mood}
           skill={skill}
           demo={demo}
-          followPointer={followPointer}
+          followPointer={followPointer && mood === "follow"}
           pointer={pointer}
           quality={meshQuality}
           loop={loop}
+          seed={seed}
         />
       </group>
       <StudioShadows scale={placement === "stage-right" ? 12 : 10} />
