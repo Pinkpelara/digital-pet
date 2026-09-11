@@ -13,6 +13,9 @@ type StageCanvasProps = {
   camera?: { position: [number, number, number]; fov?: number; near?: number; far?: number };
   alpha?: boolean;
   dprMax?: number;
+  /** Keep the GL context once mounted; pause when offscreen. */
+  eager?: boolean;
+  onReady?: () => void;
   onPointerMove?: (event: PointerEvent<HTMLDivElement>) => void;
   onPointerDown?: (event: PointerEvent<HTMLDivElement>) => void;
   onClick?: (event: PointerEvent<HTMLDivElement>) => void;
@@ -24,17 +27,20 @@ export function StageCanvas({
   camera = { position: [0, 0.45, 5.6], fov: 30 },
   alpha = true,
   dprMax = 1.6,
+  eager = false,
+  onReady,
   onPointerMove,
   onPointerDown,
   onClick,
 }: StageCanvasProps) {
   const host = useRef<HTMLDivElement>(null);
   const renderer = useRef<WebGLRenderer | null>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(eager);
   const [tabOn, setTabOn] = useState(true);
   const budget = useBudgetGpu();
-  const cap = budget ? Math.min(dprMax, 1.15) : dprMax;
+  const cap = budget ? Math.min(dprMax, 1) : dprMax;
   const dpr = useMemo<[number, number]>(() => [1, cap], [cap]);
+  const playing = visible && tabOn;
 
   useEffect(() => {
     const node = host.current;
@@ -45,11 +51,11 @@ export function StageCanvas({
     }
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0.05, rootMargin: "80px" },
+      { threshold: 0.05, rootMargin: eager ? "0px" : "40px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [eager]);
 
   useEffect(() => {
     const onVis = () => setTabOn(document.visibilityState !== "hidden");
@@ -58,6 +64,16 @@ export function StageCanvas({
   }, []);
 
   useEffect(() => {
+    if (eager) {
+      return () => {
+        const gl = renderer.current;
+        if (!gl) return;
+        gl.getContext().getExtension("WEBGL_lose_context")?.loseContext();
+        gl.dispose();
+        renderer.current = null;
+      };
+    }
+    if (!visible) return;
     return () => {
       const gl = renderer.current;
       if (!gl) return;
@@ -65,7 +81,7 @@ export function StageCanvas({
       gl.dispose();
       renderer.current = null;
     };
-  }, [visible]);
+  }, [eager, visible]);
 
   return (
     <div
@@ -76,11 +92,11 @@ export function StageCanvas({
       onClick={onClick}
       style={alpha ? undefined : { background: STAGE_BG }}
     >
-      {visible ? (
+      {eager || visible ? (
         <Canvas
           shadows={!budget}
           dpr={dpr}
-          frameloop={tabOn ? "always" : "never"}
+          frameloop={playing ? "always" : "never"}
           gl={{
             antialias: !budget,
             alpha,
@@ -92,6 +108,11 @@ export function StageCanvas({
             renderer.current = gl;
             gl.toneMapping = ACESFilmicToneMapping;
             gl.outputColorSpace = SRGBColorSpace;
+            if (!onReady) return;
+            const first = window.requestAnimationFrame(() => {
+              window.requestAnimationFrame(() => onReady());
+            });
+            void first;
           }}
           camera={{
             position: camera.position,

@@ -9,7 +9,7 @@ import { FollowLight } from "@/components/stage/FollowLight";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows } from "@/components/stage/StudioKit";
 import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
-import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId } from "@/lib/types";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 const moods: CreatureMood[] = ["follow", "climb", "happy", "follow", "nap", "follow"];
 
@@ -21,6 +21,7 @@ function Rig({
   skill,
   demo,
   equipped,
+  species,
 }: {
   pointer: { x: number; y: number };
   scroll: number;
@@ -29,6 +30,7 @@ function Rig({
   skill: SkillId | null;
   demo: DemoActionId | null;
   equipped: EquipmentLoadout;
+  species: SpeciesId;
 }) {
   const group = useRef<Group>(null);
   useFrame((state) => {
@@ -48,7 +50,7 @@ function Rig({
   return (
     <group ref={group} position={mobile ? [0, 0.04, 0] : [0.48, 0.02, 0]} scale={mobile ? 1.28 : 1.48}>
       <FigurineMesh
-        species="bloop"
+        species={species}
         followPointer={!demo}
         pointer={pointer}
         quality={mobile ? "medium" : "high"}
@@ -66,11 +68,15 @@ export function HeroStage({
   skill = null,
   demo = null,
   equipped = {},
+  species = "bloop",
+  onReady,
 }: {
   mood?: CreatureMood;
   skill?: SkillId | null;
   demo?: DemoActionId | null;
   equipped?: EquipmentLoadout;
+  species?: SpeciesId;
+  onReady?: () => void;
 }) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scroll, setScroll] = useState(0);
@@ -78,6 +84,10 @@ export function HeroStage({
   const [mood, setMood] = useState<CreatureMood>("follow");
   const [reducedMotion, setReducedMotion] = useState(false);
   const reduce = useRef(false);
+
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
 
   useEffect(() => {
     reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -135,6 +145,7 @@ export function HeroStage({
         skill={skill}
         demo={demo}
         equipped={equipped}
+        species={species}
       />
       <StudioShadows position={[0, -0.96, 0]} scale={12} />
     </StageCanvas>

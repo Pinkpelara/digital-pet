@@ -2,8 +2,27 @@ import { formatPrice } from "@/lib/format";
 import { brand } from "@/lib/brand";
 import type { CatalogItem } from "@/lib/types";
 
-/** Featured homepage shop line: items whose effect is obvious at a glance. */
-export const FEATURED_SHOP_IDS = ["outfit-raincoat", "gadget-umbrella"] as const;
+/** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
+export const FEATURED_SHOP_IDS = [
+  "outfit-raincoat",
+  "gadget-umbrella",
+  "gadget-skateboard",
+  "skill-moonwalk",
+] as const;
+
+/** Names-only shop headline. Full sentence lives in brand.shopBody. */
+export const SHOP_NOW_NAMES = "Raincoat. Umbrella. Skateboard. Moonwalk.";
+
+/** Shop-safe first, featured SKUs at the front of their kind. */
+export function orderForShop(items: CatalogItem[]): CatalogItem[] {
+  const featuredIndex = new Map<string, number>(FEATURED_SHOP_IDS.map((id, index) => [id, index]));
+  return [...items].sort((a, b) => {
+    const aFeatured = featuredIndex.get(a.id) ?? 100;
+    const bFeatured = featuredIndex.get(b.id) ?? 100;
+    if (aFeatured !== bFeatured) return aFeatured - bFeatured;
+    return Number(isShopSafe(b)) - Number(isShopSafe(a));
+  });
+}
 
 /** Visible names on shop cards and PDPs. Radial / studio may still say Teach X. */
 export function shopTitle(item: CatalogItem): string {
@@ -59,7 +78,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "outfit":
       return {
         title: "Closet",
-        lede: "Hats, coats, boots, sunglasses. Everything changes how they look — and birthdays stay free.",
+        lede: "Raincoat. Try it on. It’s theirs.",
       };
     case "gadget":
       return {
@@ -69,7 +88,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Tricks they can learn: Moonwalk, Cartwheel, Nap Anywhere. Watch any of them first, right on the page.",
+        lede: "Moonwalk. Try it on. It’s theirs.",
       };
     case "drop":
       return {

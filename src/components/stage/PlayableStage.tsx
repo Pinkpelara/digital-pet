@@ -6,7 +6,7 @@ import { LiveStage } from "@/components/stage/LiveStage";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
 import type { CreatureStageProps } from "@/components/stage/CreatureStage";
-import type { BehaviourCounters, DemoActionId, PersonalityStats, SkillId } from "@/lib/types";
+import type { BehaviourCounters, DemoActionId, PersonalitySeed, PersonalityStats, SkillId } from "@/lib/types";
 
 type PlayableStageProps = Omit<CreatureStageProps, "onStageClick" | "demo"> & {
   unlockedSkills?: SkillId[];
@@ -18,6 +18,10 @@ type PlayableStageProps = Omit<CreatureStageProps, "onStageClick" | "demo"> & {
   stats?: PersonalityStats;
   /** Called when they are observed doing something. Feeds trait discovery. */
   onBehaviour?: (kind: keyof BehaviourCounters) => void;
+  instanceId?: string;
+  seed?: PersonalitySeed;
+  persistEquip?: boolean;
+  holdAction?: DemoActionId | null;
 };
 
 export function PlayableStage({
@@ -28,12 +32,26 @@ export function PlayableStage({
   playAction = null,
   stats,
   onBehaviour,
+  instanceId,
+  seed,
+  persistEquip,
+  holdAction,
   equipped,
   species,
   className,
   ...stage
 }: PlayableStageProps) {
-  const playable = usePlayableCompanion({ species, equipped, unlockedSkills, stats, onBehaviour });
+  const playable = usePlayableCompanion({
+    species,
+    equipped,
+    unlockedSkills,
+    stats,
+    onBehaviour,
+    instanceId,
+    seed,
+    persistEquip,
+    holdAction,
+  });
   const lastExternal = useRef<DemoActionId | null>(null);
 
   const applyExternal = playable.applyExternal;

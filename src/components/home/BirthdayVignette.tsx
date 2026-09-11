@@ -62,8 +62,8 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
         It’s your birthday. They already knew.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        A parcel shows up without you mentioning it. They sit with you while you work. They do their
-        own little things when you are not looking.
+        A parcel shows up without you mentioning it. They sit with you while you work. Ignore them
+        long enough and they sulk — lightly, not a streak counter.
       </p>
 
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[0.9fr_1.1fr]">
@@ -89,7 +89,7 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
                   autoPlay="party"
                   playAction="party"
                   companionName="Bloop"
-                  hint="Party hat + confetti. Balloon Bunch is free for 24 hours."
+                  hint="Party hat. Confetti. They already knew."
                   className="h-full"
                   cameraZ={5.4}
                 />
@@ -101,16 +101,16 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
         <div>
           <ul className="space-y-4 text-ink-soft">
             <li>
-              <span className="font-medium text-ink">They keep you company.</span> They live in the
-              corner while you study or take calls. They are not trying to make you productive.
+              <span className="font-medium text-ink">Work-with-you.</span> They live in the corner
+              while you study or take calls.
             </li>
             <li>
-              <span className="font-medium text-ink">They do their own thing.</span> Naps, climbs,
-              little expeditions. You notice them, you do not schedule them.
+              <span className="font-medium text-ink">Sulk when ignored.</span> Look away long enough
+              and they turn their back. Tap them. They come back.
             </li>
             <li>
-              <span className="font-medium text-ink">Who they are is not for sale.</span> You meet
-              it. Secrets stay ??? until they don’t. Two Bloops are still two problems.
+              <span className="font-medium text-ink">They’re still them.</span> Two Bloops, two
+              problems.
             </li>
           </ul>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -127,20 +127,14 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
           </div>
           {open || hasBalloonBunch() ? (
             <p className="mt-4 text-sm text-moss">
-              Balloon Bunch is free for 24 hours around a birthday. The{" "}
-              <Link href="/item/party-hat" className="underline underline-offset-4">
-                Party Hat
-              </Link>
-              {" "}is the part you keep.{" "}
+              The party hat is on.{" "}
               <Link href="/item/balloon-bunch" className="underline underline-offset-4">
-                See the trick
-              </Link>
-              .
+                Balloon Bunch
+              </Link>{" "}
+              came with it.
             </p>
           ) : null}
-          <p className="mt-4 text-xs text-ink-soft">
-            This demo uses a local birthday flag. Nothing is sent anywhere.
-          </p>
+          <p className="mt-4 text-xs text-ink-soft">Demo only. Nothing is sent anywhere.</p>
         </div>
       </div>
     </section>

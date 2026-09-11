@@ -12,11 +12,9 @@ import {
   speciesName,
   wearingNames,
 } from "@/lib/companion-view";
-import { discoveredLabels } from "@/lib/personality";
 import type { CompanionInstance } from "@/lib/types";
 
 export function CompanionCard({ instance }: { instance: CompanionInstance }) {
-  const labels = discoveredLabels(instance.discovered);
   const knows = skillNames(instance);
   const wearing = wearingNames(instance);
   const gadget = favouriteGadget(instance);
@@ -30,7 +28,9 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
           equipped={instance.equipped}
           unlockedSkills={instance.unlockedSkills}
           companionName={instance.name}
-          hint="Tap them — Moonwalk, Skateboard, Umbrella."
+          instanceId={instance.id}
+          seed={instance.seed}
+          persistEquip
           className="h-full w-full"
           cameraZ={5.5}
         />
@@ -44,23 +44,6 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
       <p className="mt-1 text-sm text-ink-soft">Together for {daysTogether(instance)} days</p>
 
       <dl className="mt-5 space-y-3 text-sm">
-        <div>
-          <dt className="text-xs uppercase tracking-[0.16em] text-ink-soft">Personality discovered</dt>
-          <dd className="mt-1 flex flex-wrap gap-2">
-            {labels.length > 0 ? (
-              labels.map((label) => (
-                <span
-                  key={label}
-                  className="rounded-full border border-ink/15 px-3 py-1 text-sm text-ink"
-                >
-                  {label}
-                </span>
-              ))
-            ) : (
-              <span className="text-ink-soft">Still a mystery. Keep living together.</span>
-            )}
-          </dd>
-        </div>
         <div>
           <dt className="text-xs uppercase tracking-[0.16em] text-ink-soft">Knows</dt>
           <dd className="mt-1 text-ink">{knows.length ? knows.join(" · ") : "Nothing yet"}</dd>

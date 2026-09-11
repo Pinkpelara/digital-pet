@@ -72,7 +72,7 @@ export function CreatureStage({
     <StageCanvas
       className={className}
       alpha={false}
-      dprMax={dprMax ?? (meshQuality === "high" ? 1.5 : meshQuality === "medium" ? 1.2 : 1.1)}
+      dprMax={dprMax ?? (meshQuality === "high" ? 1.35 : meshQuality === "medium" ? 1.1 : 1)}
       camera={{ position: [placement === "stage-right" ? 0.42 : 0, 0.42, cameraZ], fov: 30 }}
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();

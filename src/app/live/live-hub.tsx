@@ -14,7 +14,16 @@ function LiveHubInner() {
   const name = hydrated ? instance?.name : undefined;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 md:px-10 md:py-16">
+    <div className="relative overflow-hidden bg-paper pb-16">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-0 h-64 w-64 rounded-full bg-blush/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-0 top-8 h-72 w-72 rounded-full bg-moss/10 blur-3xl"
+      />
+      <div className="relative mx-auto max-w-6xl px-4 py-12 md:px-10 md:py-16">
       <WhereTheyLive heading="h1" instanceId={instance?.id ?? id ?? undefined} companionName={name} />
       <BirthdayVignette compact />
       <p className="mt-10 max-w-2xl text-sm text-ink-soft">
@@ -22,6 +31,7 @@ function LiveHubInner() {
         the corner on a work machine. Desktop is an extra door into the same inventory — never a
         second checkout, never a loot box.
       </p>
+      </div>
     </div>
   );
 }

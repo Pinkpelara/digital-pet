@@ -6,7 +6,7 @@ export const metadata = { title: "Support" };
 const faqs = [
   {
     q: "Did I buy a file?",
-    a: "No. What you bought lives in your account, like a game inventory — not a file you download and copy around.",
+    a: "No. You bought a digital entitlement stored on your account. The companion is not a downloadable asset you copy around.",
   },
   {
     q: "Do I have to install something?",
@@ -21,8 +21,8 @@ const faqs = [
     a: "Never. Limited drops are timed, priced, and listed. What you see is what you pay.",
   },
   {
-    q: "Can I buy a personality?",
-    a: "No. Who they are is decided when you adopt, and you find it out by living with them. Gadgets and skills change what they can do.",
+    q: "Can I name them?",
+    a: "Yes. A box arrives, they climb out, you name them, they’re yours.",
   },
 ];
 

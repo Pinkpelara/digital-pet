@@ -8,25 +8,24 @@ export default function DesktopPage() {
   return (
     <div className="bg-paper pb-20">
       <PageHero
-        kicker="Coming later"
+        kicker="Flagship · not shipped"
         title="Eventually they roam the whole machine."
-        lede="The version we are building toward walks across your real desktop — over windows, along the taskbar, asleep on the clock. It is not finished, and we are not selling an installer we do not have."
+        lede="The version we are building toward walks across your real desktop — over windows, along the dock, asleep on the clock. That is co-presence at OS scale, OpenPets-style: a shell and a skills shelf, not a humanoid robot. It is not finished, and we are not selling an installer we do not have."
       />
       <div className="mx-auto max-w-3xl px-5 md:px-10">
       <p className="text-ink-soft">
-        Nothing bad happens if you forget them. Loud mischief is always your choice, never the
-        default.
+        Mute chaos is always one tap. They do not starve. They do not die if you forget them.
       </p>
       <p className="mt-3 text-ink-soft">
-        Today they live in the corner of a pinned browser: Chrome or Edge, no install, same account.
-        Come back here when a test build exists.
+        For work machines today, they live in the corner of a pinned browser. That is the real
+        now-path: Chrome or Edge, no IT install, same nest. Come back here when a test build exists.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/browser" className="rounded-full bg-ink px-5 py-3 text-paper">
           Pin them in the corner
         </Link>
         <Link href="/skills" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
-          Browse skills
+          Skills shelf
         </Link>
         <Link href="/download/windows" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
           Windows (coming soon)

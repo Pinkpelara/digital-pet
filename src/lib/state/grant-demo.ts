@@ -1,5 +1,5 @@
 import { companions, items } from "@/data/catalog";
-import { applyTendencies, fullLabels, randomSeed, statsFromSeed } from "@/lib/personality";
+import { applyTendencies, randomSeed, statsFromSeed } from "@/lib/personality";
 import type { CompanionInstance, DemoUser, OwnershipRecord, SkillId } from "@/lib/types";
 import type { PersistedNest } from "@/lib/state/storage";
 
@@ -12,9 +12,8 @@ export const demoUser = (): DemoUser => ({
 });
 
 /**
- * A new individual. Species tendencies shape the seed; the seed stays hidden
- * and cannot be edited. The first personality label is obvious immediately,
- * the rest arrive as you live together.
+ * A new individual. Species tendencies shape the seed; the seed stays hidden.
+ * You find out who they are by living with them — the site does not label them on day one.
  */
 export function newCompanionInstance(
   speciesId: CompanionInstance["speciesId"],
@@ -25,7 +24,6 @@ export function newCompanionInstance(
   const species = companions.find((entry) => entry.id === speciesId) ?? companions[0];
   const seed = applyTendencies(randomSeed(), species.tendencies);
   const at = new Date().toISOString();
-  const first = fullLabels(seed)[0];
   return {
     id: crypto.randomUUID(),
     userId,
@@ -37,7 +35,7 @@ export function newCompanionInstance(
     stats: statsFromSeed(seed),
     equipped: {},
     unlockedSkills: [...species.nativeSkills],
-    discovered: first ? [{ label: first, at }] : [],
+    discovered: [],
     counters: {},
     secrets: [],
     favouriteSpot: null,
@@ -76,8 +74,15 @@ export function grantItemsLocally(
     }
   }
 
-  // Skills are taught, not worn: owning one unlocks it for every companion.
-  const instances = [...instanceById.values()].map((instance) => {
+  const ownership = [...ownershipByItem.values()];
+  const gear: CompanionInstance["equipped"] = {};
+  for (const row of ownership) {
+    const item = items.find((entry) => entry.id === row.itemId);
+    if (item?.slot) gear[item.slot] = item.id;
+  }
+
+  // Skills unlock for everyone. Slotted stuff lives on the newest roommate.
+  const raw = [...instanceById.values()].map((instance) => {
     let next = instance;
     for (const itemId of itemIds) {
       const item = items.find((entry) => entry.id === itemId);
@@ -87,11 +92,16 @@ export function grantItemsLocally(
     }
     return next;
   });
+  const newest = [...raw].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+  const instances = raw.map((instance) => {
+    if (!newest || instance.id !== newest.id) return instance;
+    return { ...instance, equipped: { ...instance.equipped, ...gear } };
+  });
 
   return {
     ...prev,
     user,
-    ownership: [...ownershipByItem.values()],
+    ownership,
     instances,
   };
 }

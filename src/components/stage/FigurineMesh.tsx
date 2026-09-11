@@ -137,15 +137,23 @@ function Gear({
         <group position={[0, 0.58, 0.04]}>
           <mesh rotation={[0, 0, Math.PI / 2]} position={[0, 0.16, -0.04]}>
             <torusGeometry args={[0.38, 0.035, 8, 18, Math.PI]} />
-            <meshStandardMaterial color="#2a2a2a" roughness={0.4} />
+            <meshStandardMaterial color="#c9d0dc" roughness={0.35} metalness={0.25} />
           </mesh>
           <mesh castShadow position={[-0.42, 0.04, 0.12]} rotation={[0, 0.4, 0]}>
             <cylinderGeometry args={[0.16, 0.16, 0.09, 16]} />
-            <ClayMaterial color="#1a1a1a" />
+            <ClayMaterial color="#8B93A7" />
           </mesh>
           <mesh castShadow position={[0.42, 0.04, 0.12]} rotation={[0, -0.4, 0]}>
             <cylinderGeometry args={[0.16, 0.16, 0.09, 16]} />
-            <ClayMaterial color="#1a1a1a" />
+            <ClayMaterial color="#8B93A7" />
+          </mesh>
+          <mesh position={[-0.42, 0.04, 0.165]}>
+            <circleGeometry args={[0.11, 16]} />
+            <meshStandardMaterial color="#5ce6d8" roughness={0.45} />
+          </mesh>
+          <mesh position={[0.42, 0.04, 0.165]}>
+            <circleGeometry args={[0.11, 16]} />
+            <meshStandardMaterial color="#5ce6d8" roughness={0.45} />
           </mesh>
         </group>
       )}

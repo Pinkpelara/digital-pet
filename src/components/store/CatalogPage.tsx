@@ -1,6 +1,6 @@
 import { CatalogGrid } from "@/components/store/CatalogGrid";
 import { PageHero } from "@/components/site/KineticTitle";
-import { categoryCopy } from "@/lib/catalog-paths";
+import { categoryCopy, orderForShop } from "@/lib/catalog-paths";
 import type { CatalogItem } from "@/lib/types";
 
 export function CatalogPage({
@@ -14,6 +14,7 @@ export function CatalogPage({
 }) {
   const copy = categoryCopy(kind);
   const showreel = kind === "gadget" || kind === "skill";
+  const ordered = orderForShop(items);
   return (
     <div className="relative overflow-hidden bg-paper pb-20">
       <PageHero
@@ -23,7 +24,7 @@ export function CatalogPage({
       />
       <div className="mx-auto max-w-6xl px-4 md:px-10">
         <CatalogGrid
-          items={items}
+          items={ordered}
           className={showreel ? "grid gap-5 md:grid-cols-2" : undefined}
         />
       </div>

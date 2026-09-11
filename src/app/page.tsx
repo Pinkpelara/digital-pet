@@ -5,17 +5,7 @@ import { formatPrice } from "@/lib/format";
 import { HeroBanner } from "@/components/stage/HeroBanner";
 import { HomeProductJsonLd } from "@/components/store/ProductJsonLd";
 import { KineticTitle } from "@/components/site/KineticTitle";
-import { PersonalityCards } from "@/components/home/PersonalityCards";
-import {
-  LetLoose,
-  LiveYourDay,
-  MakeYoursDemo,
-  SendAGift,
-  SomethingHappened,
-  TheyNotice,
-  ThingsChange,
-  TwinBloops,
-} from "@/components/home/HomeSections";
+import { DeferredMeet, DeferredTheirStuff } from "@/components/home/DeferredHome";
 
 export default function HomePage() {
   const adoptFrom = formatPrice(adoptFromCents());
@@ -31,29 +21,30 @@ export default function HomePage() {
               <div>
                 <p className="kicker">Meet</p>
                 <KineticTitle as="h2" className="mt-3 text-4xl text-ink md:text-6xl">
-                  Four species. Live.
+                  Who’s this
                 </KineticTitle>
               </div>
-              <Link href="/companions" className="text-sm text-moss underline underline-offset-4">
+              <Link href="/companions" prefetch={false} className="text-sm text-moss underline underline-offset-4">
                 See all
               </Link>
             </div>
             <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
-            <p className="mt-2 max-w-xl text-ink-soft">{brand.heroSupport}</p>
           </div>
           <div className="mx-auto mt-10 max-w-6xl px-5 md:px-10">
-            <PersonalityCards featured />
+            <DeferredMeet />
           </div>
         </section>
 
-        <TwinBloops />
-        <LiveYourDay />
-        <TheyNotice />
-        <SomethingHappened />
-        <SendAGift />
-        <LetLoose />
-        <MakeYoursDemo />
-        <ThingsChange />
+        <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+          <p className="kicker">Their stuff</p>
+          <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
+            Try it on. It’s theirs.
+          </KineticTitle>
+          <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
+          <div className="mt-10">
+            <DeferredTheirStuff />
+          </div>
+        </section>
       </div>
 
       <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-28 pt-12 text-center md:px-10">
@@ -62,9 +53,8 @@ export default function HomePage() {
           Adopt one
         </KineticTitle>
         <p className="mx-auto mt-4 max-w-lg text-ink-soft">{brand.meetBody}</p>
-        <p className="mx-auto mt-2 max-w-lg text-ink-soft">{brand.heroSupport}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/companions/bloop" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+          <Link href="/companions/bloop" prefetch={false} className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
             Adopt from {adoptFrom}. Start with Bloop.
           </Link>
         </div>

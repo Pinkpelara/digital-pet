@@ -27,16 +27,16 @@ const BEATS: Array<{
   },
   {
     id: "stretch",
-    label: "Long afternoon",
-    body: "They notice the slump. One big stretch about it.",
+    label: "Mood dip",
+    body: "A soft stretch bubble. They notice the slump.",
     demo: "stretch",
     equipped: {},
     ms: 3500,
   },
   {
     id: "adventure",
-    label: "Evening walk",
-    body: "Sometimes they wander off on their own. They come back with a sticker. You did not send them.",
+    label: "Evening streak",
+    body: "They come back from an evening streak with a sticker. You did not send them. They went.",
     demo: "adventure",
     equipped: { face: "outfit-sunglasses" },
     ms: 3500,
@@ -44,7 +44,7 @@ const BEATS: Array<{
   {
     id: "party",
     label: "Birthday",
-    body: "Party hat + confetti. Balloon Bunch is free for 24 hours around a birthday.",
+    body: "Party hat and confetti. They already knew.",
     demo: "party",
     equipped: { head: "gadget-partyhat", back: "gadget-balloon" },
     ms: 4000,
@@ -102,9 +102,9 @@ export function DayVignette() {
       </ol>
       {birthdayUnlocked ? (
         <p className="mt-4 text-sm text-moss">
-          Balloon Bunch is unlocked for 24 hours.{" "}
+          Balloon Bunch is with them.{" "}
           <Link href="/item/balloon-bunch" className="underline underline-offset-4">
-            See the trick
+            See the balloons
           </Link>
           {" · "}
           <Link href="/item/party-hat" className="underline underline-offset-4">

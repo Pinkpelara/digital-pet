@@ -1,7 +1,10 @@
 import { AdminDesk } from "@/components/admin/AdminDesk";
 import { PageHero } from "@/components/site/KineticTitle";
 
-export const metadata = { title: "Admin" };
+export const metadata = {
+  title: "Admin",
+  robots: { index: false, follow: false, nocache: true },
+};
 
 export default function AdminPage() {
   return (
