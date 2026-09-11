@@ -68,6 +68,9 @@ export function CompanionProfileView() {
             stats={instance.stats}
             onBehaviour={onBehaviour}
             companionName={instance.name}
+            instanceId={instance.id}
+            seed={instance.seed}
+            persistEquip
             className="h-full w-full"
             cameraZ={5.5}
           />

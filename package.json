@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:habits": "npx --yes tsx scripts/verify-species-habits.ts",
+    "verify:persist": "npx --yes tsx scripts/verify-nest-persist.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

@@ -73,7 +73,7 @@ export function PlayableStage({
   }, [applyExternal, playAction, stage.skill]);
 
   const liveDemo = playable.demo ?? playAction ?? stage.skill ?? autoPlay ?? null;
-  const hintText = hint ?? (playable.open || playable.demo ? "" : "They’re doing their own thing.");
+  const hintText = playable.open || playable.demo ? "" : (hint ?? "");
 
   return (
     <div className={`playable-stage relative h-full w-full ${className ?? ""}`}>
@@ -84,6 +84,8 @@ export function PlayableStage({
         mood={playable.mood}
         skill={playable.skill ?? stage.skill}
         demo={liveDemo}
+        seed={seed}
+        followPointer={playable.mood === "follow"}
         className="h-full w-full"
       />
       <StageFx demo={liveDemo} />
