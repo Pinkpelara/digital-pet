@@ -50,7 +50,7 @@ function Rig({
         species="bloop"
         followPointer={!demo && !sulk}
         pointer={pointer}
-        quality="high"
+        quality={mobile ? "medium" : "high"}
         mood={mood}
         skill={skill}
         demo={demo}
@@ -76,7 +76,7 @@ export function HeroStage({
 }) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scroll, setScroll] = useState(0);
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState(true);
   const [mood, setMood] = useState<CreatureMood>("follow");
   const reduce = useRef(false);
 
@@ -114,7 +114,7 @@ export function HeroStage({
     <StageCanvas
       className="absolute inset-0"
       alpha
-      dprMax={1.75}
+      dprMax={mobile ? 1.15 : 1.5}
       camera={{ position: [0.2, 0.42, 5.6], fov: 30, far: 40 }}
       onPointerMove={(event) => {
         if (reduce.current) return;

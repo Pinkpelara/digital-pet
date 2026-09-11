@@ -1,9 +1,19 @@
 "use client";
 
 import { ContactShadows, RoundedBox } from "@react-three/drei";
+import { useStageBudget } from "@/components/stage/stage-budget";
 import { STAGE_PLATFORM, STAGE_SHADOW } from "@/lib/stage-theme";
 
 export function StudioLights({ intensity = 1 }: { intensity?: number }) {
+  const budget = useStageBudget();
+  if (budget) {
+    return (
+      <>
+        <hemisphereLight args={["#fff6ea", "#e8d8c4", 1.12 * intensity]} />
+        <directionalLight position={[2.4, 4.4, 3]} intensity={1.7 * intensity} color="#fff4e4" />
+      </>
+    );
+  }
   return (
     <>
       <hemisphereLight args={["#fff6ea", "#e8d8c4", 1.05 * intensity]} />
@@ -41,5 +51,7 @@ export function StudioShadows({
   position?: [number, number, number];
   scale?: number;
 }) {
+  const budget = useStageBudget();
+  if (budget) return null;
   return <ContactShadows position={position} opacity={0.28} scale={scale} blur={2.8} far={3.4} color={STAGE_SHADOW} />;
 }

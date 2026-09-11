@@ -1,13 +1,21 @@
 "use client";
 
-import { useMemo, useRef, type RefObject } from "react";
+import { createContext, useContext, useMemo, useRef, type RefObject } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
 import { clay, figurineLook } from "@/lib/figurine-look";
 import { actionFromLoadout } from "@/lib/demo-actions";
 import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
+type MeshQuality = "high" | "medium" | "low";
+
+const MeshQualityContext = createContext<MeshQuality>("high");
+
 function ClayMaterial({ color }: { color: string }) {
+  const quality = useContext(MeshQualityContext);
+  if (quality !== "high") {
+    return <meshStandardMaterial color={color} roughness={clay.roughness} metalness={clay.metalness} />;
+  }
   return (
     <meshPhysicalMaterial
       color={color}
@@ -264,7 +272,7 @@ export function FigurineMesh({
   sulk?: boolean;
   followPointer?: boolean;
   pointer?: { x: number; y: number };
-  quality?: "high" | "medium";
+  quality?: MeshQuality;
   loop?: boolean;
 }) {
   const root = useRef<Group>(null);
@@ -272,7 +280,7 @@ export function FigurineMesh({
   const actionStarted = useRef(0);
   const lastAction = useRef<string | null>(null);
   const look = figurineLook[species];
-  const segs = quality === "high" ? 48 : 28;
+  const segs = quality === "high" ? 48 : quality === "medium" ? 28 : 16;
   const proportions = useMemo(() => {
     if (species === "mochi") return { body: [1.22, 0.88, 1.12] as const, head: [1.12, 0.92, 1.08] as const };
     if (species === "sprout") return { body: [0.9, 1.08, 0.92] as const, head: [0.92, 1.04, 0.95] as const };
@@ -507,6 +515,7 @@ export function FigurineMesh({
   const sticker = liveAction === "adventure";
 
   return (
+    <MeshQualityContext.Provider value={quality}>
     <group ref={root}>
       <group position={[0, -0.02, 0]}>
         <group scale={proportions.body}>
@@ -654,5 +663,6 @@ export function FigurineMesh({
         )}
       </group>
     </group>
+    </MeshQualityContext.Provider>
   );
 }

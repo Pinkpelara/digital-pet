@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
+import { PairedStage } from "@/components/stage/PairedStage";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { StageFx } from "@/components/stage/StageFx";
 import { CareChips } from "@/components/home/CareChips";
@@ -52,6 +53,7 @@ function StageBox({
           companionName={companionName}
           className="h-full min-h-[280px] w-full"
           cameraZ={5.6}
+          quality="medium"
         />
       ) : (
         <div className="relative h-full min-h-[280px] w-full">
@@ -87,17 +89,22 @@ export function TwinBloops() {
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 overflow-hidden rounded-[1.8rem] bg-cream">
+        <PairedStage
+          left={{ species: "bloop", mood: "climb" }}
+          right={{ species: "bloop", mood: "nap" }}
+          className="min-h-[340px] md:min-h-[420px]"
+        />
+      </div>
+      <div className="mt-6 grid gap-6 md:grid-cols-2">
         <article>
-          <StageBox species="bloop" mood="climb" />
-          <h3 className="mt-4 font-display text-2xl text-ink">This one climbs first</h3>
+          <h3 className="font-display text-2xl text-ink">This one climbs first</h3>
           <p className="mt-2 text-sm text-ink-soft">
             Investigates the edge of the page. Falls. Climbs again.
           </p>
         </article>
         <article>
-          <StageBox species="bloop" mood="nap" />
-          <h3 className="mt-4 font-display text-2xl text-ink">This one waits</h3>
+          <h3 className="font-display text-2xl text-ink">This one waits</h3>
           <p className="mt-2 text-sm text-ink-soft">
             Checks for danger twice. Then takes a nap about it.
           </p>
@@ -134,20 +141,12 @@ const tryLooks: ToyLook[] = [
     line: "A raincoat is a shape. Visible in a second.",
   },
   {
-    id: "board",
-    label: "Skateboard",
-    equipped: { feet: "gadget-skateboard" },
+    id: "umbrella",
+    label: "Pocket Umbrella",
+    equipped: { hand: "gadget-umbrella" },
     skill: null,
-    demo: "skate",
-    line: "Click the board. They skate.",
-  },
-  {
-    id: "moonwalk",
-    label: "Moonwalk",
-    equipped: { face: "outfit-sunglasses" },
-    skill: "moonwalk",
-    demo: "moonwalk",
-    line: "Moonwalk. Backward, smooth, slightly illegal.",
+    demo: "rain-walk",
+    line: "An umbrella is a walk. Visible in a second.",
   },
 ];
 
@@ -167,7 +166,7 @@ export function MakeYoursDemo() {
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
       <p className="text-sm font-medium text-moss">Shop</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
-        Raincoat. Skateboard. Moonwalk.
+        Raincoat · Pocket Umbrella
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
@@ -284,9 +283,12 @@ export function TheyNotice() {
         They peek, copy, or nap in the same corner. Full roommate behaviour is still a preview — you
         can already keep more than one.
       </p>
-      <div className="mt-10 grid gap-4 md:grid-cols-2">
-        <StageBox species="sprout" mood="follow" equipped={{ back: "gadget-balloon" }} />
-        <StageBox species="mochi" mood="nap" equipped={{ body: "outfit-hoodie" }} />
+      <div className="mt-10 overflow-hidden rounded-[1.8rem] bg-cream">
+        <PairedStage
+          left={{ species: "sprout", mood: "follow", equipped: { back: "gadget-balloon" } }}
+          right={{ species: "mochi", mood: "nap", equipped: { body: "outfit-hoodie" } }}
+          className="min-h-[340px] md:min-h-[420px]"
+        />
       </div>
     </section>
   );

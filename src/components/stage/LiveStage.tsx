@@ -3,10 +3,11 @@
 import dynamic from "next/dynamic";
 import type { CreatureStageProps } from "@/components/stage/CreatureStage";
 import { Creature } from "@/components/creatures/Creature";
+import { WhenVisible } from "@/components/site/WhenVisible";
 
 const LoadedStage = dynamic(
   () => import("@/components/stage/CreatureStage").then((mod) => mod.CreatureStage),
-  { ssr: false },
+  { ssr: false, loading: () => <div className="h-full w-full bg-cream" /> },
 );
 
 export function LiveStage(props: CreatureStageProps & { size?: number }) {
@@ -22,5 +23,12 @@ export function LiveStage(props: CreatureStageProps & { size?: number }) {
       />
     );
   }
-  return <LoadedStage {...props} />;
+  return (
+    <WhenVisible
+      className={props.className}
+      fallback={<div className="h-full min-h-[160px] w-full bg-cream" />}
+    >
+      <LoadedStage {...props} />
+    </WhenVisible>
+  );
 }

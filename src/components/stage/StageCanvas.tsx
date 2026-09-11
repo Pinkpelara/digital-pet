@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useMemo, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { ACESFilmicToneMapping, SRGBColorSpace, type WebGLRenderer } from "three";
+import { useBudgetGpu } from "@/components/site/use-budget-gpu";
+import { StageBudgetContext } from "@/components/stage/stage-budget";
 import { STAGE_BG } from "@/lib/stage-theme";
 
 type StageCanvasProps = {
@@ -29,20 +31,30 @@ export function StageCanvas({
   const host = useRef<HTMLDivElement>(null);
   const renderer = useRef<WebGLRenderer | null>(null);
   const [visible, setVisible] = useState(false);
-  const dpr = useMemo<[number, number]>(() => [1, dprMax], [dprMax]);
+  const [tabOn, setTabOn] = useState(true);
+  const budget = useBudgetGpu();
+  const cap = budget ? Math.min(dprMax, 1.15) : dprMax;
+  const dpr = useMemo<[number, number]>(() => [1, cap], [cap]);
 
   useEffect(() => {
     const node = host.current;
-    if (!node || typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      const id = window.requestAnimationFrame(() => setVisible(true));
+      return () => window.cancelAnimationFrame(id);
     }
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0.08, rootMargin: "40px" },
+      { threshold: 0.05, rootMargin: "80px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onVis = () => setTabOn(document.visibilityState !== "hidden");
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
 
   useEffect(() => {
@@ -66,13 +78,15 @@ export function StageCanvas({
     >
       {visible ? (
         <Canvas
-          shadows
+          shadows={!budget}
           dpr={dpr}
+          frameloop={tabOn ? "always" : "never"}
           gl={{
-            antialias: true,
+            antialias: !budget,
             alpha,
-            powerPreference: "high-performance",
+            powerPreference: budget ? "low-power" : "high-performance",
             stencil: false,
+            depth: true,
           }}
           onCreated={({ gl }) => {
             renderer.current = gl;
@@ -86,7 +100,9 @@ export function StageCanvas({
             far: camera.far ?? 40,
           }}
         >
-          <Suspense fallback={null}>{children}</Suspense>
+          <StageBudgetContext.Provider value={{ budget }}>
+            <Suspense fallback={null}>{children}</Suspense>
+          </StageBudgetContext.Provider>
         </Canvas>
       ) : null}
     </div>

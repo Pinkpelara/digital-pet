@@ -79,8 +79,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <TwinBloops />
       <div className="below-fold">
+        <TwinBloops />
         <LiveYourDay />
         <MakeYoursDemo />
         <ThingsChange />
