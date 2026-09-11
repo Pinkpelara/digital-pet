@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { companions, items } from "@/data/catalog";
 
+export const dynamic = "force-static";
+
 const site = "https://pinkpelara.github.io/digital-pet";
 
 function loc(path: string): string {
