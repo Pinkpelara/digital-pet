@@ -69,7 +69,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Teach lives in the radial. Preview tricks until the motion is unmistakable. Shop what you can see: Raincoat · Pocket Umbrella.",
+        lede: "Moonwalk lives on the radial as a preview. Shop what you can see: Raincoat · Pocket Umbrella.",
       };
     case "drop":
       return {

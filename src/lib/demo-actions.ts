@@ -110,6 +110,7 @@ const ICON_BY_ACTION: Record<DemoActionId, WheelIconId> = {
 /** Loops forever on a live stage. Moonwalk is three steps, then a hold. */
 const LOOPING: Set<DemoActionId> = new Set([
   "skate",
+  "moonwalk",
   "rain-walk",
   "climb",
   "nap",
@@ -265,7 +266,7 @@ export function wheelActionFromItem(item: CatalogItem): WheelAction | null {
     kind,
     label,
     shortLabel: label,
-    caption: kind === "skill" && item.skillId === "moonwalk" ? "Teach moonwalk. Backward, smooth, slightly illegal." : label,
+    caption: kind === "skill" && item.skillId === "moonwalk" ? "Moonwalk. Backward, smooth, slightly illegal." : label,
     accent: item.accent,
     icon: ICON_BY_ACTION[action],
     equip: loadoutForAction(item, action),
@@ -290,8 +291,9 @@ function slot(
 }
 
 /**
- * Presence pie for companion stages: Teach / Gadget / Outfit / Mood peek / Nap / Gift
- * plus Climb and Study so the wheel stays 6–8.
+ * Live-pet radial: dedicated Moonwalk + Skateboard wedges that fire those demos,
+ * plus sell-now Umbrella / Raincoat, then presence. 8 slots.
+ * Skateboard / Moonwalk stay preview (shopSafe false) until a later shop-gate.
  */
 export function presencePieForCompanion(input: {
   species: SpeciesId;
@@ -301,39 +303,67 @@ export function presencePieForCompanion(input: {
 }): ResolvedWheelItem[] {
   const owned = new Set(input.ownedItemIds ?? []);
   const unlocked = new Set(input.unlockedSkills ?? []);
-  const teach = catalogById.get("skill-moonwalk");
-  const gadget = catalogById.get("gadget-umbrella");
-  const outfit = catalogById.get("outfit-raincoat");
+  const moonwalk = catalogById.get("skill-moonwalk");
+  const skate = catalogById.get("gadget-skateboard");
+  const umbrella = catalogById.get("gadget-umbrella");
+  const raincoat = catalogById.get("outfit-raincoat");
   const nap = catalogById.get("skill-nap");
   const climb = catalogById.get("skill-climb");
 
-  const teachAction = teach ? wheelActionFromItem(teach) : null;
-  const gadgetAction = gadget ? wheelActionFromItem(gadget) : null;
-  const outfitAction = outfit ? wheelActionFromItem(outfit) : null;
+  const moonwalkAction = moonwalk ? wheelActionFromItem(moonwalk) : null;
+  const skateAction = skate ? wheelActionFromItem(skate) : null;
+  const umbrellaAction = umbrella ? wheelActionFromItem(umbrella) : null;
+  const raincoatAction = raincoat ? wheelActionFromItem(raincoat) : null;
   const napAction = nap ? wheelActionFromItem(nap) : null;
   const climbAction = climb ? wheelActionFromItem(climb) : null;
 
   const pie: ResolvedWheelItem[] = [];
 
-  if (teachAction) {
+  if (moonwalkAction) {
     pie.push(
       slot(
         {
-          ...teachAction,
-          label: "Teach",
-          shortLabel: "Teach moonwalk",
-          caption: "Teach moonwalk. Backward, smooth, slightly illegal.",
+          ...moonwalkAction,
+          label: "Moonwalk",
+          shortLabel: "Moonwalk",
+          caption: "Moonwalk. Backward, smooth, slightly illegal.",
         },
         owned,
         unlocked,
       ),
     );
   }
-  if (gadgetAction) {
-    pie.push(slot({ ...gadgetAction, label: "Gadget", shortLabel: "Pocket Umbrella" }, owned, unlocked));
+  if (skateAction) {
+    pie.push(
+      slot(
+        {
+          ...skateAction,
+          label: "Skateboard",
+          shortLabel: "Skateboard",
+          caption: "Skateboard. Click it. They skate.",
+        },
+        owned,
+        unlocked,
+      ),
+    );
   }
-  if (outfitAction) {
-    pie.push(slot({ ...outfitAction, label: "Outfit", shortLabel: "Yellow Raincoat" }, owned, unlocked));
+  if (umbrellaAction) {
+    pie.push(
+      slot(
+        { ...umbrellaAction, label: "Umbrella", shortLabel: "Pocket Umbrella", caption: "Pocket Umbrella. Rain-walks." },
+        owned,
+        unlocked,
+      ),
+    );
+  }
+  if (raincoatAction) {
+    pie.push(
+      slot(
+        { ...raincoatAction, label: "Raincoat", shortLabel: "Yellow Raincoat", caption: "Yellow Raincoat. A shape in a second." },
+        owned,
+        unlocked,
+      ),
+    );
   }
 
   pie.push(
@@ -386,33 +416,11 @@ export function presencePieForCompanion(input: {
     pie.push(slot({ ...climbAction, label: "Climb", shortLabel: "Climb" }, owned, unlocked, true));
   }
 
-  pie.push(
-    slot(
-      {
-        itemId: "presence-study",
-        action: "focus",
-        kind: "presence",
-        label: "Study",
-        shortLabel: "Study together",
-        caption: "They study when you study. Headphones on.",
-        accent: "#6a7c86",
-        icon: "focus",
-        equip: { head: "gadget-headphones" },
-        skill: "focus",
-        loops: true,
-      },
-      owned,
-      unlocked,
-      true,
-    ),
-  );
-
   return pie.slice(0, 8);
 }
 
 /**
- * 6–8 radial slots for a live companion stage.
- * Presence pie first: Teach / Gadget / Outfit / Mood peek / Nap / Gift.
+ * Radial for hero, studio, profile, and other live companion stages.
  */
 export function wheelForCompanion(input: {
   species: SpeciesId;

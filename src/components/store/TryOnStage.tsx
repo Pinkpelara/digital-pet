@@ -80,7 +80,7 @@ export function TryOnStage({
             className="h-full w-full"
             cameraZ={5.15}
             companionName={product.kind === "companion" ? product.name : species}
-            hint="Tap them — Teach, Gadget, Outfit, Nap."
+            hint="Tap them — Moonwalk, Skateboard, Umbrella."
             autoPlay={demoActionForItem(product)}
             playAction={playAction}
           />

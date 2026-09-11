@@ -98,7 +98,7 @@ export function HeroBanner() {
           type="button"
           className={`absolute inset-0 cursor-pointer bg-transparent ${playable.open ? "pointer-events-none" : ""}`}
           onClick={playable.toggleWheel}
-          aria-label="Open Bloop’s gadgets and skills"
+          aria-label="Open Bloop’s Moonwalk, Skateboard, and gadgets"
           aria-expanded={playable.open}
         />
         <ActionWheel
