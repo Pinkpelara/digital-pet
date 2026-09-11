@@ -100,11 +100,7 @@ export function TryOnStage({
           {product.kind === "skill" && product.skillId === "moonwalk" ? (
             <p className="mt-3 max-w-md font-medium text-ink">Moonwalk. Backward, smooth, slightly illegal.</p>
           ) : null}
-          {product.kind === "companion" ? (
-            <p className="mt-3 max-w-md text-sm text-ink-soft">
-              Watch them for a bit. Adopt when you are sure.
-            </p>
-          ) : (
+          {product.kind === "companion" ? null : (
             <p className="mt-3 max-w-md text-sm text-ink-soft">
               What you buy stays yours. Birthday surprises are always free.
             </p>
