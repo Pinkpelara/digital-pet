@@ -64,12 +64,12 @@ export function usePlayableCompanion(input: {
   }, []);
 
   const toggleWheel = useCallback(() => {
-    poke();
     setOpen((prev) => {
       const next = !prev;
       if (next) track("action_wheel_opened", { species: input.species });
       return next;
     });
+    poke();
   }, [input.species, poke]);
 
   const closeWheel = useCallback(() => setOpen(false), []);

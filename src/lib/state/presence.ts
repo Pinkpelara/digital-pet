@@ -29,7 +29,11 @@ function read(): PresenceState {
 
 function write(next: PresenceState): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(KEY, JSON.stringify(next));
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(next));
+  } catch {
+    /* private mode / blocked storage */
+  }
 }
 
 export function readPresence(): PresenceState {

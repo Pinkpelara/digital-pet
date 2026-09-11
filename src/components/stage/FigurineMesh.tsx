@@ -302,7 +302,7 @@ export function FigurineMesh({
       const t = loop ? local % duration : Math.min(local, walk);
       const walkT = Math.min(t, walk);
       const traveling = t < walk;
-      group.position.x = -(walkT / 0.55) * 0.28;
+      group.position.x = -(walkT / 0.55) * 0.16;
       group.rotation.y += (-0.85 - group.rotation.y) * 0.2;
       group.rotation.x += (0.06 - group.rotation.x) * 0.16;
       group.rotation.z = traveling ? Math.sin(walkT * 10) * 0.08 : 0;
