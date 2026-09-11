@@ -84,7 +84,7 @@ export function HeroBanner() {
           <Link href="/browser" className="underline underline-offset-4">
             Pin the browser
           </Link>
-          {playable.sulk ? " They’re waiting." : ""}
+          {playable.sulk ? ". They’re waiting." : "."}
         </p>
       </div>
 
