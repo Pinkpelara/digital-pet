@@ -149,8 +149,8 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
         </div>
 
         <p className="mt-6 text-sm text-ink-soft">
-          Equip still lives here. Every look does a 1–2s show-off on them first. Gadgets change what
-          they do; personality is not something you can equip. Cosmetics and Teach skills stay yours.
+          Dress them here. Every look gets a quick show-off before you save it. Clothes and gadgets
+          change what they wear and what they can do — who they are is not something you can equip.
         </p>
       </div>
     </div>

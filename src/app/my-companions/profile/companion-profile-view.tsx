@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { PersonalityReveal } from "@/components/share/PersonalityReveal";
 import { WhatDidTheyDo } from "@/components/share/WhatDidTheyDo";
@@ -16,22 +16,7 @@ import {
   wearingNames,
 } from "@/lib/companion-view";
 import { useNest } from "@/lib/state/nest-context";
-import type { BehaviourCounters, PersonalitySeed } from "@/lib/types";
-
-/** Which behaviour this individual tends to get up to, from its hidden seed. */
-function behaviourFor(seed: PersonalitySeed): keyof BehaviourCounters {
-  const v = seed.values;
-  const ranked: Array<[keyof BehaviourCounters, number]> = [
-    ["explored", v.curiosity + v.energy / 2],
-    ["napped", v.sleepiness * 1.4],
-    ["followedCursor", v.clinginess * 1.3],
-    ["climbed", v.mischief + v.courage],
-    ["hid", 100 - v.sociability + v.courage * 0.2],
-    ["photographed", v.drama + v.sociability * 0.4],
-  ];
-  ranked.sort((a, b) => b[1] - a[1]);
-  return ranked[0][0];
-}
+import type { BehaviourCounters } from "@/lib/types";
 
 export function CompanionProfileView() {
   const params = useSearchParams();
@@ -51,12 +36,6 @@ export function CompanionProfileView() {
     },
     [instance, recordBehaviour],
   );
-
-  useEffect(() => {
-    if (!instance) return;
-    const timer = window.setInterval(() => onBehaviour(behaviourFor(instance.seed)), 7000);
-    return () => window.clearTimeout(timer);
-  }, [instance, onBehaviour]);
 
   if (!hydrated) {
     return <div className="px-5 py-16 text-ink-soft">Finding them.</div>;
@@ -86,8 +65,9 @@ export function CompanionProfileView() {
             species={instance.speciesId}
             equipped={instance.equipped}
             unlockedSkills={instance.unlockedSkills}
+            stats={instance.stats}
+            onBehaviour={onBehaviour}
             companionName={instance.name}
-            hint="Tap them — Moonwalk, Skateboard, Umbrella."
             className="h-full w-full"
             cameraZ={5.5}
           />

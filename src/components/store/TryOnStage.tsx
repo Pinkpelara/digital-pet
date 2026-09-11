@@ -80,7 +80,6 @@ export function TryOnStage({
             className="h-full w-full"
             cameraZ={5.15}
             companionName={product.kind === "companion" ? product.name : species}
-            hint="Tap them — Moonwalk, Skateboard, Umbrella."
             autoPlay={demoActionForItem(product)}
             playAction={playAction}
           />
@@ -97,11 +96,11 @@ export function TryOnStage({
           ) : null}
           {product.kind === "companion" ? (
             <p className="mt-3 max-w-md text-sm text-ink-soft">
-              Soft trial: live with this individual before anything else. Personality is not for sale.
+              Watch them for a bit. Adopt when you are sure.
             </p>
           ) : (
             <p className="mt-3 max-w-md text-sm text-ink-soft">
-              Cosmetics and Teach skills stay yours. Birthday and habit magic stay free.
+              What you buy stays yours. Birthday surprises are always free.
             </p>
           )}
           <div className="mt-8">
@@ -124,8 +123,8 @@ export function TryOnStage({
               </div>
             ) : (
               <p className="max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-sm text-ink-soft ring-1 ring-ink/10">
-                Preview only. Watch the trick first. If you cannot see it in a second, we do not sell
-                it yet. Shop what you can see: Raincoat · Pocket Umbrella.
+                Not in the shop yet — this is a preview. Watch what it does. On sale now: Raincoat ·
+                Pocket Umbrella.
               </p>
             )}
           </div>

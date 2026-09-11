@@ -8,15 +8,14 @@ export default function BrowserPage() {
   return (
     <div className="bg-paper pb-20">
       <PageHero
-        kicker="The real now-path · work machines"
+        kicker="Works on any computer"
         title="Lives in the corner while you work."
-        lede="Pin this site in Chrome or Edge and they sit beside your tabs — Happy Dog energy: always there, never a second job. You write, they nap. You ignore them, they sulk. You look back, they noticed. Mute chaos anytime in the header."
+        lede="Pin this site in Chrome or Edge and they sit beside your tabs. You write, they nap. You look back, they noticed. Always there, never a second job."
       />
       <div className="mx-auto max-w-3xl px-5 md:px-10">
       <p className="text-ink-soft">
-        This is the honest path for a locked-down work computer. No IT ticket. Same inventory as the
-        website. A full OS desktop pet is coming later — until then, the browser pin is the live
-        product.
+        This is the easy path for a work computer. No IT ticket. Same inventory as the website. A
+        full desktop pet is coming later — until then, the browser pin is the live product.
       </p>
 
       <section className="mt-10 rounded-[1.6rem] bg-mist p-6 ring-1 ring-ink/10">

@@ -6,7 +6,6 @@ import { LiveStage } from "@/components/stage/LiveStage";
 import { PairedStage } from "@/components/stage/PairedStage";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { StageFx } from "@/components/stage/StageFx";
-import { CareChips } from "@/components/home/CareChips";
 import { DayVignette } from "@/components/home/DayVignette";
 import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
@@ -21,7 +20,6 @@ function StageBox({
   skill,
   demo,
   mood,
-  sulk = false,
   className = "aspect-[4/5]",
   playable = false,
   companionName,
@@ -33,7 +31,6 @@ function StageBox({
   skill?: SkillId | null;
   demo?: DemoActionId | null;
   mood?: "idle" | "nap" | "follow" | "climb" | "happy" | "hide";
-  sulk?: boolean;
   className?: string;
   playable?: boolean;
   companionName?: string;
@@ -64,7 +61,6 @@ function StageBox({
             skill={skill}
             demo={demo ?? skill ?? null}
             mood={mood}
-            sulk={sulk}
             className="h-full min-h-[280px] w-full"
             cameraZ={5.6}
             followPointer={false}
@@ -144,7 +140,7 @@ const tryLooks: StageLook[] = [
     equipped: { body: "outfit-raincoat" },
     skill: null,
     demo: null,
-    line: "A raincoat is a shape. Visible in a second.",
+    line: "A raincoat changes how they look.",
   },
   {
     id: "umbrella",
@@ -152,7 +148,7 @@ const tryLooks: StageLook[] = [
     equipped: { hand: "gadget-umbrella" },
     skill: null,
     demo: "rain-walk",
-    line: "An umbrella is a walk. Visible in a second.",
+    line: "An umbrella changes how they walk.",
   },
 ];
 
@@ -238,13 +234,13 @@ export function ThingsChange() {
   const [on, setOn] = useState(true);
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
-      <p className="kicker">If you cannot see it in a second, it is not a gadget</p>
+      <p className="kicker">Gadgets</p>
       <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Umbrella on. Now it rain-walks.
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Silhouette or motion in under a second — or we do not sell it. A raincoat is a shape. An
-        umbrella is a walk. Personality is not for sale.
+        Everything in the shop changes something you can see: how they look or how they move. A
+        raincoat is a shape. An umbrella is a walk.
       </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-2">
         <StageBox
@@ -289,8 +285,8 @@ export function TheyNotice() {
         Two in a room is not two solos.
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
-        They peek, copy, or nap in the same corner. Full roommate behaviour is still a preview — you
-        can already keep more than one.
+        They peek, copy, or nap in the same corner. Two of them is more fun than one — this part is
+        still early, but you can already adopt more than one.
       </p>
       <div className="stage-frame mt-10 overflow-hidden rounded-[1.8rem]">
         <PairedStage
@@ -311,8 +307,8 @@ export function SomethingHappened() {
         They keep secrets. You find them later.
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Hidden habits stay hidden until you live with them. No paying to unlock a personality. The
-        ??? stay ??? until they do not.
+        Hidden habits stay hidden until you live with them. None of this is for sale. You find it by
+        watching. The ??? stay ??? until they do not.
       </p>
       <ul className="mt-8 grid gap-3 sm:grid-cols-3">
         {["??? still undiscovered", "??? still undiscovered", "??? still undiscovered"].map((line, index) => (
@@ -353,20 +349,19 @@ export function LetLoose() {
         Pin the browser. They stay in the corner.
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
-        The real now-path on a work machine is a pinned browser window — they sit in the corner
-        while you write. Happy-Dog energy: always there, never a second job. A full OS desktop app
-        is a stub until it exists. We are not selling a robot body.
+        Pin this site in Chrome or Edge and they sit in the corner while you work. No install,
+        nothing for IT to approve. You write, they nap. You look back, they noticed.
       </p>
       <p className="mt-3 max-w-xl text-ink-soft">
-        Mute chaos is one tap. Goose-mode is an opt-in Teach, never the default. They sulk when
-        ignored. They do not die.
+        A desktop app that lets them roam your whole screen is coming later. Nothing bad happens
+        while you are away.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/browser" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
           Pin the browser
         </Link>
         <Link href="/desktop" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
-          Desktop stub
+          Desktop app — coming soon
         </Link>
       </div>
     </section>
@@ -381,7 +376,6 @@ export function LiveYourDay() {
         They notice your day. Birthday cake appears before you remember.
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.freeMagicBody}</p>
-      <CareChips className="mt-6" />
 
       <div className="mt-10">
         <DayVignette />

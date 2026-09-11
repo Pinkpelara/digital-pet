@@ -20,23 +20,23 @@ const BEATS: Array<{
   {
     id: "focus",
     label: "Deep work / homework",
-    body: "Headphones on. They settle when you settle. Cause → effect, not a coach.",
+    body: "Headphones on. They settle when you settle.",
     demo: "focus",
     equipped: { head: "gadget-headphones" },
     ms: 3500,
   },
   {
     id: "stretch",
-    label: "Mood dip",
-    body: "A soft stretch bubble. They notice the slump. Nothing clinical. Nothing lethal.",
+    label: "Long afternoon",
+    body: "They notice the slump. One big stretch about it.",
     demo: "stretch",
     equipped: {},
     ms: 3500,
   },
   {
     id: "adventure",
-    label: "Evening streak",
-    body: "They come back from an evening streak with a sticker. You did not send them. They went.",
+    label: "Evening walk",
+    body: "Sometimes they wander off on their own. They come back with a sticker. You did not send them.",
     demo: "adventure",
     equipped: { face: "outfit-sunglasses" },
     ms: 3500,
@@ -44,7 +44,7 @@ const BEATS: Array<{
   {
     id: "party",
     label: "Birthday",
-    body: "Party hat + confetti. Balloon Bunch is a free 24-hour Teach. We sell the hat, not the cake.",
+    body: "Party hat + confetti. Balloon Bunch is free for 24 hours around a birthday.",
     demo: "party",
     equipped: { head: "gadget-partyhat", back: "gadget-balloon" },
     ms: 4000,
@@ -104,11 +104,11 @@ export function DayVignette() {
         <p className="mt-4 text-sm text-moss">
           Balloon Bunch is unlocked for 24 hours.{" "}
           <Link href="/item/balloon-bunch" className="underline underline-offset-4">
-            See the Teach
+            See the trick
           </Link>
           {" · "}
           <Link href="/item/party-hat" className="underline underline-offset-4">
-            Party Hat around the moment
+            Party Hat
           </Link>
         </p>
       ) : null}

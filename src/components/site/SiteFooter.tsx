@@ -57,7 +57,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-ink/8 px-4 py-4 text-center text-xs text-ink-soft">
         <p>{brand.audienceNote}</p>
-        <p className="mt-2">They sulk. They wait. They never die from neglect. Mute chaos anytime.</p>
+        <p className="mt-2">Nothing bad happens when you are away.</p>
         <p className="mt-2">
           <VoiceToggle />
         </p>

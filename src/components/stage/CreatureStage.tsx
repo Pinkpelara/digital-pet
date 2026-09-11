@@ -16,7 +16,6 @@ export type CreatureStageProps = {
   mood?: CreatureMood;
   skill?: SkillId | null;
   demo?: DemoActionId | null;
-  sulk?: boolean;
   className?: string;
   followPointer?: boolean;
   cameraZ?: number;
@@ -55,7 +54,6 @@ export function CreatureStage({
   mood = "idle",
   skill = null,
   demo = null,
-  sulk = false,
   className,
   followPointer = true,
   cameraZ = 5.7,
@@ -96,7 +94,6 @@ export function CreatureStage({
           mood={mood}
           skill={skill}
           demo={demo}
-          sulk={sulk}
           followPointer={followPointer}
           pointer={pointer}
           quality={meshQuality}

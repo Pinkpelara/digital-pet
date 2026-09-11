@@ -13,7 +13,7 @@ export type WheelAction = {
   itemId: string;
   action: DemoActionId;
   kind: WheelKind;
-  /** Radial label: Teach / Gadget / Outfit / Mood peek / Nap / Gift. */
+  /** Radial label: Say hi / Teach X / gadget name / outfit name / Nap / Parcel. */
   label: string;
   shortLabel: string;
   caption: string;
@@ -125,23 +125,22 @@ const LOOPING: Set<DemoActionId> = new Set([
   "party",
 ]);
 
-/** Equip is the demo. If a board is on the feet, they skate this frame — no effect delay. */
-export function actionFromLoadout(
-  equipped: EquipmentLoadout | undefined,
-  skill?: SkillId | null,
-  demo?: DemoActionId | null,
-): DemoActionId | null {
-  if (demo) return demo;
-  if (skill) return skill;
-  if (!equipped) return null;
-  if (equipped.feet === "gadget-skateboard") return "skate";
-  if (equipped.hand === "gadget-umbrella") return "rain-walk";
-  if (equipped.hand === "gadget-camera") return "photo-pose";
-  if (equipped.back === "gadget-balloon") return "hover";
-  if (equipped.hand === "gadget-broom") return "tidy";
-  if (equipped.head === "gadget-headphones") return "focus";
-  if (equipped.head === "gadget-partyhat") return "party";
-  return null;
+/**
+ * An action only ever uses the item it belongs to. A demo never invents
+ * other products the visitor does not have: no raincoat inside a rain-walk,
+ * no sunglasses inside a moonwalk, no hoodie inside a nap.
+ */
+export function loadoutForAction(item: CatalogItem | null, action: DemoActionId): EquipmentLoadout {
+  const loadout: EquipmentLoadout = {};
+  if (item?.slot) loadout[item.slot] = item.id;
+  if (action === "rain-walk" && !loadout.hand) loadout.hand = "gadget-umbrella";
+  if (action === "skate" && !loadout.feet) loadout.feet = "gadget-skateboard";
+  if (action === "photo-pose" && !loadout.hand) loadout.hand = "gadget-camera";
+  if (action === "hover" && !loadout.back) loadout.back = "gadget-balloon";
+  if (action === "tidy" && !loadout.hand) loadout.hand = "gadget-broom";
+  if (action === "focus" && !loadout.head) loadout.head = "gadget-headphones";
+  if (action === "party" && !loadout.head) loadout.head = "gadget-partyhat";
+  return loadout;
 }
 
 export function demoActionForItem(item: CatalogItem): DemoActionId | null {
@@ -216,27 +215,19 @@ export function showOffMs(action: DemoActionId | null): number {
   return 1600;
 }
 
-export function loadoutForAction(item: CatalogItem | null, action: DemoActionId): EquipmentLoadout {
-  const loadout: EquipmentLoadout = {};
-  if (item?.slot) loadout[item.slot] = item.id;
-  if (action === "rain-walk") {
-    loadout.hand = "gadget-umbrella";
-    loadout.body = "outfit-raincoat";
-  }
-  if (action === "skate") loadout.feet = "gadget-skateboard";
-  if (action === "moonwalk") loadout.face = "outfit-sunglasses";
-  if (action === "photo-pose") loadout.hand = "gadget-camera";
-  if (action === "hover") loadout.back = "gadget-balloon";
-  if (action === "tidy") loadout.hand = "gadget-broom";
-  if (action === "nap") loadout.body = "outfit-hoodie";
-  if (action === "focus") loadout.head = "gadget-headphones";
-  if (action === "party") loadout.head = "gadget-partyhat";
-  if (action === "balloon-bunch") loadout.back = "gadget-balloon";
-  if (action === "study") loadout.head = loadout.head ?? "gadget-headphones";
-  if (action === "twirl" && item?.slot === "body") loadout.body = item.id;
-  if (action === "gift") loadout.back = loadout.back ?? "gadget-balloon";
-  if (action === "adventure") loadout.face = "outfit-sunglasses";
-  return loadout;
+/**
+ * What the creature is doing right now. Only an explicit demo or a performed
+ * skill counts. Wearing a gadget does not lock them into its animation —
+ * owned gear just exists in the world; they use it when they feel like it.
+ */
+export function actionFromLoadout(
+  _equipped: EquipmentLoadout | undefined,
+  skill?: SkillId | null,
+  demo?: DemoActionId | null,
+): DemoActionId | null {
+  if (demo) return demo;
+  if (skill) return skill;
+  return null;
 }
 
 export function speciesForCatalogItem(item: CatalogItem): SpeciesId {
@@ -340,7 +331,7 @@ export function presencePieForCompanion(input: {
           ...skateAction,
           label: "Skateboard",
           shortLabel: "Skateboard",
-          caption: "Skateboard. Click it. They skate.",
+          caption: "They skate. Then show off about it.",
         },
         owned,
         unlocked,
@@ -350,7 +341,7 @@ export function presencePieForCompanion(input: {
   if (umbrellaAction) {
     pie.push(
       slot(
-        { ...umbrellaAction, label: "Umbrella", shortLabel: "Pocket Umbrella", caption: "Pocket Umbrella. Rain-walks." },
+        { ...umbrellaAction, label: "Umbrella", shortLabel: "Pocket Umbrella", caption: "Opens a beat too late." },
         owned,
         unlocked,
       ),
@@ -359,7 +350,7 @@ export function presencePieForCompanion(input: {
   if (raincoatAction) {
     pie.push(
       slot(
-        { ...raincoatAction, label: "Raincoat", shortLabel: "Yellow Raincoat", caption: "Yellow Raincoat. A shape in a second." },
+        { ...raincoatAction, label: "Raincoat", shortLabel: "Yellow Raincoat", caption: "A raincoat changes how they look." },
         owned,
         unlocked,
       ),
@@ -369,12 +360,12 @@ export function presencePieForCompanion(input: {
   pie.push(
     slot(
       {
-        itemId: "presence-mood-peek",
+        itemId: "presence-greeting",
         action: "mood-peek",
         kind: "presence",
-        label: "Mood peek",
-        shortLabel: "Mood peek",
-        caption: "They’re curious. Soft, not a health bar.",
+        label: "Say hi",
+        shortLabel: "Say hi",
+        caption: "They lean in to look at you.",
         accent: "#C5D4E0",
         icon: "mood",
         equip: {},
@@ -388,23 +379,30 @@ export function presencePieForCompanion(input: {
   );
 
   if (napAction) {
-    pie.push(slot({ ...napAction, label: "Nap", shortLabel: "Nap" }, owned, unlocked, true));
+    pie.push(
+      slot(
+        { ...napAction, label: "Nap", shortLabel: "Nap", caption: "They find a warm corner." },
+        owned,
+        unlocked,
+        true,
+      ),
+    );
   }
 
   pie.push(
     slot(
       {
         itemId: "presence-gift",
-        action: "party",
+        action: "gift",
         kind: "presence",
-        label: "Gift",
-        shortLabel: "Gift",
-        caption: "A parcel. Birthday and habit magic stay free.",
+        label: "Give a parcel",
+        shortLabel: "Parcel",
+        caption: "A parcel appears. They investigate.",
         accent: "#E86B6B",
-        icon: "party",
-        equip: { head: "gadget-partyhat", back: "gadget-balloon" },
-        skill: "balloon-bunch",
-        loops: true,
+        icon: "gift",
+        equip: {},
+        skill: null,
+        loops: false,
       },
       owned,
       unlocked,

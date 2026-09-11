@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { CompanionCard } from "@/components/companions/CompanionCard";
-import { CareChips } from "@/components/home/CareChips";
 import { PageHero } from "@/components/site/KineticTitle";
 import { useNest } from "@/lib/state/nest-context";
 
@@ -19,9 +18,8 @@ export default function MyCompanionsPage() {
       <PageHero
         kicker="Your companions"
         title="Who lives with you"
-        lede="This is their home. Tap a companion for Teach / Gadget / Outfit / Mood peek / Nap / Gift. Each one is an individual. Personality is not for sale."
+        lede="This is their home. Tap one to see what they can do. Each one is an individual — even two of the same species turn out different."
       >
-        <CareChips className="mt-5" />
         <p className="mt-4">
           <Link href="/live" className="text-sm text-moss underline">
             Where should they live?

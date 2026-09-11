@@ -20,7 +20,6 @@ function Rig({
   mood,
   skill,
   demo,
-  sulk,
   equipped,
 }: {
   pointer: { x: number; y: number };
@@ -29,7 +28,6 @@ function Rig({
   mood: CreatureMood;
   skill: SkillId | null;
   demo: DemoActionId | null;
-  sulk: boolean;
   equipped: EquipmentLoadout;
 }) {
   const group = useRef<Group>(null);
@@ -42,7 +40,7 @@ function Rig({
     cam.position.y = MathUtils.lerp(cam.position.y, targetY, 0.05);
     cam.position.z = MathUtils.lerp(cam.position.z, targetZ, 0.055);
     cam.lookAt(mobile ? 0 : 0.42, 0.16, 0);
-    if (group.current && !demo && !sulk) {
+    if (group.current && !demo) {
       group.current.rotation.y = MathUtils.lerp(group.current.rotation.y, pointer.x * 0.28, 0.055);
       group.current.rotation.x = MathUtils.lerp(group.current.rotation.x, pointer.y * -0.08, 0.05);
     }
@@ -51,13 +49,12 @@ function Rig({
     <group ref={group} position={mobile ? [0, 0.04, 0] : [0.48, 0.02, 0]} scale={mobile ? 1.28 : 1.48}>
       <FigurineMesh
         species="bloop"
-        followPointer={!demo && !sulk}
+        followPointer={!demo}
         pointer={pointer}
         quality={mobile ? "medium" : "high"}
         mood={mood}
         skill={skill}
         demo={demo}
-        sulk={sulk}
         equipped={equipped}
       />
     </group>
@@ -68,13 +65,11 @@ export function HeroStage({
   mood: moodOverride,
   skill = null,
   demo = null,
-  sulk = false,
   equipped = {},
 }: {
   mood?: CreatureMood;
   skill?: SkillId | null;
   demo?: DemoActionId | null;
-  sulk?: boolean;
   equipped?: EquipmentLoadout;
 }) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
@@ -139,7 +134,6 @@ export function HeroStage({
         mood={moodOverride ?? (demo ? "skill" : mood)}
         skill={skill}
         demo={demo}
-        sulk={sulk}
         equipped={equipped}
       />
       <StudioShadows position={[0, -0.96, 0]} scale={12} />

@@ -22,7 +22,7 @@ export default function CompanionsPage() {
         }
       >
         <p className="mt-6 text-sm text-ink-soft">
-          {companions.length} species. Personality is not for sale.
+          {companions.length} species. No two alike — even within a species.
         </p>
       </PageHero>
 

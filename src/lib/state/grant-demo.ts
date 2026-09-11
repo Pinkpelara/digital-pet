@@ -68,12 +68,11 @@ export function grantItemsLocally(
       });
     }
     if (item.kind === "companion" && item.speciesId) {
-      const already = [...instanceById.values()].some((row) => row.speciesId === item.speciesId);
-      if (!already) {
-        const ownership = ownershipByItem.get(itemId)!;
-        const instance = newCompanionInstance(item.speciesId, ownership.id, user.id);
-        instanceById.set(instance.id, instance);
-      }
+      // Every adoption is a new individual. Two Bloops are two different
+      // creatures with different hidden personalities — that is the point.
+      const ownership = ownershipByItem.get(itemId)!;
+      const instance = newCompanionInstance(item.speciesId, ownership.id, user.id);
+      instanceById.set(instance.id, instance);
     }
   }
 

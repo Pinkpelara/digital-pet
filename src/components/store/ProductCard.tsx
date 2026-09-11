@@ -60,12 +60,12 @@ export function ProductCard({
         <div className="poster-copy">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-moss">
             {item.kind}
-            {owned ? " · owned" : shopSafe ? "" : " · preview"}
+            {owned ? " · owned" : shopSafe ? "" : " · coming soon"}
           </p>
           <h3 className="mt-1 font-display text-3xl leading-none text-ink">{title}</h3>
           <p className="mt-2 text-sm text-ink-soft">{item.behaviorNote ?? item.tagline}</p>
           <p className="mt-3 text-sm tabular-nums text-ink">
-            {shopSafe ? formatPrice(item.priceCents) : "Preview — not for sale yet"}
+            {shopSafe ? formatPrice(item.priceCents) : "Coming soon"}
           </p>
         </div>
       </Link>

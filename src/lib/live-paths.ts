@@ -28,7 +28,7 @@ export const livePaths: LivePath[] = [
     id: "browser",
     kicker: "Work-friendly · ready now",
     title: "Lives in the corner while you work",
-    body: "Pin this site in Chrome or Edge and they sit beside your tabs. Co-presence on a work machine, no IT install. This is the real now-path. An extension comes later — you do not need it.",
+    body: "Pin this site in Chrome or Edge and they sit beside your tabs. No install, nothing for IT to approve. An extension comes later — you do not need it.",
     href: () => "/browser",
     cta: "Pin the browser",
     badge: "No IT install",
@@ -38,7 +38,7 @@ export const livePaths: LivePath[] = [
     id: "desktop",
     kicker: "Optional · coming soon",
     title: "The whole desktop, later",
-    body: "The flagship is a creature that walks across your real Windows or Mac desktop. It is not shipped. Until then, pin the browser. Work PCs that block installers can skip this entirely.",
+    body: "The big version is a creature that walks across your real Windows or Mac desktop. It is not shipped yet. Until then, pin the browser. Work computers that block installers can skip this entirely.",
     href: () => "/desktop",
     cta: "Read what exists",
     badge: "Not shipped",
@@ -55,6 +55,6 @@ export function liveIntro(name?: string): { title: string; lede: string } {
   }
   return {
     title: "Where should they live?",
-    lede: "You already own your companions. Pick one home or several. The website is the default. Pinning the browser is how they live in the corner while you work. Desktop roaming is coming — we are not pretending it exists yet.",
+    lede: "You already own your companions. Pick one home or several. The website is the default. Pinning the browser is how they live in the corner while you work. Desktop roaming is coming — it does not exist yet.",
   };
 }

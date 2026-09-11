@@ -52,7 +52,6 @@ export function HeroBanner() {
               mood={playable.mood}
               skill={playable.skill}
               demo={playable.demo}
-              sulk={playable.sulk}
               equipped={playable.equipped}
             />
             <StageFx demo={playable.demo} />
@@ -80,11 +79,11 @@ export function HeroBanner() {
         </div>
         <p className="mt-5 max-w-md text-sm text-ink-soft">{brand.heroSupport}</p>
         <p className="pointer-events-auto mt-2 max-w-md text-sm text-ink-soft">
-          They never vanish from neglect. Mute the chaos anytime.{" "}
+          Nothing bad happens if you are away for a while.{" "}
           <Link href="/browser" className="underline underline-offset-4">
             Pin the browser
           </Link>
-          {playable.sulk ? ". They’re waiting." : "."}
+          {"."}
         </p>
       </div>
 
@@ -108,7 +107,7 @@ export function HeroBanner() {
           name="Bloop"
         />
         <p className="stage-caption max-md:bottom-4">
-          {playable.demo ? playable.caption : playable.sulk ? "They’re waiting." : "Move. Click them."}
+          {playable.demo ? playable.caption : "They notice when you move."}
         </p>
       </div>
     </section>

@@ -2,7 +2,7 @@ import { formatPrice } from "@/lib/format";
 import { brand } from "@/lib/brand";
 import type { CatalogItem } from "@/lib/types";
 
-/** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
+/** Featured homepage shop line: items whose effect is obvious at a glance. */
 export const FEATURED_SHOP_IDS = ["outfit-raincoat", "gadget-umbrella"] as const;
 
 /** Visible names on shop cards and PDPs. Radial / studio may still say Teach X. */
@@ -59,7 +59,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "outfit":
       return {
         title: "Closet",
-        lede: "Raincoat. Visible in a second. Birthday and the day they notice you stay free — we sell the coat, not the cake.",
+        lede: "Hats, coats, boots, sunglasses. Everything changes how they look — and birthdays stay free.",
       };
     case "gadget":
       return {
@@ -69,7 +69,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Moonwalk lives on the radial as a preview. Shop what you can see: Raincoat · Pocket Umbrella.",
+        lede: "Tricks they can learn: Moonwalk, Cartwheel, Nap Anywhere. Watch any of them first, right on the page.",
       };
     case "drop":
       return {

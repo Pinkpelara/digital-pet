@@ -258,7 +258,6 @@ export function FigurineMesh({
   mood = "idle",
   skill = null,
   demo = null,
-  sulk = false,
   followPointer = false,
   pointer,
   quality = "high",
@@ -269,7 +268,6 @@ export function FigurineMesh({
   mood?: CreatureMood;
   skill?: SkillId | null;
   demo?: DemoActionId | null;
-  sulk?: boolean;
   followPointer?: boolean;
   pointer?: { x: number; y: number };
   quality?: MeshQuality;
@@ -310,7 +308,7 @@ export function FigurineMesh({
     const nap = !action && (mood === "nap" || skill === "nap");
     const climbing = action === "climb" || (!action && mood === "climb");
     const hiding = action === "hide" || (!action && mood === "hide");
-    const sulking = sulk && !action;
+    const walking = !action && mood === "walk";
 
     group.position.x = 0;
     group.position.z = 0;
@@ -319,17 +317,20 @@ export function FigurineMesh({
 
     const lookY = watching ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.09;
     const lookX = watching ? (pointer?.y ?? 0) * -0.16 : Math.sin(t * 0.24) * 0.04;
-    if (!action && !sulking) {
+    if (!action) {
+      if (walking) {
+        // Their own little patrol: two detuned sine waves so the pace varies.
+        const drift = Math.sin(t * 0.31) * 0.9 + Math.sin(t * 0.113 + 1.7) * 0.35;
+        const heading = Math.cos(t * 0.31) * 0.279 + Math.cos(t * 0.113 + 1.7) * 0.0396;
+        group.position.x = drift;
+        group.position.y = Math.abs(Math.sin(t * 3.4)) * 0.045;
+        group.rotation.y += ((heading >= 0 ? 0.5 : -0.5) - group.rotation.y) * 0.06;
+        group.rotation.x += (0.04 - group.rotation.x) * 0.06;
+        group.rotation.z = Math.sin(t * 3.4) * 0.04;
+        return;
+      }
       group.rotation.y += (lookY - group.rotation.y) * 0.08;
       group.rotation.x += (lookX - group.rotation.x) * 0.08;
-    }
-
-    if (sulking) {
-      group.rotation.y += (0.9 - group.rotation.y) * 0.06;
-      group.rotation.x += (0.12 - group.rotation.x) * 0.06;
-      group.position.y = -0.1;
-      group.scale.setScalar(0.9);
-      return;
     }
 
     if (action === "moonwalk") {
