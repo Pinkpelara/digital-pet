@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { items } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
-import { hrefForItem } from "@/lib/catalog-paths";
+import { hrefForItem, isShopSafe } from "@/lib/catalog-paths";
 
 export function LooksGoodWith({ ids, tone = "light" }: { ids: string[]; tone?: "light" | "dark" }) {
   const related = ids
     .map((id) => items.find((item) => item.id === id))
-    .filter((item): item is NonNullable<typeof item> => Boolean(item));
+    .filter((item): item is NonNullable<typeof item> => Boolean(item))
+    .filter(isShopSafe);
   if (related.length === 0) return null;
 
   const dark = tone === "dark";

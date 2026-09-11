@@ -83,7 +83,25 @@ const LOOPING: Set<DemoActionId> = new Set([
   "dance",
   "hide",
   "tidy",
+  "photo-pose",
 ]);
+
+/** Equip is the demo. If a board is on the feet, they skate this frame — no effect delay. */
+export function actionFromLoadout(
+  equipped: EquipmentLoadout | undefined,
+  skill?: SkillId | null,
+  demo?: DemoActionId | null,
+): DemoActionId | null {
+  if (demo) return demo;
+  if (skill) return skill;
+  if (!equipped) return null;
+  if (equipped.feet === "gadget-skateboard") return "skate";
+  if (equipped.hand === "gadget-umbrella") return "rain-walk";
+  if (equipped.hand === "gadget-camera") return "photo-pose";
+  if (equipped.back === "gadget-balloon") return "hover";
+  if (equipped.hand === "gadget-broom") return "tidy";
+  return null;
+}
 
 /** Signature demos everyone can preview on a live stage. */
 const PREVIEW_QUEUE = [

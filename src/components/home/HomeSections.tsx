@@ -4,49 +4,61 @@ import { useState } from "react";
 import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { PlayableStage } from "@/components/stage/PlayableStage";
-import { companions } from "@/data/catalog";
+import { StageFx } from "@/components/stage/StageFx";
+import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
-import type { EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
+import type { DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 function StageBox({
   species,
   equipped,
   skill,
+  demo,
   mood,
   className = "aspect-[4/5]",
   playable = false,
   companionName,
+  stageKey,
 }: {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
   skill?: SkillId | null;
+  demo?: DemoActionId | null;
   mood?: "idle" | "nap" | "follow" | "climb" | "happy" | "hide";
   className?: string;
   playable?: boolean;
   companionName?: string;
+  stageKey?: string;
 }) {
   return (
     <div className={`overflow-hidden rounded-[1.8rem] bg-cream ${className}`}>
       {playable ? (
         <PlayableStage
+          key={stageKey}
           species={species}
           equipped={equipped}
           skill={skill}
-          autoPlay={skill ?? undefined}
+          autoPlay={skill ?? demo ?? undefined}
+          playAction={demo ?? skill ?? null}
           mood={mood}
           companionName={companionName}
           className="h-full min-h-[280px] w-full"
           cameraZ={5.6}
         />
       ) : (
-        <LiveStage
-          species={species}
-          equipped={equipped}
-          skill={skill}
-          mood={mood}
-          className="h-full min-h-[280px] w-full"
-          cameraZ={5.6}
-        />
+        <div className="relative h-full min-h-[280px] w-full">
+          <LiveStage
+            species={species}
+            equipped={equipped}
+            skill={skill}
+            demo={demo ?? skill ?? null}
+            mood={mood}
+            className="h-full min-h-[280px] w-full"
+            cameraZ={5.6}
+          />
+          <StageFx demo={demo ?? skill ?? null} />
+        </div>
       )}
     </div>
   );
@@ -100,11 +112,11 @@ const tryLooks: Array<{
   label: string;
   equipped: EquipmentLoadout;
   skill: SkillId | null;
+  demo: DemoActionId | null;
 }> = [
-  { id: "plain", label: "Just them", equipped: {}, skill: null },
-  { id: "coat", label: "Yellow raincoat", equipped: { body: "outfit-raincoat" }, skill: null },
-  { id: "board", label: "Skateboard", equipped: { feet: "gadget-skateboard" }, skill: "skate" },
-  { id: "walk", label: "Teach moonwalk", equipped: { face: "outfit-sunglasses" }, skill: "moonwalk" },
+  { id: "plain", label: "Just them", equipped: {}, skill: null, demo: null },
+  { id: "coat", label: "Yellow raincoat", equipped: { body: "outfit-raincoat" }, skill: null, demo: null },
+  { id: "umbrella", label: "Pocket umbrella", equipped: { body: "outfit-raincoat", hand: "gadget-umbrella" }, skill: null, demo: "rain-walk" },
 ];
 
 export function MakeYoursDemo() {
@@ -112,18 +124,20 @@ export function MakeYoursDemo() {
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Make yours yours</p>
+      <p className="text-sm font-medium text-moss">In the shop now</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
-        Dress it. Hand it a gadget. Teach it a trick.
+        Dress it. Hand it an umbrella.
       </h2>
-          <p className="mt-4 max-w-xl text-ink-soft">
-            Tap Bloop for the trick wheel. Catalog grids stay catalogs — the pet is the demo stage.
-          </p>
+      <p className="mt-4 max-w-xl text-ink-soft">
+        Shop line: Yellow Raincoat · Pocket Umbrella. If you cannot see it in a second, we do not sell it.
+      </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <StageBox
+          stageKey={look.id}
           species="bloop"
           equipped={look.equipped}
           skill={look.skill}
+          demo={look.demo}
           playable
           companionName="Bloop"
           className="min-h-[420px] md:min-h-[520px]"
@@ -144,17 +158,31 @@ export function MakeYoursDemo() {
             ))}
           </div>
           <p className="mt-6 text-ink-soft">
-            {look.id === "board"
-              ? "A skateboard means skating. Gadgets change what they do, not who they are."
-              : look.id === "walk"
-                ? "Skills are things you teach. This one walks backward and looks very sure about it."
-                : look.id === "coat"
-                  ? "A raincoat is just a raincoat. Personality stays hidden."
-                  : "Same Bloop. You have not met the individual yet."}
+            {look.id === "umbrella"
+              ? "An umbrella means rain-walks. Gadgets change what they do, not who they are."
+              : look.id === "coat"
+                ? "A raincoat is just a raincoat. Personality stays hidden."
+                : "Same Bloop. You have not met the individual yet."}
           </p>
-          <Link href="/companions/bloop" className="mt-8 inline-block rounded-full bg-ink px-6 py-3 text-sm text-paper">
-            Adopt Bloop and keep a look
-          </Link>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {FEATURED_SHOP_IDS.map((id, index) => {
+              const item = catalogById.get(id);
+              if (!item) return null;
+              return (
+                <Link
+                  key={id}
+                  href={`/item/${item.slug}`}
+                  className={
+                    index === 0
+                      ? "inline-block rounded-full bg-ink px-6 py-3 text-sm text-paper"
+                      : "inline-block rounded-full border border-ink/15 px-6 py-3 text-sm text-ink"
+                  }
+                >
+                  Add {item.name}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
@@ -167,17 +195,17 @@ export function ThingsChange() {
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
       <p className="text-sm font-medium text-moss">Things change what they do</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
-        Skateboard on. Now it skates.
+        Umbrella on. Now it rain-walks.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        An umbrella means rain-walks. A broom means pointless sweeping. Personality is not for sale.
+        A raincoat is a silhouette. An umbrella is a walk. Personality is not for sale.
       </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-2">
         <StageBox
-          species="niblet"
-          equipped={on ? { feet: "gadget-skateboard", face: "outfit-sunglasses" } : {}}
-          skill={on ? "skate" : null}
-          mood={on ? "happy" : "idle"}
+          species="bloop"
+          equipped={on ? { body: "outfit-raincoat", hand: "gadget-umbrella" } : { body: "outfit-raincoat" }}
+          demo={on ? "rain-walk" : null}
+          mood="idle"
         />
         <div>
           <button
@@ -185,17 +213,17 @@ export function ThingsChange() {
             onClick={() => setOn((prev) => !prev)}
             className="rounded-full bg-ink px-6 py-3 text-sm text-paper"
           >
-            {on ? "Take the board away" : "Give Niblet the board"}
+            {on ? "Close the umbrella" : "Open the umbrella"}
           </button>
           <p className="mt-5 text-ink-soft">
-            {on ? "Showing off. Obviously." : "Just standing there. Worse, somehow."}
+            {on ? "Same Bloop. Wetter priorities." : "Same Bloop. Coat still on."}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/gadgets" className="text-sm text-moss underline underline-offset-4">
-              See gadgets
+            <Link href="/item/pocket-umbrella" className="text-sm text-moss underline underline-offset-4">
+              Add Pocket Umbrella
             </Link>
-            <Link href="/skills" className="text-sm text-moss underline underline-offset-4">
-              Teach a skill
+            <Link href="/item/yellow-raincoat" className="text-sm text-moss underline underline-offset-4">
+              Add Yellow Raincoat
             </Link>
           </div>
         </div>

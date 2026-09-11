@@ -181,6 +181,7 @@ export const items: CatalogItem[] = [
     slot: "body",
     looksGoodWith: ["gadget-umbrella", "outfit-rainboots", "companion-bloop"],
     accent: "#F2C14E",
+    shopSafe: true,
     active: true,
   },
   {
@@ -244,6 +245,7 @@ export const items: CatalogItem[] = [
     slot: "feet",
     looksGoodWith: ["outfit-raincoat", "gadget-umbrella"],
     accent: "#F2C14E",
+    shopSafe: true,
     active: true,
   },
   {
@@ -277,6 +279,7 @@ export const items: CatalogItem[] = [
     behaviorNote: "Rain-walks. Opens a beat too late.",
     looksGoodWith: ["outfit-raincoat", "companion-bloop"],
     accent: "#5B8DEF",
+    shopSafe: true,
     active: true,
   },
   {
@@ -295,6 +298,7 @@ export const items: CatalogItem[] = [
     behaviorNote: "Skates. Then shows off about it.",
     looksGoodWith: ["skill-skate", "outfit-sunglasses", "companion-niblet"],
     accent: "#C47F28",
+    shopSafe: false,
     active: true,
   },
   {
@@ -313,6 +317,7 @@ export const items: CatalogItem[] = [
     behaviorNote: "Takes photos. Mostly of nothing.",
     looksGoodWith: ["companion-sprout", "companion-bloop", "skill-juggle"],
     accent: "#6B6B6B",
+    shopSafe: false,
     active: true,
   },
   {
@@ -364,6 +369,7 @@ export const items: CatalogItem[] = [
     skillId: "moonwalk",
     looksGoodWith: ["outfit-sunglasses", "companion-niblet"],
     accent: "#7E8CFF",
+    shopSafe: false,
     active: true,
   },
   {
@@ -455,6 +461,7 @@ export const items: CatalogItem[] = [
     skillId: "skate",
     looksGoodWith: ["gadget-skateboard", "outfit-sunglasses"],
     accent: "#C47F28",
+    shopSafe: false,
     active: true,
   },
   {

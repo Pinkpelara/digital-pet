@@ -5,8 +5,7 @@ import { useMemo, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
-import { adoptHref } from "@/lib/catalog-paths";
-import { formatPrice } from "@/lib/format";
+import { adoptHref, isShopSafe, pdpCtaLabel } from "@/lib/catalog-paths";
 import { demoActionForItem } from "@/lib/demo-actions";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
@@ -62,12 +61,8 @@ export function TryOnStage({
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
   const heading =
     product.kind === "skill" ? `Teach ${product.name}` : product.kind === "companion" ? `Meet ${product.name}.` : product.name;
-  const cta =
-    product.kind === "companion"
-      ? `Adopt ${formatPrice(product.priceCents)}`
-      : product.kind === "skill"
-        ? `Teach ${product.name} ${formatPrice(product.priceCents)}`
-        : `Add to inventory ${formatPrice(product.priceCents)}`;
+  const shopSafe = isShopSafe(product);
+  const cta = pdpCtaLabel(product);
 
   return (
     <div className="bg-paper">
@@ -94,19 +89,26 @@ export function TryOnStage({
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
           <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
           <div className="mt-8">
-            <Link
-              href={adoptHref([product.id])}
-              onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-              className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
-            >
-              {cta}
-            </Link>
+            {shopSafe ? (
+              <Link
+                href={adoptHref([product.id])}
+                onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+                className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
+              >
+                {cta}
+              </Link>
+            ) : (
+              <p className="max-w-md rounded-[1.2rem] bg-cream px-4 py-3 text-sm text-ink-soft">
+                Preview only. If you cannot see the trick in a second, we do not sell it yet. Shop
+                line: Yellow Raincoat · Pocket Umbrella.
+              </p>
+            )}
           </div>
-          {tryOns.length > 0 && (
+          {tryOns.filter(isShopSafe).length > 0 && (
             <div className="mt-10">
               <p className="text-sm text-ink-soft">Try a look on this one</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {tryOns.map((item) => {
+                {tryOns.filter(isShopSafe).map((item) => {
                   const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
                   const href = item.skillId
                     ? `?wear=${wearParam || ""}&play=${item.skillId}`

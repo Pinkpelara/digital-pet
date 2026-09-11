@@ -6,6 +6,7 @@ import { LiveStage } from "@/components/stage/LiveStage";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
 import type { CreatureStageProps } from "@/components/stage/CreatureStage";
+import { actionFromLoadout } from "@/lib/demo-actions";
 import type { DemoActionId, SkillId } from "@/lib/types";
 
 type PlayableStageProps = Omit<CreatureStageProps, "onStageClick" | "demo" | "sulk"> & {
@@ -65,6 +66,14 @@ export function PlayableStage({
     playable.toggleWheel();
   }
 
+  const liveDemo =
+    playAction ??
+    stage.skill ??
+    actionFromLoadout(playable.equipped, null, null) ??
+    playable.demo ??
+    autoPlay ??
+    null;
+
   return (
     <div
       className={`playable-stage relative h-full w-full ${className ?? ""}`}
@@ -76,12 +85,12 @@ export function PlayableStage({
         species={species}
         equipped={playable.equipped}
         mood={playable.mood}
-        skill={playable.skill}
-        demo={playable.demo}
+        skill={playable.skill ?? stage.skill}
+        demo={liveDemo}
         sulk={playable.sulk}
         className="h-full w-full"
       />
-      <StageFx demo={playable.demo} />
+      <StageFx demo={liveDemo} />
       <ActionWheel
         items={playable.wheel}
         open={playable.open}

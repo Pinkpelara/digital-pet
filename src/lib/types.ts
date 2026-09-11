@@ -129,6 +129,11 @@ export type CatalogItem = {
   unlocksBehavior?: string;
   /** Short line shown on the "things change what they do" rail. */
   behaviorNote?: string;
+  /**
+   * Shop-gate: only true when the live demo shows a silhouette or motion change in under a second.
+   * False means try-on/preview only — no checkout until the trick is obvious.
+   */
+  shopSafe?: boolean;
   looksGoodWith: string[];
   compatibleSpecies?: SpeciesId[];
   accent: string;

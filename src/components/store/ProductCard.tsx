@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { formatPrice } from "@/lib/format";
+import { isShopSafe } from "@/lib/catalog-paths";
 import type { CatalogItem } from "@/lib/types";
 
 export function ProductCard({
@@ -15,6 +16,7 @@ export function ProductCard({
   owned?: boolean;
 }) {
   const title = item.kind === "skill" ? `Teach ${item.name}` : item.name;
+  const shopSafe = isShopSafe(item);
 
   return (
     <article className="card-lift overflow-hidden rounded-[1.6rem] bg-cream/70 ring-1 ring-ink/8">
@@ -36,11 +38,13 @@ export function ProductCard({
         <div className="bg-paper px-5 py-4">
           <p className="text-xs uppercase tracking-[0.16em] text-ink-soft">
             {item.kind}
-            {owned ? " · owned" : ""}
+            {owned ? " · owned" : shopSafe ? "" : " · preview"}
           </p>
           <h3 className="mt-1 font-display text-2xl text-ink">{title}</h3>
           <p className="mt-1 text-sm text-ink-soft">{item.behaviorNote ?? item.tagline}</p>
-          <p className="mt-3 text-sm tabular-nums text-ink">{formatPrice(item.priceCents)}</p>
+          <p className="mt-3 text-sm tabular-nums text-ink">
+            {shopSafe ? formatPrice(item.priceCents) : "Preview — not for sale yet"}
+          </p>
         </div>
       </Link>
     </article>
