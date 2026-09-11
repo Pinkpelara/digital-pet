@@ -1,18 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { useEffect, useState, type ComponentType } from "react";
 import { IdleMount } from "@/components/site/IdleMount";
 import { WhenVisible } from "@/components/site/WhenVisible";
-
-const PersonalityCards = dynamic(
-  () => import("@/components/home/PersonalityCards").then((mod) => mod.PersonalityCards),
-  { ssr: false },
-);
-
-const MakeYoursDemo = dynamic(
-  () => import("@/components/home/HomeSections").then((mod) => mod.MakeYoursDemo),
-  { ssr: false },
-);
 
 function MeetFallback() {
   return (
@@ -28,23 +18,49 @@ function StuffFallback() {
   return <div className="min-h-[460px] rounded-[1.8rem] bg-cream md:min-h-[560px]" aria-hidden />;
 }
 
-/** Meet grid — four R3F posters, only after first paint and near the viewport. */
+function LazyMeet() {
+  const [Cards, setCards] = useState<ComponentType<{ featured?: boolean }> | null>(null);
+
+  useEffect(() => {
+    void import("@/components/home/PersonalityCards").then((mod) => {
+      setCards(() => mod.PersonalityCards);
+    });
+  }, []);
+
+  if (!Cards) return <MeetFallback />;
+  return <Cards featured />;
+}
+
+function LazyStuff() {
+  const [Demo, setDemo] = useState<ComponentType | null>(null);
+
+  useEffect(() => {
+    void import("@/components/home/HomeSections").then((mod) => {
+      setDemo(() => mod.MakeYoursDemo);
+    });
+  }, []);
+
+  if (!Demo) return <StuffFallback />;
+  return <Demo />;
+}
+
+/** Meet grid — four R3F posters, only after LCP and when the section is on screen. */
 export function DeferredMeet() {
   return (
-    <IdleMount delay={1600}>
-      <WhenVisible once rootMargin="40px" fallback={<MeetFallback />}>
-        <PersonalityCards featured />
+    <IdleMount delay={3600}>
+      <WhenVisible once rootMargin="0px" fallback={<MeetFallback />}>
+        <LazyMeet />
       </WhenVisible>
     </IdleMount>
   );
 }
 
-/** Their-stuff try-on — one extra canvas, well after the hero. */
+/** Their-stuff try-on — one extra canvas, well after the hero hydrates. */
 export function DeferredTheirStuff() {
   return (
-    <IdleMount delay={2200}>
-      <WhenVisible once rootMargin="40px" fallback={<StuffFallback />}>
-        <MakeYoursDemo />
+    <IdleMount delay={4800}>
+      <WhenVisible once rootMargin="0px" fallback={<StuffFallback />}>
+        <LazyStuff />
       </WhenVisible>
     </IdleMount>
   );

@@ -13,8 +13,9 @@ type StageCanvasProps = {
   camera?: { position: [number, number, number]; fov?: number; near?: number; far?: number };
   alpha?: boolean;
   dprMax?: number;
-  /** Hero only: mount on first paint, keep the GL context, pause when offscreen. */
+  /** Keep the GL context once mounted; pause when offscreen. */
   eager?: boolean;
+  onReady?: () => void;
   onPointerMove?: (event: PointerEvent<HTMLDivElement>) => void;
   onPointerDown?: (event: PointerEvent<HTMLDivElement>) => void;
   onClick?: (event: PointerEvent<HTMLDivElement>) => void;
@@ -27,6 +28,7 @@ export function StageCanvas({
   alpha = true,
   dprMax = 1.6,
   eager = false,
+  onReady,
   onPointerMove,
   onPointerDown,
   onClick,
@@ -106,6 +108,11 @@ export function StageCanvas({
             renderer.current = gl;
             gl.toneMapping = ACESFilmicToneMapping;
             gl.outputColorSpace = SRGBColorSpace;
+            if (!onReady) return;
+            const first = window.requestAnimationFrame(() => {
+              window.requestAnimationFrame(() => onReady());
+            });
+            void first;
           }}
           camera={{
             position: camera.position,

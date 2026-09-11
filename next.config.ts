@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: usingGitHubPages ? `/${repo}` : "",
   },
+  experimental: {
+    optimizePackageImports: ["@react-three/fiber", "@react-three/drei", "three"],
+  },
 };
 
 export default nextConfig;

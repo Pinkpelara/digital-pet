@@ -10,14 +10,17 @@ import "./globals.css";
 const sans = Outfit({
   variable: "--font-sans-face",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
   display: "swap",
+  preload: false,
 });
 
 const display = Syne({
   variable: "--font-display-face",
   subsets: ["latin"],
-  weight: ["700", "800"],
+  weight: ["800"],
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
