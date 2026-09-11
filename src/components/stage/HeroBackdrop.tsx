@@ -32,18 +32,20 @@ export function HeroBackdrop() {
     window.addEventListener("touchstart", load, { once: true, passive: true });
 
     const armIdle = () => {
-      if (typeof window.requestIdleCallback === "function") {
-        idleId = window.requestIdleCallback(load, { timeout: 1400 });
-      } else {
-        timeoutId = window.setTimeout(load, 400);
-      }
+      // Stay off the LCP critical path: wait a beat after load, then idle.
+      timeoutId = window.setTimeout(() => {
+        if (typeof window.requestIdleCallback === "function") {
+          idleId = window.requestIdleCallback(load, { timeout: 1800 });
+        } else {
+          load();
+        }
+      }, 4000);
     };
 
     if (document.readyState === "complete") {
       armIdle();
     } else {
       window.addEventListener("load", armIdle, { once: true });
-      timeoutId = window.setTimeout(load, 2800);
     }
 
     return () => {

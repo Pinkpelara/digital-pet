@@ -18,7 +18,7 @@ export function SiteHeader() {
         Skip to content
       </a>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-8">
-        <Link href="/" className="flex items-baseline gap-3">
+        <Link href="/" prefetch={false} className="flex items-baseline gap-3">
           <span className="font-display text-[1.7rem] tracking-tight">{brand.name}</span>
           <span className="hidden text-sm text-ink-soft sm:inline">{brand.tagline}</span>
         </Link>
@@ -29,6 +29,7 @@ export function SiteHeader() {
               <Link
                 key={link.href}
                 href={link.href}
+                prefetch={false}
                 className={`rounded-full px-3 py-1.5 text-sm transition ${
                   active ? "bg-ink text-paper" : "text-ink-soft hover:text-ink"
                 }`}
@@ -49,6 +50,7 @@ export function SiteHeader() {
           </button>
           <Link
             href="/my-companions"
+            prefetch={false}
             className="rounded-full bg-ink px-3 py-1.5 text-sm text-paper"
             suppressHydrationWarning
           >
@@ -56,6 +58,7 @@ export function SiteHeader() {
           </Link>
           <Link
             href={user && hydrated ? "/inventory" : "/login"}
+            prefetch={false}
             className="hidden text-sm text-ink-soft sm:inline"
             suppressHydrationWarning
           >
@@ -65,7 +68,7 @@ export function SiteHeader() {
       </div>
       <nav aria-label="Store sections" className="flex gap-2 overflow-x-auto border-t border-ink/5 px-4 py-2 lg:hidden">
         {navLinks.map((link) => (
-          <Link key={link.href} href={link.href} className="shrink-0 rounded-full bg-cream px-3 py-1 text-sm text-ink ring-1 ring-ink/10">
+          <Link key={link.href} href={link.href} prefetch={false} className="shrink-0 rounded-full bg-cream px-3 py-1 text-sm text-ink ring-1 ring-ink/10">
             {link.label}
           </Link>
         ))}

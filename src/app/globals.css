@@ -49,12 +49,12 @@ html {
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans-face, ui-sans-serif), system-ui, sans-serif;
   letter-spacing: 0.01em;
 }
 
 .font-display {
-  font-family: var(--font-display-face), var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-display-face, ui-sans-serif), var(--font-sans-face, ui-sans-serif), system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.05em;
 }
@@ -330,6 +330,13 @@ body {
 
 .hero-word {
   display: inline-block;
+}
+
+/* Local metrics-matched face only — webfonts must not sit on the LCP node. */
+.hero-headline {
+  font-family: "Syne Fallback", Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.05em;
 }
 
 .kinetic-title {

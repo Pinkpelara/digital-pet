@@ -11,14 +11,14 @@ export function HeroAdoptLink({ adoptFrom }: { adoptFrom: string }) {
 
   if (roommate) {
     return (
-      <Link href={profileHref(roommate.id)} className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+      <Link href={profileHref(roommate.id)} prefetch={false} className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
         {name} is here
       </Link>
     );
   }
 
   return (
-    <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+    <Link href="/companions/bloop" prefetch={false} className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
       Adopt from {adoptFrom}. Start with Bloop.
     </Link>
   );

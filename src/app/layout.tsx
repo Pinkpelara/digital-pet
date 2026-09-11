@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Outfit, Syne } from "next/font/google";
+import { FontWarm } from "@/components/site/FontWarm";
 import { SiteShell } from "@/components/site/SiteShell";
 import { OrganizationJsonLd } from "@/components/store/ProductJsonLd";
 import { brand } from "@/lib/brand";
@@ -11,7 +12,7 @@ const sans = Outfit({
   variable: "--font-sans-face",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  display: "swap",
+  display: "optional",
   preload: false,
 });
 
@@ -19,8 +20,8 @@ const display = Syne({
   variable: "--font-display-face",
   subsets: ["latin"],
   weight: ["800"],
-  display: "swap",
-  preload: true,
+  display: "optional",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -64,8 +65,9 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable} h-full antialiased`}>
+    <html lang="en" className="h-full antialiased">
       <body className="min-h-full">
+        <FontWarm className={`${sans.variable} ${display.variable}`} />
         <OrganizationJsonLd />
         <SiteShell>{children}</SiteShell>
       </body>
