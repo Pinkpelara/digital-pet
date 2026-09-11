@@ -49,12 +49,12 @@ html {
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans-face, ui-sans-serif), system-ui, sans-serif;
   letter-spacing: 0.01em;
 }
 
 .font-display {
-  font-family: var(--font-display-face), var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-display-face, ui-sans-serif), var(--font-sans-face, ui-sans-serif), system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.05em;
 }
@@ -332,6 +332,13 @@ body {
   display: inline-block;
 }
 
+/* Local metrics-matched face only — webfonts must not sit on the LCP node. */
+.hero-headline {
+  font-family: "Syne Fallback", Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
 .kinetic-title {
   perspective: 900px;
 }
@@ -406,6 +413,72 @@ body {
   background:
     linear-gradient(90deg, var(--void) 0%, rgba(12, 0, 33, 0.55) 38%, transparent 62%),
     radial-gradient(70% 80% at 72% 48%, transparent 18%, rgba(12, 0, 33, 0.42) 62%, var(--void) 100%);
+}
+
+.hero-poster {
+  position: absolute;
+  inset: 0;
+  background: var(--void);
+}
+
+.hero-poster-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(46% 42% at 72% 46%, rgba(255, 90, 168, 0.22), transparent 70%),
+    radial-gradient(36% 34% at 64% 58%, rgba(92, 230, 216, 0.16), transparent 68%),
+    radial-gradient(28% 24% at 78% 38%, rgba(242, 193, 78, 0.12), transparent 70%);
+}
+
+.hero-poster-figure {
+  position: absolute;
+  inset: 12% 0 12% 42%;
+}
+
+.hero-poster-svg {
+  width: min(78%, 420px);
+  height: auto;
+  filter: drop-shadow(0 28px 48px rgba(0, 0, 0, 0.45));
+}
+
+.hero-poster-bob {
+  transform-origin: 80px 140px;
+  animation: hero-poster-bob 3.4s ease-in-out infinite;
+}
+
+.hero-poster-retired {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 360ms ease;
+}
+
+@media (max-width: 767px) {
+  .hero-poster-figure {
+    inset: 32% 8% auto;
+    height: 48%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-poster-svg {
+    width: min(62vw, 280px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-poster-bob {
+    animation: none;
+  }
+}
+
+@keyframes hero-poster-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
 }
 
 .film-wash {

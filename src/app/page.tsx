@@ -24,7 +24,7 @@ export default function HomePage() {
                   Who’s this
                 </KineticTitle>
               </div>
-              <Link href="/companions" className="text-sm text-moss underline underline-offset-4">
+              <Link href="/companions" prefetch={false} className="text-sm text-moss underline underline-offset-4">
                 See all
               </Link>
             </div>
@@ -54,7 +54,7 @@ export default function HomePage() {
         </KineticTitle>
         <p className="mx-auto mt-4 max-w-lg text-ink-soft">{brand.meetBody}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/companions/bloop" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+          <Link href="/companions/bloop" prefetch={false} className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
             Adopt from {adoptFrom}. Start with Bloop.
           </Link>
         </div>

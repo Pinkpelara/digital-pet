@@ -55,7 +55,7 @@ function Rig({
         species={species}
         followPointer={!demo && !sulk}
         pointer={pointer}
-        quality={mobile ? "medium" : "high"}
+        quality={mobile ? "low" : "medium"}
         mood={mood}
         skill={skill}
         demo={demo}
@@ -73,6 +73,7 @@ export function HeroStage({
   sulk = false,
   equipped = {},
   species = "bloop",
+  onReady,
 }: {
   mood?: CreatureMood;
   skill?: SkillId | null;
@@ -80,6 +81,7 @@ export function HeroStage({
   sulk?: boolean;
   equipped?: EquipmentLoadout;
   species?: SpeciesId;
+  onReady?: () => void;
 }) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scroll, setScroll] = useState(0);
@@ -124,8 +126,9 @@ export function HeroStage({
       className="absolute inset-0"
       alpha={false}
       eager
-      dprMax={mobile ? 1 : 1.35}
+      dprMax={mobile ? 1 : 1.25}
       camera={{ position: [0.2, 0.42, 5.4], fov: 32, far: 40 }}
+      onReady={onReady}
       onPointerMove={(event) => {
         if (reduce.current) return;
         const x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -135,7 +138,7 @@ export function HeroStage({
     >
       <color attach="background" args={[STAGE_BG]} />
       <fog attach="fog" args={[STAGE_FOG, 10, 24]} />
-      <StudioLights />
+      <StudioLights compact={mobile} />
       {!reducedMotion && !mobile ? <FollowLight pointer={pointer} /> : null}
       <Rig
         pointer={pointer}
@@ -148,7 +151,7 @@ export function HeroStage({
         equipped={equipped}
         species={species}
       />
-      <StudioShadows position={[0, -0.96, 0]} scale={12} />
+      {!mobile ? <StudioShadows position={[0, -0.96, 0]} scale={12} /> : null}
     </StageCanvas>
   );
 }

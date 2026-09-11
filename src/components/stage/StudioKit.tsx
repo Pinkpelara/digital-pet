@@ -4,9 +4,9 @@ import { ContactShadows, RoundedBox } from "@react-three/drei";
 import { useStageBudget } from "@/components/stage/stage-budget";
 import { STAGE_PLATFORM, STAGE_SHADOW } from "@/lib/stage-theme";
 
-export function StudioLights({ intensity = 1 }: { intensity?: number }) {
+export function StudioLights({ intensity = 1, compact = false }: { intensity?: number; compact?: boolean }) {
   const budget = useStageBudget();
-  if (budget) {
+  if (budget || compact) {
     return (
       <>
         <hemisphereLight args={["#6a3a9a", "#0C0021", 0.95 * intensity]} />

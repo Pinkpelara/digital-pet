@@ -1,13 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { PageView } from "@/components/site/PageView";
 import { PwaRegister } from "@/components/live/PwaRegister";
-import { HomeCreatures } from "@/components/creatures/HomeCreatures";
 import { IdleMount } from "@/components/site/IdleMount";
 import { NestProvider } from "@/lib/state/nest-context";
+
+const HomeCreatures = dynamic(
+  () => import("@/components/creatures/HomeCreatures").then((mod) => mod.HomeCreatures),
+  { ssr: false },
+);
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
@@ -19,7 +24,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           <SiteHeader />
         </Suspense>
         <Suspense fallback={null}>
-          <IdleMount delay={2200}>
+          <IdleMount delay={4000}>
             <HomeCreatures />
           </IdleMount>
         </Suspense>
