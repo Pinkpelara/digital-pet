@@ -85,8 +85,8 @@ export function TwinBloops() {
         Two Bloops. Completely different problems.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Every companion gets a hidden personality when you adopt it. Same store page. Not the same
-        creature.
+        Pick a species, name them, personality shows up as you live together. Same store page. Not
+        the same creature.
       </p>
 
       <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -167,13 +167,12 @@ export function MakeYoursDemo() {
 
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Toys you can see</p>
+      <p className="text-sm font-medium text-moss">Shop</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
         Raincoat. Skateboard. Moonwalk.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        If you cannot see it in a second, we do not sell it. Birthday and the day they notice you are
-        free magic — not shop items.
+        Raincoat, Skateboard, Moonwalk — if you can’t see it move in a second, it’s not for sale.
       </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <StageBox
@@ -370,13 +369,12 @@ export function LetLoose() {
 export function LiveYourDay() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Free magic — not for sale</p>
+      <p className="text-sm font-medium text-moss">Free magic — no price</p>
       <h2 className="mt-3 max-w-[18ch] font-display text-4xl text-ink md:text-5xl">
         They notice your day. Birthday cake appears before you remember.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Homework, a mood dip, an evening streak, a birthday — those moments stay free. We do not
-        paywall the cake. You meet one individual. You do not buy a personality.
+        Birthday and noticing your day stay gifts, not gadgets. We do not paywall the cake.
       </p>
       <CareChips className="mt-6" />
 

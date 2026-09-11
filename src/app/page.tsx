@@ -2,6 +2,7 @@ import Link from "next/link";
 import { companions } from "@/data/catalog";
 import { HeroBanner } from "@/components/stage/HeroBanner";
 import { ResidentGallery } from "@/components/stage/ResidentGallery";
+import { HomeProductJsonLd } from "@/components/store/ProductJsonLd";
 import {
   LetLoose,
   LiveYourDay,
@@ -15,16 +16,16 @@ import {
 
 const steps = [
   {
-    title: "Adopt",
-    body: "Pick a species. Bring one home. Soft trial before a paywall.",
+    title: "Meet",
+    body: "Pick a species, name them, personality shows up as you live together.",
   },
   {
-    title: "Discover",
-    body: "Its quirks show up on their own. Two of the same species never match.",
+    title: "Shop",
+    body: "Raincoat, Skateboard, Moonwalk — if you can’t see it move in a second, it’s not for sale.",
   },
   {
-    title: "Make it yours",
-    body: "Name it, dress it, hand it gadgets, teach it tricks.",
+    title: "Free magic",
+    body: "Birthday and noticing your day stay gifts, not gadgets. No price on those moments.",
   },
   {
     title: "Let it loose",
@@ -35,6 +36,7 @@ const steps = [
 export default function HomePage() {
   return (
     <div className="bg-paper">
+      <HomeProductJsonLd />
       <HeroBanner />
 
       <section id="how-they-live" className="mx-auto max-w-6xl px-5 py-16 md:px-10">
@@ -53,13 +55,16 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 md:px-10">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-moss">Meet them</p>
+              <p className="text-sm font-medium text-moss">Meet</p>
               <h2 className="mt-2 font-display text-4xl text-ink md:text-5xl">Four species. Live.</h2>
             </div>
             <Link href="/companions" className="text-sm text-moss underline underline-offset-4">
               See all
             </Link>
           </div>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            Pick a species, name them, personality shows up as you live together.
+          </p>
         </div>
         <div className="mt-6 h-[min(58vh,520px)] w-full overflow-hidden bg-cream">
           <ResidentGallery className="h-full w-full" />

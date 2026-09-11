@@ -10,7 +10,9 @@ export default function CompanionsPage() {
   return (
     <div className="bg-paper">
       <section className="mx-auto max-w-6xl px-5 pt-12 md:px-10 md:pt-16">
-        <p className="text-sm font-medium text-moss">Adopt from {formatPrice(adoptFromCents())}</p>
+        <p className="text-sm font-medium text-moss">
+          Adopt from {formatPrice(adoptFromCents())} — start with Bloop
+        </p>
         <h1 className="mt-3 max-w-[14ch] font-display text-5xl leading-[0.98] text-ink md:text-7xl">
           Adopt one
         </h1>

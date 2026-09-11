@@ -53,7 +53,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "companion":
       return {
         title: "Companions",
-        lede: "Pick a species. Bring one home. You do not choose its personality. You meet it.",
+        lede: "Pick a species, name them, personality shows up as you live together. You do not choose it. You meet it.",
       };
     case "outfit":
       return {
@@ -63,7 +63,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "If it does not change how they look or move in a second, it is not for sale. Shop what you can see: Pocket Umbrella. Headphones and a party hat change the silhouette on contact.",
+        lede: "Raincoat, Skateboard, Moonwalk — if you can’t see it move in a second, it’s not for sale. Shop what you can see now: Pocket Umbrella. Headphones and a party hat change the silhouette on contact.",
       };
     case "skill":
       return {
