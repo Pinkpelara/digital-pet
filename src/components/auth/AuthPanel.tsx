@@ -24,7 +24,6 @@ export function AuthPanel() {
   return (
     <div className="mx-auto max-w-md rounded-[2rem] bg-mist p-8 ring-1 ring-ink/10">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">No passwords</p>
-      <h1 className="mt-2 font-display text-4xl leading-[0.92] text-ink md:text-5xl">Come in quietly.</h1>
       <p className="mt-3 text-ink-soft">
         Google, Apple, or an email magic link. Demo mode signs you in locally — no keys required.
       </p>

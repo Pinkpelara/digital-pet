@@ -1,4 +1,5 @@
 import { catalogById } from "@/data/catalog";
+import { isShopSafe } from "@/lib/catalog-paths";
 import type {
   CatalogItem,
   DemoActionId,
@@ -59,7 +60,6 @@ const ACTION_BY_ITEM: Record<string, DemoActionId> = {
   "gadget-balloon": "hover",
   "gadget-broom": "tidy",
   "gadget-headphones": "focus",
-  "gadget-partyhat": "party",
   "outfit-raincoat": "twirl",
   "outfit-hoodie": "twirl",
   "outfit-sunglasses": "twirl",
@@ -140,7 +140,6 @@ export function actionFromLoadout(
   if (equipped.back === "gadget-balloon") return "hover";
   if (equipped.hand === "gadget-broom") return "tidy";
   if (equipped.head === "gadget-headphones") return "focus";
-  if (equipped.head === "gadget-partyhat") return "party";
   return null;
 }
 
@@ -287,13 +286,15 @@ function slot(
   free = false,
 ): ResolvedWheelItem {
   const ownedItem = free || ownedFlag(action.itemId, owned, unlocked);
-  return { ...action, owned: ownedItem, preview: !ownedItem };
+  const catalogItem = catalogById.get(action.itemId);
+  const preview = !ownedItem && (!catalogItem || !isShopSafe(catalogItem));
+  return { ...action, owned: ownedItem, preview };
 }
 
 /**
  * Live-pet radial: dedicated Moonwalk + Skateboard wedges that fire those demos,
  * plus sell-now Umbrella / Raincoat, then presence. 8 slots.
- * Skateboard / Moonwalk stay preview (shopSafe false) until a later shop-gate.
+ * Preview chips are for items that are not shop-safe yet — not for unowned sell-now SKUs.
  */
 export function presencePieForCompanion(input: {
   species: SpeciesId;

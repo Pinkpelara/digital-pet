@@ -21,7 +21,8 @@ export const brand = {
   hero:
     "They live on your screen now. Adopt one. Name it. Who they are shows up while you live together. You do not choose its personality. You meet it.",
   meetBody: "Adopt one. Name it. Who they are shows up while you live together.",
-  shopBody: "Raincoat. Pocket Umbrella. If you can’t see it in a second, we don’t sell it.",
+  shopBody:
+    "Raincoat · Pocket Umbrella · Skateboard · Moonwalk. If you can’t see it in a second, we don’t sell it.",
   freeMagicBody: "Birthdays and noticing your day stay gifts. You can’t buy those.",
   closer: "Same species. Never the same one.",
   bottomCta: "Adopt one",

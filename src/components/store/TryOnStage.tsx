@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
-import { adoptHref, isShopSafe, pdpCtaLabel, shopTitle } from "@/lib/catalog-paths";
+import { adoptHref, isShopSafe, pdpCtaLabel, shopTitle, SHOP_NOW_NAMES } from "@/lib/catalog-paths";
 import { demoActionForItem, showOffMs } from "@/lib/demo-actions";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
@@ -124,8 +124,8 @@ export function TryOnStage({
               </div>
             ) : (
               <p className="max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-sm text-ink-soft ring-1 ring-ink/10">
-                Preview only. Watch the trick first. If you cannot see it in a second, we do not sell
-                it yet. Shop what you can see: Raincoat · Pocket Umbrella.
+                Preview only. Watch the silhouette first. If you cannot see it in a second, we do
+                not sell it yet. Shop what you can see: {SHOP_NOW_NAMES}.
               </p>
             )}
           </div>

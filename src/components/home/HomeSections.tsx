@@ -10,7 +10,7 @@ import { CareChips } from "@/components/home/CareChips";
 import { DayVignette } from "@/components/home/DayVignette";
 import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
-import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
+import { FEATURED_SHOP_IDS, SHOP_NOW_NAMES } from "@/lib/catalog-paths";
 import { brand } from "@/lib/brand";
 import { KineticTitle } from "@/components/site/KineticTitle";
 import type { DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
@@ -154,6 +154,22 @@ const tryLooks: StageLook[] = [
     demo: "rain-walk",
     line: "An umbrella is a walk. Visible in a second.",
   },
+  {
+    id: "skate",
+    label: "Skateboard",
+    equipped: { feet: "gadget-skateboard" },
+    skill: null,
+    demo: "skate",
+    line: "A skateboard is a roll. Visible in a second.",
+  },
+  {
+    id: "moonwalk",
+    label: "Moonwalk",
+    equipped: { face: "outfit-sunglasses" },
+    skill: "moonwalk",
+    demo: "moonwalk",
+    line: "Moonwalk. Backward, smooth, slightly illegal.",
+  },
 ];
 
 const takenBack: StageLook = {
@@ -171,8 +187,8 @@ export function MakeYoursDemo() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
       <p className="kicker">Shop</p>
-      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
-        Raincoat · Pocket Umbrella
+      <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
+        {SHOP_NOW_NAMES}
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
@@ -228,6 +244,11 @@ export function MakeYoursDemo() {
               );
             })}
           </div>
+          <p className="mt-4">
+            <Link href="/item/focus-headphones" className="text-sm text-moss underline underline-offset-4">
+              Also: Focus Headphones
+            </Link>
+          </p>
         </div>
       </div>
     </section>
@@ -244,7 +265,8 @@ export function ThingsChange() {
       </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
         Silhouette or motion in under a second — or we do not sell it. A raincoat is a shape. An
-        umbrella is a walk. Personality is not for sale.
+        umbrella is a walk. A skateboard is a roll. Moonwalk is three steps back. Personality is not
+        for sale.
       </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-2">
         <StageBox
@@ -270,6 +292,12 @@ export function ThingsChange() {
             </Link>
             <Link href="/item/yellow-raincoat" className="text-sm text-moss underline underline-offset-4">
               Add Yellow Raincoat
+            </Link>
+            <Link href="/item/maple-skateboard" className="text-sm text-moss underline underline-offset-4">
+              Add Maple Skateboard
+            </Link>
+            <Link href="/item/moonwalk" className="text-sm text-moss underline underline-offset-4">
+              Add Moonwalk
             </Link>
             <Link href="/gadgets" className="text-sm text-moss underline underline-offset-4">
               Gadget showreel

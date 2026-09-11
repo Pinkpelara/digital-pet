@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { CompanionCard } from "@/components/companions/CompanionCard";
 import { CareChips } from "@/components/home/CareChips";
+import { LiveStage } from "@/components/stage/LiveStage";
 import { PageHero } from "@/components/site/KineticTitle";
+import { brand } from "@/lib/brand";
 import { useNest } from "@/lib/state/nest-context";
 
 export default function MyCompanionsPage() {
@@ -31,15 +33,27 @@ export default function MyCompanionsPage() {
 
       <div className="mx-auto max-w-6xl px-5 md:px-10">
       {instances.length === 0 ? (
-        <div className="overflow-hidden rounded-[2rem] bg-mist ring-1 ring-ink/10">
-          <div className="flex h-72 items-center justify-center bg-cream text-ink-soft">Nobody lives here yet.</div>
-          <div className="p-8">
-            <p className="font-display text-3xl text-ink">Nobody lives here yet.</p>
-            <Link href="/companions" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
+        <article className="poster-card overflow-hidden rounded-[2rem]">
+          <div className="min-h-[360px] bg-cream md:min-h-[460px]">
+            <LiveStage
+              species="bloop"
+              mood="idle"
+              className="h-full min-h-[360px] w-full md:min-h-[460px]"
+              cameraZ={5.5}
+              followPointer
+              quality="medium"
+            />
+          </div>
+          <div className="film-wash" aria-hidden />
+          <div className="poster-copy">
+            <p className="text-[11px] font-semibold tracking-[0.28em] text-moss">EMPTY NEST</p>
+            <p className="mt-2 font-display text-4xl leading-none text-ink">Nobody lives here yet.</p>
+            <p className="mt-3 max-w-md text-ink-soft">{brand.meetBody}</p>
+            <Link href="/companions" className="mt-6 inline-block rounded-full bg-ink px-5 py-3 text-paper">
               Adopt one
             </Link>
           </div>
-        </div>
+        </article>
       ) : (
         <>
           <p className="text-sm text-ink-soft">

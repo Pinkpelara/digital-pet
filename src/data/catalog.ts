@@ -302,7 +302,7 @@ export const items: CatalogItem[] = [
     behaviorNote: "Skates. Then shows off about it.",
     looksGoodWith: ["skill-skate", "outfit-sunglasses", "companion-niblet"],
     accent: "#C47F28",
-    shopSafe: false,
+    shopSafe: true,
     active: true,
   },
   {
@@ -377,8 +377,8 @@ export const items: CatalogItem[] = [
     unlocksBehavior: "focus",
     behaviorNote: "Puts the phones on. Goes quiet. Visible in a second.",
     looksGoodWith: ["companion-bloop", "skill-focus", "outfit-hoodie"],
-    accent: "#3a3a3a",
-    shopSafe: false,
+    accent: "#8B93A7",
+    shopSafe: true,
     active: true,
   },
   {
@@ -389,12 +389,12 @@ export const items: CatalogItem[] = [
     name: "Party Hat",
     tagline: "Birthday silhouette. The skill that day is a gift.",
     description:
-      "A cone that appears on the head in under a second. We sell the hat around the birthday. Balloon Bunch is a free 24-hour Teach that day. We do not paywall the cake.",
+      "A cone that appears on the head in under a second. The hat stays a birthday silhouette — not for sale yet. Balloon Bunch is a free 24-hour Teach that day. We do not paywall the cake.",
     priceCents: 149,
     currency: "usd",
     slot: "head",
     unlocksBehavior: "party",
-    behaviorNote: "Hat pops on. Confetti. Balloon Bunch stays free that day.",
+    behaviorNote: "Hat on. The silhouette. Confetti stays a birthday gift.",
     looksGoodWith: ["skill-balloon-bunch", "gadget-balloon", "companion-bloop"],
     accent: "#E86B6B",
     shopSafe: false,
@@ -413,7 +413,7 @@ export const items: CatalogItem[] = [
     skillId: "moonwalk",
     looksGoodWith: ["outfit-sunglasses", "companion-niblet"],
     accent: "#7E8CFF",
-    shopSafe: false,
+    shopSafe: true,
     active: true,
   },
   {
