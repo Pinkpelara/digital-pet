@@ -1,4 +1,5 @@
 import { catalogById } from "@/data/catalog";
+import { isShopSafe } from "@/lib/catalog-paths";
 import type {
   CatalogItem,
   DemoActionId,
@@ -13,7 +14,6 @@ export type WheelAction = {
   itemId: string;
   action: DemoActionId;
   kind: WheelKind;
-  /** Radial label: Teach / Gadget / Outfit / Mood peek / Nap / Gift. */
   label: string;
   shortLabel: string;
   caption: string;
@@ -59,7 +59,6 @@ const ACTION_BY_ITEM: Record<string, DemoActionId> = {
   "gadget-balloon": "hover",
   "gadget-broom": "tidy",
   "gadget-headphones": "focus",
-  "gadget-partyhat": "party",
   "outfit-raincoat": "twirl",
   "outfit-hoodie": "twirl",
   "outfit-sunglasses": "twirl",
@@ -107,7 +106,6 @@ const ICON_BY_ACTION: Record<DemoActionId, WheelIconId> = {
   chaos: "chaos",
 };
 
-/** Loops forever on a live stage. Moonwalk is three steps, then a hold. */
 const LOOPING: Set<DemoActionId> = new Set([
   "skate",
   "moonwalk",
@@ -125,22 +123,26 @@ const LOOPING: Set<DemoActionId> = new Set([
   "party",
 ]);
 
-/** Equip is the demo. If a board is on the feet, they skate this frame — no effect delay. */
+const SLOT_FOR_ACTION: Partial<Record<DemoActionId, { slot: keyof EquipmentLoadout; id: string }>> = {
+  skate: { slot: "feet", id: "gadget-skateboard" },
+  "rain-walk": { slot: "hand", id: "gadget-umbrella" },
+  "photo-pose": { slot: "hand", id: "gadget-camera" },
+  hover: { slot: "back", id: "gadget-balloon" },
+  tidy: { slot: "hand", id: "gadget-broom" },
+  focus: { slot: "head", id: "gadget-headphones" },
+  study: { slot: "head", id: "gadget-headphones" },
+  party: { slot: "head", id: "gadget-partyhat" },
+  "balloon-bunch": { slot: "back", id: "gadget-balloon" },
+};
+
+/** Possession is not a looping demo. Only an explicit demo or skill plays. */
 export function actionFromLoadout(
-  equipped: EquipmentLoadout | undefined,
+  _equipped: EquipmentLoadout | undefined,
   skill?: SkillId | null,
   demo?: DemoActionId | null,
 ): DemoActionId | null {
   if (demo) return demo;
   if (skill) return skill;
-  if (!equipped) return null;
-  if (equipped.feet === "gadget-skateboard") return "skate";
-  if (equipped.hand === "gadget-umbrella") return "rain-walk";
-  if (equipped.hand === "gadget-camera") return "photo-pose";
-  if (equipped.back === "gadget-balloon") return "hover";
-  if (equipped.hand === "gadget-broom") return "tidy";
-  if (equipped.head === "gadget-headphones") return "focus";
-  if (equipped.head === "gadget-partyhat") return "party";
   return null;
 }
 
@@ -182,9 +184,7 @@ export function moodFromDemo(action: DemoActionId | null): "idle" | "nap" | "cli
   if (action === "dance" || action === "skate" || action === "moonwalk" || action === "gift" || action === "twirl") {
     return "happy";
   }
-  if (action === "mad") return "idle";
   if (action === "study" || action === "focus") return "follow";
-  if (action === "stretch") return "idle";
   if (action === "adventure" || action === "party" || action === "balloon-bunch") return "happy";
   if (action === "chaos") return "skill";
   return "skill";
@@ -207,35 +207,21 @@ export function demoDurationMs(action: DemoActionId): number {
   return 2800;
 }
 
-/** 1–2s show-off before a price confirmation is allowed. */
 export function showOffMs(action: DemoActionId | null): number {
-  if (!action) return 1600;
+  if (!action) return 0;
   if (action === "moonwalk") return 1850;
   if (action === "rain-walk") return 1800;
   if (action === "skate") return 1800;
-  return 1600;
+  return 0;
 }
 
+/** Only the thing they used. Never invent a raincoat, sunglasses, or hoodie. */
 export function loadoutForAction(item: CatalogItem | null, action: DemoActionId): EquipmentLoadout {
   const loadout: EquipmentLoadout = {};
   if (item?.slot) loadout[item.slot] = item.id;
-  if (action === "rain-walk") {
-    loadout.hand = "gadget-umbrella";
-    loadout.body = "outfit-raincoat";
-  }
-  if (action === "skate") loadout.feet = "gadget-skateboard";
-  if (action === "moonwalk") loadout.face = "outfit-sunglasses";
-  if (action === "photo-pose") loadout.hand = "gadget-camera";
-  if (action === "hover") loadout.back = "gadget-balloon";
-  if (action === "tidy") loadout.hand = "gadget-broom";
-  if (action === "nap") loadout.body = "outfit-hoodie";
-  if (action === "focus") loadout.head = "gadget-headphones";
-  if (action === "party") loadout.head = "gadget-partyhat";
-  if (action === "balloon-bunch") loadout.back = "gadget-balloon";
-  if (action === "study") loadout.head = loadout.head ?? "gadget-headphones";
+  const mapped = SLOT_FOR_ACTION[action];
+  if (mapped && !loadout[mapped.slot]) loadout[mapped.slot] = mapped.id;
   if (action === "twirl" && item?.slot === "body") loadout.body = item.id;
-  if (action === "gift") loadout.back = loadout.back ?? "gadget-balloon";
-  if (action === "adventure") loadout.face = "outfit-sunglasses";
   return loadout;
 }
 
@@ -249,8 +235,9 @@ export function speciesForCatalogItem(item: CatalogItem): SpeciesId {
 }
 
 export function loadoutForCatalogItem(item: CatalogItem): EquipmentLoadout {
+  if (item.slot) return { [item.slot]: item.id };
   const action = demoActionForItem(item);
-  if (!action) return item.slot ? { [item.slot]: item.id } : {};
+  if (!action) return {};
   return loadoutForAction(item, action);
 }
 
@@ -259,14 +246,13 @@ export function wheelActionFromItem(item: CatalogItem): WheelAction | null {
   if (!action) return null;
   const kind: WheelKind = item.kind === "skill" ? "skill" : item.kind === "outfit" || item.kind === "drop" ? "outfit" : "gadget";
   const name = item.name;
-  const label = kind === "skill" ? `Teach ${name}` : name;
   return {
     itemId: item.id,
     action,
     kind,
-    label,
-    shortLabel: label,
-    caption: kind === "skill" && item.skillId === "moonwalk" ? "Moonwalk. Backward, smooth, slightly illegal." : label,
+    label: name,
+    shortLabel: name,
+    caption: name,
     accent: item.accent,
     icon: ICON_BY_ACTION[action],
     equip: loadoutForAction(item, action),
@@ -287,14 +273,11 @@ function slot(
   free = false,
 ): ResolvedWheelItem {
   const ownedItem = free || ownedFlag(action.itemId, owned, unlocked);
-  return { ...action, owned: ownedItem, preview: !ownedItem };
+  const catalogItem = catalogById.get(action.itemId);
+  const preview = !ownedItem && (!catalogItem || !isShopSafe(catalogItem));
+  return { ...action, owned: ownedItem, preview };
 }
 
-/**
- * Live-pet radial: dedicated Moonwalk + Skateboard wedges that fire those demos,
- * plus sell-now Umbrella / Raincoat, then presence. 8 slots.
- * Skateboard / Moonwalk stay preview (shopSafe false) until a later shop-gate.
- */
 export function presencePieForCompanion(input: {
   species: SpeciesId;
   ownedItemIds?: Iterable<string>;
@@ -310,6 +293,8 @@ export function presencePieForCompanion(input: {
   const nap = catalogById.get("skill-nap");
   const climb = catalogById.get("skill-climb");
 
+  const pie: ResolvedWheelItem[] = [];
+
   const moonwalkAction = moonwalk ? wheelActionFromItem(moonwalk) : null;
   const skateAction = skate ? wheelActionFromItem(skate) : null;
   const umbrellaAction = umbrella ? wheelActionFromItem(umbrella) : null;
@@ -317,54 +302,10 @@ export function presencePieForCompanion(input: {
   const napAction = nap ? wheelActionFromItem(nap) : null;
   const climbAction = climb ? wheelActionFromItem(climb) : null;
 
-  const pie: ResolvedWheelItem[] = [];
-
-  if (moonwalkAction) {
-    pie.push(
-      slot(
-        {
-          ...moonwalkAction,
-          label: "Moonwalk",
-          shortLabel: "Moonwalk",
-          caption: "Moonwalk. Backward, smooth, slightly illegal.",
-        },
-        owned,
-        unlocked,
-      ),
-    );
-  }
-  if (skateAction) {
-    pie.push(
-      slot(
-        {
-          ...skateAction,
-          label: "Skateboard",
-          shortLabel: "Skateboard",
-          caption: "Skateboard. Click it. They skate.",
-        },
-        owned,
-        unlocked,
-      ),
-    );
-  }
-  if (umbrellaAction) {
-    pie.push(
-      slot(
-        { ...umbrellaAction, label: "Umbrella", shortLabel: "Pocket Umbrella", caption: "Pocket Umbrella. Rain-walks." },
-        owned,
-        unlocked,
-      ),
-    );
-  }
-  if (raincoatAction) {
-    pie.push(
-      slot(
-        { ...raincoatAction, label: "Raincoat", shortLabel: "Yellow Raincoat", caption: "Yellow Raincoat. A shape in a second." },
-        owned,
-        unlocked,
-      ),
-    );
-  }
+  if (moonwalkAction) pie.push(slot({ ...moonwalkAction, label: "Moonwalk", shortLabel: "Moonwalk" }, owned, unlocked));
+  if (skateAction) pie.push(slot({ ...skateAction, label: "Skateboard", shortLabel: "Skateboard" }, owned, unlocked));
+  if (umbrellaAction) pie.push(slot({ ...umbrellaAction, label: "Umbrella", shortLabel: "Umbrella" }, owned, unlocked));
+  if (raincoatAction) pie.push(slot({ ...raincoatAction, label: "Raincoat", shortLabel: "Raincoat" }, owned, unlocked));
 
   pie.push(
     slot(
@@ -372,9 +313,9 @@ export function presencePieForCompanion(input: {
         itemId: "presence-mood-peek",
         action: "mood-peek",
         kind: "presence",
-        label: "Mood peek",
-        shortLabel: "Mood peek",
-        caption: "They’re curious. Soft, not a health bar.",
+        label: "Peek",
+        shortLabel: "Peek",
+        caption: "Peek",
         accent: "#C5D4E0",
         icon: "mood",
         equip: {},
@@ -387,9 +328,7 @@ export function presencePieForCompanion(input: {
     ),
   );
 
-  if (napAction) {
-    pie.push(slot({ ...napAction, label: "Nap", shortLabel: "Nap" }, owned, unlocked, true));
-  }
+  if (napAction) pie.push(slot({ ...napAction, label: "Nap", shortLabel: "Nap" }, owned, unlocked, true));
 
   pie.push(
     slot(
@@ -399,7 +338,7 @@ export function presencePieForCompanion(input: {
         kind: "presence",
         label: "Gift",
         shortLabel: "Gift",
-        caption: "A parcel. Birthday and habit magic stay free.",
+        caption: "A parcel.",
         accent: "#E86B6B",
         icon: "party",
         equip: { head: "gadget-partyhat", back: "gadget-balloon" },
@@ -412,16 +351,11 @@ export function presencePieForCompanion(input: {
     ),
   );
 
-  if (climbAction) {
-    pie.push(slot({ ...climbAction, label: "Climb", shortLabel: "Climb" }, owned, unlocked, true));
-  }
+  if (climbAction) pie.push(slot({ ...climbAction, label: "Climb", shortLabel: "Climb" }, owned, unlocked, true));
 
   return pie.slice(0, 8);
 }
 
-/**
- * Radial for hero, studio, profile, and other live companion stages.
- */
 export function wheelForCompanion(input: {
   species: SpeciesId;
   ownedItemIds?: Iterable<string>;

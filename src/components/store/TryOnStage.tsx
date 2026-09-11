@@ -5,8 +5,9 @@ import { useMemo, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
-import { adoptHref, isShopSafe, pdpCtaLabel, shopTitle } from "@/lib/catalog-paths";
-import { demoActionForItem, showOffMs } from "@/lib/demo-actions";
+import { adoptHref, isShopSafe, pdpCtaLabel, profileHref, shopTitle } from "@/lib/catalog-paths";
+import { demoActionForItem } from "@/lib/demo-actions";
+import { useNest } from "@/lib/state/nest-context";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
@@ -24,16 +25,17 @@ export function TryOnStage({
   initialSkill?: SkillId | null;
   oneLiner?: string;
 }) {
+  const nest = useNest();
+  const roommate = nest.instances[0] ?? null;
   const [equipped, setEquipped] = useState<EquipmentLoadout>(() =>
     Object.keys(initialEquipped).length
       ? initialEquipped
       : product.slot
-        ? { [product.slot]: product.id }
-        : {},
+        ? { ...(roommate?.equipped ?? {}), [product.slot]: product.id }
+        : { ...(roommate?.equipped ?? {}) },
   );
   const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
   const [playAction, setPlayAction] = useState<DemoActionId | null>(() => demoActionForItem(product));
-  const [showOffKey, setShowOffKey] = useState(0);
 
   const tryOns = useMemo(
     () => suggestions.filter((item) => item.slot || item.skillId),
@@ -52,7 +54,6 @@ export function TryOnStage({
     }
     const action = demoActionForItem(item);
     if (action) setPlayAction(action);
-    setShowOffKey((value) => value + 1);
     if (item.skillId) {
       setSkill(item.skillId);
       track("skill_performed", { skill: item.skillId });
@@ -60,89 +61,116 @@ export function TryOnStage({
     }
   }
 
-  const wearParam = Object.values(equipped).filter(Boolean).join(",");
   const heading = product.kind === "companion" ? `Adopt ${product.name}` : shopTitle(product);
   const shopSafe = isShopSafe(product);
-  const cta = pdpCtaLabel(product);
-  const waitMs = showOffMs(playAction ?? demoActionForItem(product));
-  const waitCopy =
-    product.kind === "companion" ? "Meet them first." : "Watch them first — then the price.";
+  const owned = nest.owns(product.id);
+  const equippedOnThem = product.slot ? roommate?.equipped[product.slot] === product.id : false;
+
+  function buy() {
+    nest.signInDemo();
+    nest.grantItems([product.id], "purchase");
+    track("checkout_started", { itemIds: product.id, demo: true });
+  }
+
+  function equip() {
+    if (!roommate || !product.slot) return;
+    nest.saveOutfit(roommate.id, { ...roommate.equipped, [product.slot]: product.id });
+  }
+
+  function takeOff() {
+    if (!roommate || !product.slot) return;
+    const next = { ...roommate.equipped };
+    delete next[product.slot];
+    nest.saveOutfit(roommate.id, next);
+  }
 
   return (
     <div className="bg-paper">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
         <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream stage-frame">
           <PlayableStage
-            species={species}
+            species={roommate?.speciesId ?? species}
             equipped={equipped}
             skill={skill}
             mood={skill ? "skill" : "idle"}
             className="h-full w-full"
             cameraZ={5.15}
-            companionName={product.kind === "companion" ? product.name : species}
-            hint="Tap them — Moonwalk, Skateboard, Umbrella."
-            autoPlay={demoActionForItem(product)}
+            companionName={roommate?.name ?? (product.kind === "companion" ? product.name : species)}
+            instanceId={roommate?.id}
+            seed={roommate?.seed}
+            persistEquip={owned}
             playAction={playAction}
+            autoPlay={demoActionForItem(product)}
           />
         </div>
         <div>
-          <p className="kicker">
-            {product.kind === "companion" ? "Live companion" : "Live try-on"}
-          </p>
+          <p className="kicker">{product.kind === "companion" ? "Adopt" : owned ? "Owned" : "Try on"}</p>
           <h1 className="mt-3 max-w-[12ch] font-display text-5xl leading-[0.92] text-ink md:text-7xl">{heading}</h1>
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
-          <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
-          {product.kind === "skill" && product.skillId === "moonwalk" ? (
-            <p className="mt-3 max-w-md font-medium text-ink">Moonwalk. Backward, smooth, slightly illegal.</p>
-          ) : null}
-          {product.kind === "companion" ? (
-            <p className="mt-3 max-w-md text-sm text-ink-soft">
-              Soft trial: live with this individual before anything else. Personality is not for sale.
-            </p>
-          ) : (
-            <p className="mt-3 max-w-md text-sm text-ink-soft">
-              Cosmetics and Teach skills stay yours. Birthday and habit magic stay free.
-            </p>
-          )}
-          <div className="mt-8">
-            {shopSafe ? (
-              <div
-                key={`${product.id}-${showOffKey}`}
-                className="show-off-stack"
-                style={{ ["--show-off" as string]: `${waitMs}ms` }}
-              >
-                <p className="show-off-wait text-sm text-ink-soft">{waitCopy}</p>
-                <div className="show-off-cta">
-                  <Link
-                    href={adoptHref([product.id])}
-                    onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-                    className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
-                  >
-                    {product.kind === "companion" ? `Adopt ${product.name}` : cta}
-                  </Link>
-                </div>
-              </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            {product.kind === "companion" ? (
+              roommate?.speciesId === product.speciesId ? (
+                <Link href={profileHref(roommate.id)} className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper">
+                  {roommate.name} is yours
+                </Link>
+              ) : (
+                <Link
+                  href={adoptHref([product.id])}
+                  onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+                  className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper"
+                >
+                  Adopt {product.name}
+                </Link>
+              )
+            ) : shopSafe ? (
+              owned ? (
+                product.slot ? (
+                  equippedOnThem ? (
+                    <button type="button" onClick={takeOff} className="rounded-full bg-ink px-6 py-3 text-paper">
+                      On {roommate?.name ?? "them"}
+                    </button>
+                  ) : (
+                    <button type="button" onClick={equip} className="rounded-full bg-ink px-6 py-3 text-paper">
+                      Equip
+                    </button>
+                  )
+                ) : (
+                  <p className="rounded-full bg-mist px-6 py-3 text-sm text-ink">Owned</p>
+                )
+              ) : (
+                <button type="button" onClick={buy} className="rounded-full bg-ink px-6 py-3 text-paper">
+                  {pdpCtaLabel(product)}
+                </button>
+              )
+            ) : product.id === "gadget-camera" ? (
+              owned ? (
+                <p className="text-sm text-moss">The camera is theirs.</p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    nest.signInDemo();
+                    nest.grantItems(["gadget-camera"], "gift");
+                  }}
+                  className="rounded-full bg-ink px-6 py-3 text-paper"
+                >
+                  Give them the camera
+                </button>
+              )
             ) : (
-              <p className="max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-sm text-ink-soft ring-1 ring-ink/10">
-                Preview only. Watch the trick first. If you cannot see it in a second, we do not sell
-                it yet. Shop what you can see: Raincoat · Pocket Umbrella.
-              </p>
+              <p className="max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-sm text-ink-soft">Preview</p>
             )}
           </div>
           {tryOns.filter(isShopSafe).length > 0 && (
             <div className="mt-10">
-              <p className="text-sm text-ink-soft">Try a look on this one</p>
+              <p className="text-sm text-ink-soft">Try on</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {tryOns.filter(isShopSafe).map((item) => {
                   const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
-                  const href = item.skillId
-                    ? `?wear=${wearParam || ""}&play=${item.skillId}`
-                    : `?wear=${item.id}`;
                   return (
-                    <Link
+                    <button
                       key={item.id}
-                      href={href}
-                      scroll={false}
+                      type="button"
                       onClick={() => apply(item)}
                       aria-pressed={active}
                       className={`rounded-full border px-3 py-1.5 text-sm ${
@@ -150,7 +178,7 @@ export function TryOnStage({
                       }`}
                     >
                       {shopTitle(item)}
-                    </Link>
+                    </button>
                   );
                 })}
               </div>

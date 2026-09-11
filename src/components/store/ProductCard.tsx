@@ -65,7 +65,7 @@ export function ProductCard({
           <h3 className="mt-1 font-display text-3xl leading-none text-ink">{title}</h3>
           <p className="mt-2 text-sm text-ink-soft">{item.behaviorNote ?? item.tagline}</p>
           <p className="mt-3 text-sm tabular-nums text-ink">
-            {shopSafe ? formatPrice(item.priceCents) : "Preview — not for sale yet"}
+            {owned ? "Owned" : shopSafe ? formatPrice(item.priceCents) : "Preview"}
           </p>
         </div>
       </Link>

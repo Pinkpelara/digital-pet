@@ -4,22 +4,33 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ActionWheel } from "@/components/stage/ActionWheel";
-import { Creature } from "@/components/creatures/Creature";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
 import { brand } from "@/lib/brand";
 import { adoptFromCents } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
+import { profileHref } from "@/lib/catalog-paths";
+import { useNest } from "@/lib/state/nest-context";
 
 const HeroStage = dynamic(() => import("@/components/stage/HeroStage").then((mod) => mod.HeroStage), {
   ssr: false,
 });
 
 export function HeroBanner() {
-  const playable = usePlayableCompanion({ species: "bloop" });
+  const nest = useNest();
+  const roommate = nest.hydrated ? nest.instances[0] : null;
+  const species = roommate?.speciesId ?? "bloop";
+  const playable = usePlayableCompanion({
+    species,
+    equipped: roommate?.equipped,
+    unlockedSkills: roommate?.unlockedSkills,
+    instanceId: roommate?.id,
+    seed: roommate?.seed,
+    persistEquip: Boolean(roommate),
+  });
   const [stageReady, setStageReady] = useState(false);
-  const headline = brand.heroHeadline;
   const adoptFrom = formatPrice(adoptFromCents());
+  const name = roommate?.name ?? "Bloop";
 
   useEffect(() => {
     let cancelled = false;
@@ -49,10 +60,11 @@ export function HeroBanner() {
         {stageReady ? (
           <>
             <HeroStage
+              species={species}
               mood={playable.mood}
               skill={playable.skill}
               demo={playable.demo}
-              sulk={playable.sulk}
+              sulk={false}
               equipped={playable.equipped}
             />
             <StageFx demo={playable.demo} />
@@ -67,25 +79,20 @@ export function HeroBanner() {
       <div className="pointer-events-none relative z-20 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-24 md:justify-center md:px-10 md:pb-24 md:pt-20">
         <p className="kicker">{brand.tagline}</p>
         <h1 className="relative mt-5 max-w-[11ch] font-display text-5xl leading-[0.9] text-ink md:text-7xl lg:text-[5.4rem]">
-          {headline}
-          <span className="headline-peek pointer-events-none absolute -right-8 -top-8 hidden md:block" aria-hidden>
-            <Creature species="niblet" size={72} mood="climb" decorative equipped={{ face: "outfit-sunglasses" }} />
-          </span>
+          {brand.heroHeadline}
         </h1>
         <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">{brand.heroSub}</p>
         <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
-          <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-            Adopt from {adoptFrom}. Start with Bloop.
-          </Link>
+          {roommate ? (
+            <Link href={profileHref(roommate.id)} className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+              {name} is here
+            </Link>
+          ) : (
+            <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+              Adopt from {adoptFrom}. Start with Bloop.
+            </Link>
+          )}
         </div>
-        <p className="mt-5 max-w-md text-sm text-ink-soft">{brand.heroSupport}</p>
-        <p className="pointer-events-auto mt-2 max-w-md text-sm text-ink-soft">
-          They never vanish from neglect. Mute the chaos anytime.{" "}
-          <Link href="/browser" className="underline underline-offset-4">
-            Pin the browser
-          </Link>
-          {playable.sulk ? ". They’re waiting." : "."}
-        </p>
       </div>
 
       <div
@@ -96,20 +103,24 @@ export function HeroBanner() {
         <button
           type="button"
           className={`absolute inset-0 cursor-pointer bg-transparent ${playable.open ? "pointer-events-none" : ""}`}
-          onClick={playable.toggleWheel}
-          aria-label="Open Bloop’s Moonwalk, Skateboard, and gadgets"
-          aria-expanded={playable.open}
+          onClick={playable.pat}
+          aria-label={`Pat ${name}`}
         />
+        <button
+          type="button"
+          className="absolute bottom-6 right-6 z-30 rounded-full bg-ink/80 px-3 py-1.5 text-xs text-paper"
+          onClick={playable.toggleWheel}
+          aria-expanded={playable.open}
+        >
+          Tricks
+        </button>
         <ActionWheel
           items={playable.wheel}
           open={playable.open}
           onSelect={playable.play}
           onClose={playable.closeWheel}
-          name="Bloop"
+          name={name}
         />
-        <p className="stage-caption max-md:bottom-4">
-          {playable.demo ? playable.caption : playable.sulk ? "They’re waiting." : "Move. Click them."}
-        </p>
       </div>
     </section>
   );

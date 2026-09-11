@@ -109,8 +109,8 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
               and they turn their back. Tap them. They come back.
             </li>
             <li>
-              <span className="font-medium text-ink">Personality is still not for sale.</span> You
-              meet it. Secrets stay ??? until they don’t. Two Bloops are still two problems.
+              <span className="font-medium text-ink">They’re still them.</span> Two Bloops, two
+              problems.
             </li>
           </ul>
           <div className="mt-8 flex flex-wrap gap-3">

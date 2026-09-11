@@ -5,8 +5,8 @@ import { items } from "@/data/catalog";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { demoActionForItem } from "@/lib/demo-actions";
+import { isShopSafe } from "@/lib/catalog-paths";
 import { useNest } from "@/lib/state/nest-context";
-import { fullLabels } from "@/lib/personality";
 import type { CompanionInstance, DemoActionId, EquipSlot, SkillId } from "@/lib/types";
 
 const tabs = ["LOOK", "GADGET", "SKILLS"] as const;
@@ -30,8 +30,6 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
     () => items.filter((item) => (tabKinds[tab] as readonly string[]).includes(item.kind)),
     [tab],
   );
-  const remaining = fullLabels(instance.seed).length - instance.discovered.length;
-
   function toggle(itemId: string, slot?: EquipSlot, skillId?: SkillId) {
     const item = items.find((entry) => entry.id === itemId);
     if (slot) {
@@ -64,7 +62,9 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
           cameraZ={5.5}
           companionName={instance.name}
           unlockedSkills={instance.unlockedSkills}
-          hint="Tap them — Moonwalk, Skateboard, Umbrella."
+          instanceId={instance.id}
+          seed={instance.seed}
+          persistEquip
         />
       </div>
       <div>
@@ -104,7 +104,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
                     </span>
                   </span>
                   <span className="text-xs uppercase tracking-wider text-ink-soft">
-                    {owned ? (active ? "On" : item.skillId ? "Play" : "Equip") : "Preview"}
+                    {owned ? (active ? "On" : item.skillId ? "Play" : "Equip") : isShopSafe(item) ? "Try" : "Preview"}
                   </span>
                 </button>
               </li>
@@ -124,34 +124,6 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
           </button>
           {saved && <p className="text-sm text-moss">Saved to {instance.name}.</p>}
         </div>
-
-        <div className="mt-8 rounded-[1.4rem] bg-paper p-5 ring-1 ring-ink/8">
-          <p className="text-xs uppercase tracking-[0.16em] text-ink-soft">Personality discovered</p>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {instance.discovered.length > 0 ? (
-              instance.discovered.map((entry) => (
-                <li
-                  key={entry.label}
-                  className="rounded-full border border-ink/15 px-3 py-1 text-sm text-ink"
-                >
-                  {entry.label}
-                </li>
-              ))
-            ) : (
-              <li className="text-ink-soft">Nothing obvious yet.</li>
-            )}
-          </ul>
-          <p className="mt-3 text-sm text-ink-soft">
-            {remaining > 0
-              ? `There ${remaining === 1 ? "is" : "are"} ${remaining} more trait${remaining === 1 ? "" : "s"} you have not seen yet. You cannot set them. You cannot buy them.`
-              : "You have seen everything there is to see. For now."}
-          </p>
-        </div>
-
-        <p className="mt-6 text-sm text-ink-soft">
-          Equip still lives here. Every look does a 1–2s show-off on them first. Gadgets change what
-          they do; personality is not something you can equip. Cosmetics and Teach skills stay yours.
-        </p>
       </div>
     </div>
   );

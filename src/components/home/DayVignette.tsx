@@ -44,7 +44,7 @@ const BEATS: Array<{
   {
     id: "party",
     label: "Birthday",
-    body: "Party hat + confetti. Balloon Bunch is a free 24-hour Teach. We sell the hat, not the cake.",
+    body: "Party hat + confetti. Balloon Bunch is a free 24-hour Teach. We do not paywall the cake.",
     demo: "party",
     equipped: { head: "gadget-partyhat", back: "gadget-balloon" },
     ms: 4000,
