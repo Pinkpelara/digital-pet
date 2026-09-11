@@ -4,13 +4,14 @@ import { createContext, useCallback, useContext, useMemo, useSyncExternalStore }
 import { items } from "@/data/catalog";
 import { track } from "@/lib/analytics";
 import { revealNextTrait } from "@/lib/personality";
-import { demoUser, grantItemsLocally } from "@/lib/state/grant-demo";
+import { claimAndEquip, demoUser, grantItemsLocally, type GrantOptions } from "@/lib/state/grant-demo";
 import { emptyNest, readNest, writeNest, EMPTY_NEST, type PersistedNest } from "@/lib/state/storage";
 import { useClientMounted } from "@/lib/state/use-client-mounted";
 import type {
   BehaviourCounters,
   CompanionInstance,
   DemoUser,
+  EquipmentLoadout,
   EquipSlot,
   OwnershipRecord,
   PersonalityLabel,
@@ -24,7 +25,8 @@ type NestContextValue = PersistedNest & {
   signInDemo: (user?: Partial<DemoUser>) => DemoUser;
   signOut: () => void;
   applyGrant: (input: { user: DemoUser; ownership: OwnershipRecord[]; instances: CompanionInstance[] }) => void;
-  grantItems: (itemIds: string[], source?: OwnershipRecord["source"]) => CompanionInstance[];
+  grantItems: (itemIds: string[], source?: OwnershipRecord["source"], opts?: GrantOptions) => CompanionInstance[];
+  claimAndEquip: (loadout: EquipmentLoadout, opts?: GrantOptions & { source?: OwnershipRecord["source"] }) => CompanionInstance | null;
   saveOutfit: (instanceId: string, equipped: CompanionInstance["equipped"]) => void;
   renameCompanion: (instanceId: string, name: string) => void;
   /** Called when a behaviour is observed. May unlock a personality label. */
@@ -59,7 +61,12 @@ function subscribe(listener: () => void) {
 let snapshotCache: { raw: string; value: PersistedNest } | null = null;
 
 function persist(next: PersistedNest) {
-  writeNest(next);
+  const wrote = writeNest(next);
+  if (!wrote) {
+    snapshotCache = null;
+    emit();
+    return;
+  }
   snapshotCache = { raw: JSON.stringify(next), value: next };
   emit();
 }
@@ -123,19 +130,31 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
   );
 
   const grantItems = useCallback(
-    (itemIds: string[], source: OwnershipRecord["source"] = "purchase") => {
-      persist(grantItemsLocally(getSnapshot(), itemIds, source));
+    (itemIds: string[], source: OwnershipRecord["source"] = "purchase", opts?: GrantOptions) => {
+      persist(grantItemsLocally(getSnapshot(), itemIds, source, opts));
       track("purchase_granted", { itemIds: itemIds.join(",") });
       return getSnapshot().instances;
     },
     [],
   );
 
+  const claimGear = useCallback((loadout: EquipmentLoadout, opts?: GrantOptions & { source?: OwnershipRecord["source"] }) => {
+    persist(claimAndEquip(getSnapshot(), loadout, opts));
+    const live = getSnapshot();
+    const id = opts?.instanceId;
+    const resident = (id && live.instances.find((row) => row.id === id)) || live.instances[0] || null;
+    if (resident) track("outfit_saved", { instanceId: resident.id });
+    return resident;
+  }, []);
+
   const saveOutfit = useCallback((instanceId: string, equipped: CompanionInstance["equipped"]) => {
-    update((prev) => ({
-      ...prev,
-      instances: prev.instances.map((row) => (row.id === instanceId ? { ...row, equipped } : row)),
-    }));
+    update((prev) => {
+      if (!prev.instances.some((row) => row.id === instanceId)) return prev;
+      return {
+        ...prev,
+        instances: prev.instances.map((row) => (row.id === instanceId ? { ...row, equipped } : row)),
+      };
+    });
     track("outfit_saved", { instanceId });
   }, [update]);
 
@@ -205,6 +224,7 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
       signOut,
       applyGrant,
       grantItems,
+      claimAndEquip: claimGear,
       saveOutfit,
       renameCompanion,
       recordBehaviour,
@@ -219,6 +239,7 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       applyGrant,
+      claimGear,
       discoverSecret,
       grantItems,
       hydrated,

@@ -1,6 +1,13 @@
 import { companions, items } from "@/data/catalog";
 import { applyTendencies, randomSeed, statsFromSeed } from "@/lib/personality";
-import type { CompanionInstance, DemoUser, OwnershipRecord, SkillId } from "@/lib/types";
+import type {
+  CompanionInstance,
+  DemoUser,
+  EquipmentLoadout,
+  OwnershipRecord,
+  SkillId,
+  SpeciesId,
+} from "@/lib/types";
 import type { PersistedNest } from "@/lib/state/storage";
 
 export const demoUser = (): DemoUser => ({
@@ -44,24 +51,40 @@ export function newCompanionInstance(
   };
 }
 
+export type GrantOptions = {
+  instanceId?: string;
+  species?: SpeciesId;
+};
+
+function companionSku(species: SpeciesId): string | undefined {
+  return items.find((entry) => entry.kind === "companion" && entry.speciesId === species && entry.active)?.id;
+}
+
+/**
+ * Buying, gifting, or trying-on writes ownership AND puts the new slotted
+ * things on a living companion. An empty nest gets Bloop so "it's theirs"
+ * has someone to belong to. Existing outfits are merged, not replaced.
+ */
 export function grantItemsLocally(
   prev: PersistedNest,
   itemIds: string[],
   source: OwnershipRecord["source"] = "purchase",
+  opts: GrantOptions = {},
 ): PersistedNest {
   const user = prev.user ?? demoUser();
   const ownershipByItem = new Map(prev.ownership.map((row) => [row.itemId, row]));
   const instanceById = new Map(prev.instances.map((row) => [row.id, row]));
+  const createdIds: string[] = [];
 
-  for (const itemId of itemIds) {
+  const adopt = (itemId: string, itemSource: OwnershipRecord["source"]) => {
     const item = items.find((entry) => entry.id === itemId && entry.active);
-    if (!item) continue;
+    if (!item) return;
     if (!ownershipByItem.has(itemId)) {
       ownershipByItem.set(itemId, {
         id: crypto.randomUUID(),
         userId: user.id,
         itemId,
-        source,
+        source: itemSource,
         grantedAt: new Date().toISOString(),
       });
     }
@@ -71,17 +94,28 @@ export function grantItemsLocally(
       const ownership = ownershipByItem.get(itemId)!;
       const instance = newCompanionInstance(item.speciesId, ownership.id, user.id);
       instanceById.set(instance.id, instance);
+      createdIds.push(instance.id);
     }
-  }
+  };
 
-  const ownership = [...ownershipByItem.values()];
+  for (const itemId of itemIds) adopt(itemId, source);
+
   const gear: CompanionInstance["equipped"] = {};
-  for (const row of ownership) {
-    const item = items.find((entry) => entry.id === row.itemId);
-    if (item?.slot) gear[item.slot] = item.id;
+  let needsResident = false;
+  for (const itemId of itemIds) {
+    const item = items.find((entry) => entry.id === itemId);
+    if (item?.slot) {
+      gear[item.slot] = item.id;
+      needsResident = true;
+    }
+    if (item?.skillId) needsResident = true;
   }
 
-  // Skills unlock for everyone. Slotted stuff lives on the newest roommate.
+  if (needsResident && instanceById.size === 0) {
+    const sku = companionSku(opts.species ?? "bloop") ?? "companion-bloop";
+    adopt(sku, "demo");
+  }
+
   const raw = [...instanceById.values()].map((instance) => {
     let next = instance;
     for (const itemId of itemIds) {
@@ -92,16 +126,33 @@ export function grantItemsLocally(
     }
     return next;
   });
-  const newest = [...raw].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+
+  const target =
+    (opts.instanceId ? raw.find((row) => row.id === opts.instanceId) : undefined) ??
+    (createdIds[0] ? raw.find((row) => row.id === createdIds[0]) : undefined) ??
+    raw[0];
+
+  const hasGear = Object.keys(gear).length > 0;
   const instances = raw.map((instance) => {
-    if (!newest || instance.id !== newest.id) return instance;
+    if (!hasGear || !target || instance.id !== target.id) return instance;
     return { ...instance, equipped: { ...instance.equipped, ...gear } };
   });
 
   return {
     ...prev,
     user,
-    ownership,
+    ownership: [...ownershipByItem.values()],
     instances,
   };
+}
+
+/** Try-on / wheel equip: grant the loadout and leave it on them. Empty loadout is a no-op. */
+export function claimAndEquip(
+  prev: PersistedNest,
+  loadout: EquipmentLoadout,
+  opts: GrantOptions & { source?: OwnershipRecord["source"] } = {},
+): PersistedNest {
+  const itemIds = Object.values(loadout).filter((id): id is string => Boolean(id));
+  if (itemIds.length === 0) return prev;
+  return grantItemsLocally(prev, itemIds, opts.source ?? "demo", opts);
 }

@@ -17,7 +17,7 @@ export function HeroLiving({ onReady }: { onReady?: () => void }) {
     unlockedSkills: roommate?.unlockedSkills,
     instanceId: roommate?.id,
     seed: roommate?.seed,
-    persistEquip: Boolean(roommate),
+    persistEquip: nest.hydrated,
   });
   const name = roommate?.name ?? "Bloop";
 

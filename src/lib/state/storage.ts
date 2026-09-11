@@ -22,26 +22,24 @@ export const emptyNest = (): PersistedNest => EMPTY_NEST;
 
 /** Defensive: an instance without a seed is not a valid individual. */
 function normalize(instance: CompanionInstance): CompanionInstance {
-  if (instance.seed?.values) {
-    return {
-      ...instance,
-      discovered: instance.discovered ?? [],
-      counters: instance.counters ?? {},
-      secrets: instance.secrets ?? [],
-      favouriteSpot: instance.favouriteSpot ?? null,
-      bonds: instance.bonds ?? [],
-    };
-  }
-  const seed = randomSeed();
-  return {
-    ...instance,
-    seed,
-    stats: statsFromSeed(seed),
+  const extras = {
+    equipped: instance.equipped ?? {},
+    unlockedSkills: instance.unlockedSkills ?? [],
     discovered: instance.discovered ?? [],
     counters: instance.counters ?? {},
     secrets: instance.secrets ?? [],
     favouriteSpot: instance.favouriteSpot ?? null,
     bonds: instance.bonds ?? [],
+  };
+  if (instance.seed?.values) {
+    return { ...instance, ...extras };
+  }
+  const seed = randomSeed();
+  return {
+    ...instance,
+    ...extras,
+    seed,
+    stats: statsFromSeed(seed),
   };
 }
 
@@ -62,11 +60,35 @@ export function readNest(): PersistedNest {
   }
 }
 
-export function writeNest(nest: PersistedNest): void {
-  if (typeof window === "undefined") return;
+export function nestHasPossessions(nest: PersistedNest): boolean {
+  return nest.instances.length > 0 || nest.ownership.length > 0;
+}
+
+function peekStoredNest(): PersistedNest | null {
+  if (typeof window === "undefined") return null;
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(nest));
+    const raw = window.localStorage.getItem(KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as PersistedNest;
   } catch {
-    /* private mode / blocked storage */
+    return null;
+  }
+}
+
+/**
+ * Refuse to replace a nest that already has people/things with an empty one.
+ * Hydration and demo boot used to write EMPTY_NEST over Kevin's umbrella.
+ */
+export function writeNest(nest: PersistedNest): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const existing = peekStoredNest();
+    if (existing && nestHasPossessions(existing) && !nestHasPossessions(nest)) {
+      return false;
+    }
+    window.localStorage.setItem(KEY, JSON.stringify(nest));
+    return true;
+  } catch {
+    return false;
   }
 }
