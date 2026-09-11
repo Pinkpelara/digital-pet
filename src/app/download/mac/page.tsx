@@ -10,7 +10,7 @@ export default function MacDownloadPage() {
       <p className="mt-4 text-ink-soft">
         No .dmg yet. Adopt on the web first — that is the real product today. If you cannot install apps,{" "}
         <Link href="/browser" className="underline">
-          add Sillkin to your browser
+          add them to your browser
         </Link>
         .
       </p>

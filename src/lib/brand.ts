@@ -1,14 +1,27 @@
+/**
+ * TEMPORARY BRANDING — DO NOT SCATTER BRAND STRINGS.
+ *
+ * The final product name has not been chosen yet. This file is the single
+ * source of truth: replace TEMP_BRAND_NAME (and, if needed, the strings below)
+ * and every visible surface updates.
+ *
+ * Migration note: the previous working name was "Sillkin" and its "sill /
+ * vinyl presence / residents / volumes" language is intentionally gone.
+ */
+
+export const TEMP_BRAND_NAME = "Companions";
+
 export const brand = {
-  name: "Sillkin",
-  domain: "sillkin.app",
-  tagline: "Soft volume for the edge of the screen.",
-  hero: "Tiny creatures for your screen. Adopt one. Dress it. Teach it tricks. Keep them on the website, pin them in a browser, or optionally bring them to a desktop app.",
-  concept: ["Adopt", "Customize", "Keep them close"] as const,
+  name: TEMP_BRAND_NAME,
+  domain: "companions.app",
+  tagline: "Tiny creatures that live with you.",
+  hero: "A tiny creature that lives on your screen. Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be. No two grow up exactly alike.",
+  concept: ["Adopt", "Discover", "Make it yours", "Let it loose"] as const,
   deepLinkScheme: "companions",
-  supportEmail: "hello@sillkin.app",
+  supportEmail: "hello@companions.app",
   ageGate: "13+",
   audienceNote:
-    "Sillkin is a general-audience product. Accounts and payments are for adults. There is no kids chat, no social feed, and no loot boxes — just fixed, transparent prices.",
+    "General audience. Accounts and payments are for adults. No kids chat, no social feed, no loot boxes — just fixed, transparent prices.",
 };
 
 export const navLinks = [
@@ -16,7 +29,6 @@ export const navLinks = [
   { href: "/closet", label: "Closet" },
   { href: "/gadgets", label: "Gadgets" },
   { href: "/skills", label: "Skills" },
-  { href: "/personality", label: "Personality" },
   { href: "/drops", label: "Drops" },
 ] as const;
 

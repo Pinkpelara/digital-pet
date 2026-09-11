@@ -23,8 +23,8 @@ export function ProfileView({ publicId }: { publicId: string }) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Public nest · {publicId}</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">{user?.displayName ?? "Someone"}&apos;s sill</h1>
+      <p className="text-xs uppercase tracking-[0.2em] text-moss">Public profile · {publicId}</p>
+      <h1 className="mt-2 font-display text-5xl text-ink">{user?.displayName ?? "Someone"}&apos;s companions</h1>
       <p className="mt-3 text-ink-soft">
         A quiet showcase — no comments, no feed, no kids chat. Just a creature you can look at.
       </p>

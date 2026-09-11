@@ -18,9 +18,9 @@ export const livePaths: LivePath[] = [
     id: "website",
     kicker: "Primary · ready now",
     title: "Keep them on the website",
-    body: "They already live in My companions. Open the nest, dress them, teach tricks — no install, any computer with a browser.",
+    body: "They already live in My companions. Visit them, dress them, teach tricks — no install, any computer with a browser.",
     href: (instanceId) => (instanceId ? studioHref(instanceId) : "/my-companions"),
-    cta: "Open the nest",
+    cta: "Open your companions",
     badge: "Default",
     ready: true,
   },
@@ -28,7 +28,7 @@ export const livePaths: LivePath[] = [
     id: "browser",
     kicker: "Work-friendly · ready now",
     title: "Add to my browser",
-    body: "Pin Sillkin like an app in Chrome or Edge, or add it to your phone’s home screen. A browser extension is coming later — you do not need it yet.",
+    body: "Pin this site like an app in Chrome or Edge, or add it to your phone’s home screen. A browser extension is coming later — you do not need it yet.",
     href: () => "/browser",
     cta: "Add to browser",
     badge: "No IT install",
@@ -55,6 +55,6 @@ export function liveIntro(name?: string): { title: string; lede: string } {
   }
   return {
     title: "Where should they live?",
-    lede: "You already own your companions. Pick one home or several. The website is the default. The browser is the work-friendly pin. The desktop app is optional, later.",
+    lede: "You already own your companions. Pick one home or several. The website is the default. The browser pin is live. Desktop roaming is coming — we are not pretending it exists yet.",
   };
 }

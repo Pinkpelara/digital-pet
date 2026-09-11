@@ -9,6 +9,10 @@ export function studioHref(id: string): string {
   return `/my-companions/studio?id=${encodeURIComponent(id)}`;
 }
 
+export function profileHref(id: string): string {
+  return `/my-companions/profile?id=${encodeURIComponent(id)}`;
+}
+
 export function liveHref(instanceId?: string): string {
   if (!instanceId) return "/live";
   return `/live?id=${encodeURIComponent(instanceId)}`;
@@ -23,32 +27,27 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "companion":
       return {
         title: "Companions",
-        lede: "Adopt a creature. They live in your account — not as a file, as a someone.",
+        lede: "New species to adopt. Every one arrives with a personality you did not pick.",
       };
     case "outfit":
       return {
         title: "Closet",
-        lede: "Raincoats, hoodies, sunglasses, seasonal knit. Equip it and they wear it.",
+        lede: "Raincoats, hoodies, sunglasses. Clothing changes how they look, not who they are.",
       };
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "Tools that unlock behaviours. An umbrella is not just an umbrella.",
+        lede: "Objects that change what they do. A skateboard makes a skater. An umbrella makes a rain-walker.",
       };
     case "skill":
       return {
         title: "Skills",
-        lede: "Moonwalk, cartwheel, climb, hide. Teach a trick. Watch it stick.",
-      };
-    case "personality":
-      return {
-        title: "Personality packs",
-        lede: "Shift the odds. Chaotic, sleepy, clingy — transparent prices, no loot boxes.",
+        lede: "Things you teach them. Moonwalk, cartwheel, climb. Fixed prices, yours permanently.",
       };
     case "drop":
       return {
-        title: "Limited drops",
-        lede: "Short windows. Fixed prices. When they leave the sill, they leave.",
+        title: "Collections & drops",
+        lede: "Coordinated sets and short seasonal windows. When a drop closes, it closes.",
       };
   }
 }

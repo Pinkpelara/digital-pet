@@ -1,6 +1,6 @@
 # Row Level Security notes
 
-Sillkin treats **ownership as a server-side fact**. The browser is a view, not a ledger.
+Ownership is a **server-side fact**. The browser is a view, not a ledger.
 
 ## Who may write what
 

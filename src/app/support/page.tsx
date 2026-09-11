@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     q: "Do I have to install something?",
-    a: "No. The website is the home. You can pin Sillkin in Chrome or Edge (helpful on work computers). A Windows/Mac app is optional and not ready yet. Nothing is a loot box, and nothing is required after you adopt.",
+    a: "No. The website is the home. You can pin this site in Chrome or Edge (helpful on work computers). A Windows/Mac app is optional and not ready yet. Nothing is a loot box, and nothing is required after you adopt.",
   },
   {
     q: "Can I gift a companion?",
@@ -19,13 +19,17 @@ const faqs = [
     q: "Are there loot boxes?",
     a: "Never. Limited drops are timed, priced, and listed. What you see is what you pay.",
   },
+  {
+    q: "Can I buy a personality?",
+    a: "No. Personality is decided when you adopt. Gadgets and skills change what they do. Personality is not for sale.",
+  },
 ];
 
 export default function SupportPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-16">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">Support</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">We are here. Softly.</h1>
+      <h1 className="mt-2 font-display text-5xl text-ink">We are here.</h1>
       <p className="mt-3 text-ink-soft">
         Write {brand.supportEmail}. Demo mode needs no ticket — it runs without Stripe or Supabase keys.
       </p>

@@ -70,9 +70,11 @@ export function TryOnStage({
       </div>
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(7,8,9,0.82)_0%,rgba(7,8,9,0.28)_42%,transparent_68%)] max-md:bg-[linear-gradient(180deg,transparent_38%,rgba(7,8,9,0.9)_100%)]" />
       <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-10 md:pb-24">
-        <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">Live try-on</p>
+        <p className="text-[11px] uppercase tracking-[0.28em] text-mist/50">
+          {product.kind === "companion" ? "Live companion" : "Live try-on"}
+        </p>
         <h1 className="mt-4 max-w-[12ch] font-display text-5xl leading-[0.92] text-paper md:text-7xl">
-          {product.name}
+          {product.kind === "skill" ? `Teach ${product.name}` : product.name}
         </h1>
         <p className="mt-4 max-w-md text-base leading-relaxed text-mist/75 md:text-lg">{product.description}</p>
         <div className="pointer-events-auto mt-8">
@@ -81,7 +83,11 @@ export function TryOnStage({
             onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
             className="inline-flex items-center justify-center rounded-full bg-paper px-6 py-3 text-void hover:bg-mist"
           >
-            {product.kind === "companion" ? "Adopt" : "Add to nest"} {formatPrice(product.priceCents)}
+            {product.kind === "companion"
+              ? `Adopt ${formatPrice(product.priceCents)}`
+              : product.kind === "skill"
+                ? `Teach ${formatPrice(product.priceCents)}`
+                : `Add to inventory ${formatPrice(product.priceCents)}`}
           </Link>
         </div>
         {tryOns.length > 0 && (
