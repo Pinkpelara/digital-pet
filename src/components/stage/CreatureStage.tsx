@@ -41,8 +41,8 @@ function Aim({
     const cam = state.camera;
     const baseX = placement === "stage-right" ? 0.42 : 0;
     const lookX = placement === "stage-right" ? 0.7 : 0;
-    cam.position.x = MathUtils.lerp(cam.position.x, baseX + pointer.x * 0.35, 0.05);
-    cam.position.y = MathUtils.lerp(cam.position.y, 0.42 + pointer.y * -0.14, 0.05);
+    cam.position.x = MathUtils.lerp(cam.position.x, baseX + pointer.x * 0.48, 0.06);
+    cam.position.y = MathUtils.lerp(cam.position.y, 0.42 + pointer.y * -0.2, 0.06);
     cam.position.z = MathUtils.lerp(cam.position.z, cameraZ, 0.05);
     cam.lookAt(lookX, 0.16, 0);
   });
@@ -85,7 +85,7 @@ export function CreatureStage({
       onClick={() => onStageClick?.()}
     >
       <color attach="background" args={[STAGE_BG]} />
-      <fog attach="fog" args={[STAGE_FOG, 14, 28]} />
+      <fog attach="fog" args={[STAGE_FOG, 9, 22]} />
       <StudioLights intensity={1} />
       <StudioSill width={placement === "stage-right" ? 10 : 6.5} />
       <Aim pointer={pointer} placement={placement} cameraZ={cameraZ} />

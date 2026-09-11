@@ -1,18 +1,18 @@
 import Link from "next/link";
 import { TEMP_BRAND_NAME, brand } from "@/lib/brand";
+import { PageHero } from "@/components/site/KineticTitle";
 
 export const metadata = { title: "About" };
 
 export default function AboutPage() {
   return (
-    <article className="mx-auto max-w-2xl px-4 py-16">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">About</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">Tiny creatures that actually live with you.</h1>
-      <div className="mt-6 space-y-4 text-lg text-ink-soft">
-        <p>
-          You adopt one, give it a name, and then find out who it is. Its personality was decided
-          when you adopted it — you did not choose it, and you cannot edit it. You meet it.
-        </p>
+    <article className="bg-paper pb-20">
+      <PageHero
+        kicker="About"
+        title="Tiny creatures that actually live with you."
+        lede="You adopt one, give it a name, and then find out who it is. Its personality was decided when you adopted it — you did not choose it, and you cannot edit it. You meet it."
+      />
+      <div className="mx-auto max-w-2xl space-y-4 px-5 text-lg text-ink-soft md:px-10">
         <p>
           They sulk if you disappear. They wait. There is no lethal neglect. Mute chaos is one tap;
           Goose-mode is an opt-in Teach, never the default. We are not promising a robot that lives
@@ -34,12 +34,12 @@ export default function AboutPage() {
           tone is for anyone {brand.ageGate}.
         </p>
         <p>The name {TEMP_BRAND_NAME} is temporary while the brand is being decided.</p>
+        <p className="pt-4">
+          <Link href="/live" className="text-moss underline">
+            Where can they live?
+          </Link>
+        </p>
       </div>
-      <p className="mt-8">
-        <Link href="/live" className="text-moss underline">
-          Where can they live?
-        </Link>
-      </p>
     </article>
   );
 }

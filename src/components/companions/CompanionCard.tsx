@@ -23,8 +23,8 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
   const total = secretTotal(instance);
 
   return (
-    <article className="rounded-[1.6rem] bg-paper p-6 ring-1 ring-ink/8">
-      <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
+    <article className="poster-card rounded-[1.6rem] p-0">
+      <div className="aspect-[4/5] overflow-hidden bg-cream">
         <PlayableStage
           species={instance.speciesId}
           equipped={instance.equipped}
@@ -36,7 +36,8 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
         />
       </div>
 
-      <div className="mt-4 flex items-baseline justify-between gap-3">
+      <div className="p-6">
+      <div className="mt-0 flex items-baseline justify-between gap-3">
         <h2 className="font-display text-3xl text-ink">{instance.name}</h2>
         <p className="text-sm text-ink-soft">{speciesName(instance)}</p>
       </div>
@@ -95,6 +96,7 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
         <Link href={studioHref(instance.id)} className="rounded-full border border-ink/15 px-5 py-2.5 text-sm text-ink">
           Customize
         </Link>
+      </div>
       </div>
     </article>
   );

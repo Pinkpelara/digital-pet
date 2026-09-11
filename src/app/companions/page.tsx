@@ -1,45 +1,46 @@
 import Link from "next/link";
 import { companions, items, adoptFromCents } from "@/data/catalog";
-import { LiveStage } from "@/components/stage/LiveStage";
 import { formatPrice } from "@/lib/format";
 import { brand } from "@/lib/brand";
+import { PageHero } from "@/components/site/KineticTitle";
+import { PersonalityCards } from "@/components/home/PersonalityCards";
 
 export const metadata = { title: "Companions" };
 
 export default function CompanionsPage() {
   return (
-    <div className="bg-paper">
-      <section className="mx-auto max-w-6xl px-5 pt-12 md:px-10 md:pt-16">
-        <p className="text-sm font-medium text-moss">
-          Adopt from {formatPrice(adoptFromCents())}. Start with Bloop.
+    <div className="bg-paper pb-20">
+      <PageHero
+        kicker={`Adopt from ${formatPrice(adoptFromCents())}. Start with Bloop.`}
+        title="Adopt one"
+        lede={brand.meetBody}
+      >
+        <p className="mt-6 text-sm text-ink-soft">
+          {companions.length} species. Personality is not for sale.
         </p>
-        <h1 className="mt-3 max-w-[14ch] font-display text-5xl leading-[0.98] text-ink md:text-7xl">
-          Adopt one
-        </h1>
-        <p className="mt-5 max-w-xl text-lg text-ink-soft">{brand.meetBody}</p>
-      </section>
+      </PageHero>
 
-      <ol className="mx-auto grid max-w-6xl gap-6 px-5 py-12 md:grid-cols-2 md:px-10">
-        {companions.map((companion) => {
-          const product = items.find((item) => item.id === companion.itemId);
-          return (
-            <li key={companion.id} className="overflow-hidden rounded-[1.8rem] bg-cream ring-1 ring-ink/8">
-              <Link href={`/companions/${companion.slug}`} className="block">
-                <div className="aspect-[4/5]">
-                  <LiveStage species={companion.id} className="h-full w-full" cameraZ={5.6} />
+      <div className="mx-auto max-w-6xl px-5 pb-8 md:px-10">
+        <PersonalityCards />
+        <ol className="mt-8 grid gap-4 md:grid-cols-2">
+          {companions.map((companion) => {
+            const product = items.find((item) => item.id === companion.itemId);
+            return (
+              <li key={`${companion.id}-price`} className="flex items-baseline justify-between gap-4 border-t border-ink/10 pt-4">
+                <div>
+                  <p className="text-[11px] tracking-[0.24em] text-moss">{companion.alias}</p>
+                  <Link href={`/companions/${companion.slug}`} className="font-display text-2xl text-ink hover:text-moss">
+                    {companion.name}
+                  </Link>
                 </div>
-                <div className="bg-paper px-6 py-5">
-                  <h2 className="font-display text-3xl text-ink">{companion.name}</h2>
-                  <p className="mt-2 text-ink-soft">{companion.title}</p>
-                  <p className="mt-4 text-sm text-ink">
-                    {product ? formatPrice(product.priceCents) : ""} · Adopt
-                  </p>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </ol>
+                <p className="text-sm text-ink">
+                  {product ? formatPrice(product.priceCents) : ""} · Adopt
+                </p>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </div>
   );
 }

@@ -23,6 +23,7 @@ export const companions: CompanionSpecies[] = [
     itemId: "companion-bloop",
     title: "Bloop climbs things. Nobody taught him to.",
     tagline: "A teal climber who treats your screen like a jungle gym.",
+    alias: "WINDOW GYMNAST",
     description:
       "Bloop presses a cheek to your tabs, peeks behind unread windows, and falls more often than a creature his size should. He is not embarrassed about it.",
     priceCents: 599,
@@ -45,6 +46,7 @@ export const companions: CompanionSpecies[] = [
     itemId: "companion-mochi",
     title: "Mochi is furniture with a heartbeat.",
     tagline: "A dumpling who finds the warmest pixel and stays there.",
+    alias: "SOFT LANDING",
     description:
       "Mochi arrives pre-loved and mildly heavy. Give him a hoodie and he disappears into it until tomorrow. He will nap on your nav bar. He will not apologise.",
     priceCents: 649,
@@ -67,6 +69,7 @@ export const companions: CompanionSpecies[] = [
     itemId: "companion-sprout",
     title: "Sprout has a theory about your folders.",
     tagline: "A leafy explorer who maps the edges of your screen.",
+    alias: "EDGE CASE",
     description:
       "Sprout collects lost cursors, inspects icons, and leans toward anything that looks like weather. He has opinions about your desktop. He keeps them mostly to himself.",
     priceCents: 629,
@@ -89,6 +92,7 @@ export const companions: CompanionSpecies[] = [
     itemId: "companion-niblet",
     title: "Niblet is professionally unhelpful.",
     tagline: "Amber chaos. Will sit on the button you meant to press.",
+    alias: "MAIN EVENT",
     description:
       "Niblet moonwalks through your day, steals the spotlight, and looks extremely pleased about it. Give him sunglasses and he becomes worse. This is the selling point.",
     priceCents: 699,

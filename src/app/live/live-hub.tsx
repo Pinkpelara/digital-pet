@@ -14,7 +14,7 @@ function LiveHubInner() {
   const name = hydrated ? instance?.name : undefined;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
+    <div className="mx-auto max-w-6xl px-4 py-12 md:px-10 md:py-16">
       <WhereTheyLive heading="h1" instanceId={instance?.id ?? id ?? undefined} companionName={name} />
       <BirthdayVignette compact />
       <p className="mt-10 max-w-2xl text-sm text-ink-soft">

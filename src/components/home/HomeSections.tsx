@@ -12,6 +12,7 @@ import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
 import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
 import { brand } from "@/lib/brand";
+import { KineticTitle } from "@/components/site/KineticTitle";
 import type { DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 function StageBox({
@@ -40,7 +41,7 @@ function StageBox({
   loop?: boolean;
 }) {
   return (
-    <div className={`overflow-hidden rounded-[1.8rem] bg-cream ${className}`}>
+    <div className={`stage-frame overflow-hidden rounded-[1.8rem] ${className}`}>
       {playable ? (
         <PlayableStage
           key={stageKey}
@@ -82,42 +83,46 @@ export function TwinBloops() {
   const right = applyTendencies(seedFromString("twin-bloop-right"), companions[0].tendencies);
 
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Same species. Different little weirdos.</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">Same species. Different little weirdos.</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Two Bloops. Completely different problems.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
 
-      <div className="mt-10 overflow-hidden rounded-[1.8rem] bg-cream">
-        <PairedStage
-          left={{ species: "bloop", mood: "climb" }}
-          right={{ species: "bloop", mood: "nap" }}
-          className="min-h-[340px] md:min-h-[420px]"
-        />
-      </div>
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <article>
-          <h3 className="font-display text-2xl text-ink">This one climbs first</h3>
-          <p className="mt-2 text-sm text-ink-soft">
-            Investigates the edge of the page. Falls. Climbs again.
-          </p>
+      <div className="mt-12">
+        <article className="poster-card rounded-[1.7rem]">
+          <div className="min-h-[360px] md:min-h-[520px]">
+            <PairedStage
+              left={{ species: "bloop", mood: "climb" }}
+              right={{ species: "bloop", mood: "nap" }}
+              className="min-h-[360px] md:min-h-[520px]"
+            />
+          </div>
+          <div className="film-wash" aria-hidden />
+          <div className="poster-copy grid gap-6 md:grid-cols-2">
+            <div>
+              <p className="text-[11px] font-semibold tracking-[0.28em] text-moss">THE CLIMBER</p>
+              <h3 className="mt-1 font-display text-4xl leading-none text-ink">Edge first</h3>
+              <p className="mt-2 text-sm text-ink-soft">Investigates the edge of the page. Falls. Climbs again.</p>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold tracking-[0.28em] text-gold">THE LOAFER</p>
+              <h3 className="mt-1 font-display text-4xl leading-none text-ink">Nap theory</h3>
+              <p className="mt-2 text-sm text-ink-soft">Checks for danger twice. Then takes a nap about it.</p>
+            </div>
+          </div>
         </article>
-        <article>
-          <h3 className="font-display text-2xl text-ink">This one waits</h3>
-          <p className="mt-2 text-sm text-ink-soft">
-            Checks for danger twice. Then takes a nap about it.
+        <div className="mt-8 max-w-2xl">
+          <p className="font-display text-3xl leading-tight text-ink md:text-4xl">{contrastLine(left, right)}</p>
+          <p className="mt-4 text-ink-soft">
+            You cannot buy, set, or edit any of this. You find out by living with them.
           </p>
-        </article>
+          <Link href="/companions/bloop" className="mt-8 inline-block rounded-full bg-ink px-6 py-3 text-sm text-paper">
+            Adopt one
+          </Link>
+        </div>
       </div>
-
-      <p className="mt-8 font-display text-2xl text-ink">{contrastLine(left, right)}</p>
-      <p className="mt-3 max-w-2xl text-ink-soft">
-        You cannot buy, set, or edit any of this. You find out by living with them.
-      </p>
-      <Link href="/companions/bloop" className="mt-8 inline-block rounded-full bg-ink px-6 py-3 text-sm text-paper">
-        Adopt one
-      </Link>
     </section>
   );
 }
@@ -163,11 +168,11 @@ export function MakeYoursDemo() {
   const [look, setLook] = useState<ToyLook>(tryLooks[0]);
 
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Shop</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">Shop</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Raincoat · Pocket Umbrella
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <StageBox
@@ -178,7 +183,7 @@ export function MakeYoursDemo() {
           demo={look.demo}
           playable
           companionName="Bloop"
-          className="min-h-[420px] md:min-h-[520px]"
+          className="min-h-[460px] md:min-h-[560px]"
         />
         <div>
           <div className="flex flex-wrap gap-2">
@@ -231,11 +236,11 @@ export function MakeYoursDemo() {
 export function ThingsChange() {
   const [on, setOn] = useState(true);
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">If you cannot see it in a second, it is not a gadget</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">If you cannot see it in a second, it is not a gadget</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Umbrella on. Now it rain-walks.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
         Silhouette or motion in under a second — or we do not sell it. A raincoat is a shape. An
         umbrella is a walk. Personality is not for sale.
@@ -274,16 +279,16 @@ export function ThingsChange() {
 
 export function TheyNotice() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">They notice each other</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">They notice each other</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Two in a room is not two solos.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
         They peek, copy, or nap in the same corner. Full roommate behaviour is still a preview — you
         can already keep more than one.
       </p>
-      <div className="mt-10 overflow-hidden rounded-[1.8rem] bg-cream">
+      <div className="stage-frame mt-10 overflow-hidden rounded-[1.8rem]">
         <PairedStage
           left={{ species: "sprout", mood: "follow", equipped: { back: "gadget-balloon" } }}
           right={{ species: "mochi", mood: "nap", equipped: { body: "outfit-hoodie" } }}
@@ -296,18 +301,18 @@ export function TheyNotice() {
 
 export function SomethingHappened() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Something happened while you were gone</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">Something happened while you were gone</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         They keep secrets. You find them later.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
         Hidden habits stay hidden until you live with them. No paying to unlock a personality. The
         ??? stay ??? until they do not.
       </p>
       <ul className="mt-8 grid gap-3 sm:grid-cols-3">
         {["??? still undiscovered", "??? still undiscovered", "??? still undiscovered"].map((line, index) => (
-          <li key={index} className="rounded-[1.4rem] bg-cream px-5 py-6 text-ink-soft">
+          <li key={index} className="rounded-[1.4rem] bg-mist px-5 py-8 text-ink-soft ring-1 ring-ink/10">
             {line}
           </li>
         ))}
@@ -318,11 +323,11 @@ export function SomethingHappened() {
 
 export function TinyProblem() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Send someone a tiny problem</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">Send someone a tiny problem</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         A gift is a parcel. Then it is their problem.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
         No social network. You send a code. They open a box. Someone new moves in.
       </p>
@@ -338,11 +343,11 @@ export function TinyProblem() {
 
 export function LetLoose() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Always-there path</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">Always-there path</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
         Pin the browser. They stay in the corner.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">
         The real now-path on a work machine is a pinned browser window — they sit in the corner
         while you write. Happy-Dog energy: always there, never a second job. A full OS desktop app
@@ -366,11 +371,11 @@ export function LetLoose() {
 
 export function LiveYourDay() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Free magic</p>
-      <h2 className="mt-3 max-w-[18ch] font-display text-4xl text-ink md:text-5xl">
+    <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+      <p className="kicker">Free magic</p>
+      <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
         They notice your day. Birthday cake appears before you remember.
-      </h2>
+      </KineticTitle>
       <p className="mt-4 max-w-xl text-ink-soft">{brand.freeMagicBody}</p>
       <CareChips className="mt-6" />
 

@@ -57,8 +57,8 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
 
   return (
     <section className={`mx-auto max-w-6xl px-5 ${compact ? "py-10" : "py-20"} md:px-10`}>
-      <p className="text-sm font-medium text-moss">They notice you</p>
-      <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
+      <p className="kicker">They notice you</p>
+      <h2 className="mt-3 max-w-[16ch] font-display text-4xl leading-[0.92] text-ink md:text-6xl">
         It’s your birthday. They already knew.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
@@ -67,7 +67,7 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
       </p>
 
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[0.9fr_1.1fr]">
-        <div className="birthday-stage relative flex min-h-[360px] flex-col items-center justify-center overflow-hidden rounded-[1.8rem] bg-cream px-6 py-8">
+        <div className="birthday-stage relative flex min-h-[360px] flex-col items-center justify-center overflow-hidden rounded-[1.8rem] bg-cream px-6 py-8 stage-frame">
           {!open ? (
             <button type="button" onClick={openParcel} className="flex flex-col items-center" aria-label="Open the birthday parcel">
               <div className="parcel is-shaking">

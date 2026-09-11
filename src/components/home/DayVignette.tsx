@@ -73,7 +73,7 @@ export function DayVignette() {
 
   return (
     <div>
-      <div className="relative min-h-[340px] overflow-hidden rounded-[1.8rem] bg-cream md:min-h-[420px]">
+      <div className="relative min-h-[380px] overflow-hidden rounded-[1.8rem] bg-cream stage-frame md:min-h-[480px]">
         <LiveStage
           species="bloop"
           demo={beat.demo}
@@ -81,13 +81,11 @@ export function DayVignette() {
           loop
           followPointer={false}
           quality="medium"
-          className="h-full min-h-[340px] w-full md:min-h-[420px]"
+          className="h-full min-h-[380px] w-full md:min-h-[480px]"
           cameraZ={5.5}
         />
         <StageFx demo={beat.demo} />
-        <p className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full bg-ink/80 px-3 py-1 text-xs text-paper">
-          {beat.label}
-        </p>
+        <p className="stage-caption">{beat.label}</p>
       </div>
       <ol className="mt-6 grid gap-3 sm:grid-cols-2">
         {BEATS.map((entry, beatIndex) => (

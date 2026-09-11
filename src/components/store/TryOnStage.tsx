@@ -71,7 +71,7 @@ export function TryOnStage({
   return (
     <div className="bg-paper">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream stage-frame">
           <PlayableStage
             species={species}
             equipped={equipped}
@@ -86,10 +86,10 @@ export function TryOnStage({
           />
         </div>
         <div>
-          <p className="text-sm font-medium text-moss">
+          <p className="kicker">
             {product.kind === "companion" ? "Live companion" : "Live try-on"}
           </p>
-          <h1 className="mt-3 max-w-[12ch] font-display text-4xl leading-[1.02] text-ink md:text-6xl">{heading}</h1>
+          <h1 className="mt-3 max-w-[12ch] font-display text-5xl leading-[0.92] text-ink md:text-7xl">{heading}</h1>
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
           <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
           {product.kind === "skill" && product.skillId === "moonwalk" ? (
@@ -123,7 +123,7 @@ export function TryOnStage({
                 </div>
               </div>
             ) : (
-              <p className="max-w-md rounded-[1.2rem] bg-cream px-4 py-3 text-sm text-ink-soft">
+              <p className="max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-sm text-ink-soft ring-1 ring-ink/10">
                 Preview only. Watch the trick first. If you cannot see it in a second, we do not sell
                 it yet. Shop what you can see: Raincoat · Pocket Umbrella.
               </p>

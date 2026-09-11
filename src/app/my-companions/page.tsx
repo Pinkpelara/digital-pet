@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CompanionCard } from "@/components/companions/CompanionCard";
 import { CareChips } from "@/components/home/CareChips";
+import { PageHero } from "@/components/site/KineticTitle";
 import { useNest } from "@/lib/state/nest-context";
 
 export default function MyCompanionsPage() {
@@ -14,27 +15,26 @@ export default function MyCompanionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <p className="text-sm font-medium text-moss">Your companions</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">Who lives with you</h1>
-      <p className="mt-3 max-w-xl text-ink-soft">
-        This is their home. Tap a companion for Teach / Gadget / Outfit / Mood peek / Nap / Gift.
-        Each one is an individual. Personality is not for sale.
-      </p>
-      <CareChips className="mt-5" />
-      <p className="mt-3">
-        <Link href="/live" className="text-sm text-moss underline">
-          Where should they live?
-        </Link>
-      </p>
+    <div className="bg-paper pb-16">
+      <PageHero
+        kicker="Your companions"
+        title="Who lives with you"
+        lede="This is their home. Tap a companion for Teach / Gadget / Outfit / Mood peek / Nap / Gift. Each one is an individual. Personality is not for sale."
+      >
+        <CareChips className="mt-5" />
+        <p className="mt-4">
+          <Link href="/live" className="text-sm text-moss underline">
+            Where should they live?
+          </Link>
+        </p>
+      </PageHero>
 
+      <div className="mx-auto max-w-6xl px-5 md:px-10">
       {instances.length === 0 ? (
-        <div className="mt-10 overflow-hidden rounded-[2rem] bg-paper ring-1 ring-ink/8">
-          <div className="h-72 bg-cream">
-            <div className="flex h-full items-center justify-center text-ink-soft">Nobody lives here yet.</div>
-          </div>
+        <div className="overflow-hidden rounded-[2rem] bg-mist ring-1 ring-ink/10">
+          <div className="flex h-72 items-center justify-center bg-cream text-ink-soft">Nobody lives here yet.</div>
           <div className="p-8">
-            <p className="text-lg text-ink">Nobody lives here yet.</p>
+            <p className="font-display text-3xl text-ink">Nobody lives here yet.</p>
             <Link href="/companions" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
               Adopt one
             </Link>
@@ -42,7 +42,7 @@ export default function MyCompanionsPage() {
         </div>
       ) : (
         <>
-          <p className="mt-6 text-sm text-ink-soft">
+          <p className="text-sm text-ink-soft">
             {instances.length} companion{instances.length === 1 ? "" : "s"} · {speciesCount} species
             {" · every one different"}
           </p>
@@ -53,6 +53,7 @@ export default function MyCompanionsPage() {
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }

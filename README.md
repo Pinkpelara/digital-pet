@@ -34,7 +34,7 @@ Because `basePath` is `/digital-pet` by default, open [http://localhost:3000/dig
 GITHUB_PAGES=false npm run dev
 ```
 
-- Light homepage: live React Three Fiber companions, Outfit type, story from adopt to desktop
+- Cinematic homepage: full-viewport mouse-reactive React Three Fiber hero, Syne display type, dark void stage (`#0C0021`)
 - Store: `/companions`, `/closet`, `/gadgets`, `/skills`, `/drops`
 - Try-on: open Bloop (or any companion) and equip a raincoat / play moonwalk
 - Checkout: **Adopt** grants into the local inventory and opens a parcel ceremony, then three homes (website / browser / optional desktop)
@@ -57,7 +57,7 @@ npx serve out          # preview the Pages build (not `npm start`)
 ## Stack
 
 - Next.js App Router + TypeScript (strict) + Tailwind CSS v4
-- React Three Fiber companions (soft clay / toy materials, bright lighting)
+- React Three Fiber companions (soft clay on a cinematic void stage, magenta/teal lighting)
 - SVG/canvas-style creatures with a weighted idle / walk / nap / follow-cursor loop
 - `@rive-app/react-canvas` ready — pass `riveSrc` when you have `.riv` files; SVG is the shipped fallback
 - Supabase-shaped schema + RLS notes in `/supabase`
