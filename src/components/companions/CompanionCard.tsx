@@ -25,7 +25,7 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
   return (
     <article className="rounded-[1.6rem] bg-paper p-6 ring-1 ring-ink/8">
       <Link href={profileHref(instance.id)} className="block">
-        <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-void">
+        <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
           <LiveStage
             species={instance.speciesId}
             equipped={instance.equipped}

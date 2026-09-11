@@ -1,16 +1,17 @@
 "use client";
 
 import { ContactShadows, RoundedBox } from "@react-three/drei";
+import { STAGE_PLATFORM, STAGE_SHADOW } from "@/lib/stage-theme";
 
 export function StudioLights({ intensity = 1 }: { intensity?: number }) {
   return (
     <>
-      <hemisphereLight args={["#d5ddd8", "#101214", 0.42 * intensity]} />
+      <hemisphereLight args={["#fff6ea", "#e8d8c4", 1.05 * intensity]} />
       <directionalLight
         castShadow
-        position={[3.2, 5.4, 3.1]}
-        intensity={2.35 * intensity}
-        color="#f3f1ea"
+        position={[2.8, 5.2, 3.4]}
+        intensity={2.05 * intensity}
+        color="#fff4e4"
         shadow-mapSize={[1024, 1024]}
         shadow-camera-far={16}
         shadow-camera-near={0.5}
@@ -19,23 +20,16 @@ export function StudioLights({ intensity = 1 }: { intensity?: number }) {
         shadow-camera-top={4}
         shadow-camera-bottom={-4}
       />
-      <directionalLight position={[-3.8, 1.6, -2.4]} intensity={1.45 * intensity} color="#7f97a2" />
-      <spotLight
-        position={[0.2, 3.6, 4.2]}
-        angle={0.48}
-        penumbra={0.72}
-        intensity={1.15 * intensity}
-        color="#eef1ec"
-      />
-      <pointLight position={[0, -0.4, 2.4]} intensity={0.28 * intensity} color="#c9c6bc" />
+      <directionalLight position={[-3.4, 2.2, -1.6]} intensity={0.55 * intensity} color="#9ad4e8" />
+      <pointLight position={[0.4, 1.2, 2.6]} intensity={0.45 * intensity} color="#ffe0c4" />
     </>
   );
 }
 
 export function StudioSill({ width = 8, position = [0, -1.08, 0.12] as [number, number, number] }) {
   return (
-    <RoundedBox args={[width, 0.26, 2.35]} radius={0.07} smoothness={4} position={position} receiveShadow>
-      <meshStandardMaterial color="#141615" roughness={0.68} metalness={0.08} />
+    <RoundedBox args={[width, 0.22, 2.2]} radius={0.1} smoothness={4} position={position} receiveShadow>
+      <meshStandardMaterial color={STAGE_PLATFORM} roughness={0.82} metalness={0} />
     </RoundedBox>
   );
 }
@@ -47,5 +41,5 @@ export function StudioShadows({
   position?: [number, number, number];
   scale?: number;
 }) {
-  return <ContactShadows position={position} opacity={0.52} scale={scale} blur={2.6} far={3.4} color="#000" />;
+  return <ContactShadows position={position} opacity={0.28} scale={scale} blur={2.8} far={3.4} color={STAGE_SHADOW} />;
 }

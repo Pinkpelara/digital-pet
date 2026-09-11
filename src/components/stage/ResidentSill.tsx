@@ -7,6 +7,7 @@ import { MathUtils } from "three";
 import { FigurineMesh } from "@/components/stage/FigurineMesh";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows, StudioSill } from "@/components/stage/StudioKit";
+import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
 import type { SpeciesId } from "@/lib/types";
 
 const lineup: SpeciesId[] = ["bloop", "mochi", "sprout", "niblet"];
@@ -43,8 +44,8 @@ export function ResidentSill({ className = "h-full w-full" }: { className?: stri
         setPointer({ x, y });
       }}
     >
-      <color attach="background" args={["#070809"]} />
-      <fog attach="fog" args={["#070809", 10, 18]} />
+      <color attach="background" args={[STAGE_BG]} />
+      <fog attach="fog" args={[STAGE_FOG, 16, 32]} />
       <StudioLights intensity={1.05} />
       <StudioSill width={10} position={[0, -1.1, 0.2]} />
       <Lineup pointer={pointer} />

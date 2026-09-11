@@ -53,17 +53,17 @@ export function PersonalityReveal({ instance }: { instance: CompanionInstance })
       </div>
 
       {open && (
-        <div className="mt-6 overflow-hidden rounded-2xl bg-void p-7 text-mist">
+        <div className="mt-6 overflow-hidden rounded-2xl bg-cream p-7 text-ink">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-mist/55">
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-soft">
                 {speciesName(instance)} · {instance.name}
               </p>
-              <p className="mt-2 font-display text-4xl uppercase leading-none text-paper md:text-5xl">
+              <p className="mt-2 font-display text-4xl uppercase leading-none text-ink md:text-5xl">
                 {title}
               </p>
             </div>
-            <div className="flex h-28 w-28 items-end justify-center overflow-hidden rounded-xl">
+            <div className="flex h-28 w-28 items-end justify-center overflow-hidden rounded-xl bg-paper">
               <LiveStage
                 species={instance.speciesId}
                 equipped={instance.equipped}
@@ -72,16 +72,16 @@ export function PersonalityReveal({ instance }: { instance: CompanionInstance })
               />
             </div>
           </div>
-          <ul className="mt-6 space-y-2 text-lg text-paper">
+          <ul className="mt-6 space-y-2 text-lg text-ink">
             {lines.map((line) => (
               <li key={line}>· {line}</li>
             ))}
           </ul>
-          <p className="mt-6 text-sm text-mist/60">
+          <p className="mt-6 text-sm text-ink-soft">
             Nobody chose this. It was decided when {instance.name} was adopted.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <button type="button" onClick={() => void share()} className="rounded-full bg-paper px-5 py-2.5 text-sm text-void">
+            <button type="button" onClick={() => void share()} className="rounded-full bg-ink px-5 py-2.5 text-sm text-paper">
               Share
             </button>
             {copied && <span className="text-sm text-moss">Copied to your clipboard.</span>}

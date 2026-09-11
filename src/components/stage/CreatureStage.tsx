@@ -6,6 +6,7 @@ import { MathUtils } from "three";
 import { FigurineMesh } from "@/components/stage/FigurineMesh";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows, StudioSill } from "@/components/stage/StudioKit";
+import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
 import type { CreatureMood, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export type CreatureStageProps = {
@@ -66,9 +67,9 @@ export function CreatureStage({
         setPointer({ x, y });
       }}
     >
-      <color attach="background" args={["#070809"]} />
-      <fog attach="fog" args={["#070809", 8, 16]} />
-      <StudioLights intensity={0.95} />
+      <color attach="background" args={[STAGE_BG]} />
+      <fog attach="fog" args={[STAGE_FOG, 14, 28]} />
+      <StudioLights intensity={1} />
       <StudioSill width={placement === "stage-right" ? 10 : 6.5} />
       <Aim pointer={pointer} placement={placement} cameraZ={cameraZ} />
       <group position={[figureX, 0.04, 0]} scale={placement === "stage-right" ? 1.12 : 1}>

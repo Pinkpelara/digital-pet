@@ -25,7 +25,7 @@ function LiveHubInner() {
 
 export function LiveHub() {
   return (
-    <Suspense fallback={<div className="px-4 py-16 text-ink-soft">Finding a perch…</div>}>
+    <Suspense fallback={<div className="px-4 py-16 text-ink-soft">Finding them…</div>}>
       <LiveHubInner />
     </Suspense>
   );

@@ -26,7 +26,7 @@ export function AdoptButton({
         href="/inventory"
         className={`inline-flex items-center justify-center rounded-full bg-moss px-5 py-3 text-paper ${className ?? ""}`}
       >
-        In your nest
+        Already yours
       </Link>
     );
   }

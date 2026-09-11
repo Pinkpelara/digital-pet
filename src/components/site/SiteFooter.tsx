@@ -33,19 +33,19 @@ const footer = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-white/5 bg-void text-mist">
+    <footer className="mt-auto border-t border-ink/8 bg-paper text-ink">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-4">
         <div>
-          <p className="font-display text-3xl text-paper">{brand.name}</p>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-mist/70">{brand.hero}</p>
+          <p className="font-display text-3xl text-ink">{brand.name}</p>
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-soft">{brand.tagline}</p>
         </div>
         {footer.map((column) => (
           <div key={column.title}>
-            <p className="text-[11px] uppercase tracking-[0.22em] text-mist/40">{column.title}</p>
+            <p className="text-sm font-medium text-ink-soft">{column.title}</p>
             <ul className="mt-3 space-y-2 text-sm">
               {column.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-mist/75 hover:text-paper">
+                  <Link href={link.href} className="text-ink-soft hover:text-ink">
                     {link.label}
                   </Link>
                 </li>
@@ -54,7 +54,7 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
-      <div className="border-t border-white/5 px-4 py-4 text-center text-xs text-mist/40">
+      <div className="border-t border-ink/8 px-4 py-4 text-center text-xs text-ink-soft">
         {brand.audienceNote}
       </div>
     </footer>

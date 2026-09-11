@@ -29,17 +29,17 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   const suggestions = items.filter((item) => product.looksGoodWith.includes(item.id));
 
   return (
-    <div className="bg-void">
+    <div className="bg-paper">
       <Suspense>
         <TryOnStage species={species} product={product} suggestions={suggestions} />
       </Suspense>
       {product.unlocksBehavior && (
-        <p className="mx-auto max-w-7xl px-5 pb-10 text-sm text-mist/70 md:px-10">
-          Gadget behaviour unlocked: {product.unlocksBehavior}
+        <p className="mx-auto max-w-6xl px-5 pb-10 text-sm text-ink-soft md:px-10">
+          This changes what they do: {product.behaviorNote ?? product.unlocksBehavior}
         </p>
       )}
       {product.limitedNote && (
-        <p className="mx-auto max-w-7xl px-5 pb-12 text-sm text-mist/50 md:px-10">{product.limitedNote}</p>
+        <p className="mx-auto max-w-6xl px-5 pb-12 text-sm text-ink-soft md:px-10">{product.limitedNote}</p>
       )}
     </div>
   );

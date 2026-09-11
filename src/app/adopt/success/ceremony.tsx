@@ -20,6 +20,7 @@ export function AdoptCeremony() {
 
   const [stage, setStage] = useState<Stage>("parcel");
   const [draftName, setDraftName] = useState("");
+  const named = useRef(false);
   const granted = useRef(false);
 
   const companionItem = items.find((item) => itemIds.includes(item.id) && item.kind === "companion");
@@ -34,6 +35,12 @@ export function AdoptCeremony() {
     [instances, species],
   );
   const name = draftName.trim() || instance?.name || speciesMeta?.name || "";
+
+  useEffect(() => {
+    if (named.current || !instance) return;
+    named.current = true;
+    setDraftName(instance.name);
+  }, [instance]);
 
   useEffect(() => {
     if (!hydrated || granted.current || itemIds.length === 0) return;
@@ -84,14 +91,14 @@ export function AdoptCeremony() {
       ) : null}
 
       {stage === "emerge" && (
-        <div className="creature-crawl mt-4 h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+        <div className="creature-crawl mt-4 h-72 w-full max-w-md overflow-hidden rounded-2xl bg-cream">
           <LiveStage species={species} className="h-full w-full" mood="happy" cameraZ={5.5} />
         </div>
       )}
 
       {stage === "name" && companionItem && instance && (
         <>
-          <div className="h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+          <div className="h-72 w-full max-w-md overflow-hidden rounded-2xl bg-cream">
             <LiveStage species={instance.speciesId} className="h-full w-full" mood="happy" cameraZ={5.5} />
           </div>
           <h1 className="mt-6 font-display text-4xl text-ink md:text-5xl">
@@ -104,7 +111,7 @@ export function AdoptCeremony() {
             <input
               id="companion-name"
               name="name"
-              value={draftName || instance.name}
+              value={draftName}
               onChange={(event) => setDraftName(event.target.value)}
               className="w-full rounded-full border border-ink/15 bg-paper px-5 py-4 text-center text-lg text-ink outline-none focus:border-moss"
               maxLength={24}
@@ -126,7 +133,7 @@ export function AdoptCeremony() {
 
       {stage === "moved" && (
         <div className="w-full">
-          <div className="mx-auto h-72 w-full max-w-md overflow-hidden rounded-2xl bg-void">
+          <div className="mx-auto h-72 w-full max-w-md overflow-hidden rounded-2xl bg-cream">
             <LiveStage
               species={instance?.speciesId ?? species}
               className="h-full w-full"
