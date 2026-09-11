@@ -38,9 +38,10 @@ export function StageCanvas({
 
   useEffect(() => {
     const node = host.current;
-    if (!node || typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      const id = window.requestAnimationFrame(() => setVisible(true));
+      return () => window.cancelAnimationFrame(id);
     }
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
@@ -52,7 +53,6 @@ export function StageCanvas({
 
   useEffect(() => {
     const onVis = () => setTabOn(document.visibilityState !== "hidden");
-    onVis();
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);

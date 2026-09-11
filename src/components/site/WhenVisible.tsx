@@ -26,8 +26,8 @@ export function WhenVisible({
     const node = host.current;
     if (!node) return;
     if (typeof IntersectionObserver === "undefined") {
-      setShow(true);
-      return;
+      const id = window.requestAnimationFrame(() => setShow(true));
+      return () => window.cancelAnimationFrame(id);
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
