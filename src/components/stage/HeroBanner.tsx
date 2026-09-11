@@ -61,7 +61,7 @@ export function HeroBanner() {
         )}
       </div>
 
-      <div className="relative z-20 mx-auto flex min-h-[92svh] max-w-6xl flex-col justify-center px-5 py-16 md:px-10 md:py-24">
+      <div className="pointer-events-none relative z-20 mx-auto flex min-h-[92svh] max-w-6xl flex-col justify-center px-5 py-16 md:px-10 md:py-24">
         <p className="text-sm font-medium text-moss">{brand.tagline}</p>
         <h1 className="relative mt-4 max-w-[18ch] font-display text-4xl leading-[0.98] text-ink md:text-6xl">
           {headline}
@@ -72,7 +72,7 @@ export function HeroBanner() {
         <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
           Dress it. Teach it tricks. Find out who showed up.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
           <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
             Meet one individual
           </Link>
@@ -81,7 +81,7 @@ export function HeroBanner() {
           </Link>
         </div>
         <p className="mt-5 max-w-md text-sm text-ink-soft">You do not choose its personality. You meet it.</p>
-        <p className="mt-2 max-w-md text-sm text-ink-soft">
+        <p className="pointer-events-auto mt-2 max-w-md text-sm text-ink-soft">
           They never vanish from neglect. Mute the chaos anytime.{" "}
           <Link href="/browser" className="underline underline-offset-4">
             Pin the browser
@@ -90,7 +90,11 @@ export function HeroBanner() {
         </p>
       </div>
 
-      <div className={`absolute inset-y-[18%] right-0 w-[42%] max-md:inset-x-0 max-md:top-[54%] max-md:h-[40%] max-md:w-auto ${playable.open ? "z-30" : "z-10 max-md:z-20"}`}>
+      <div
+        className={`absolute inset-y-[18%] right-0 w-[42%] max-md:inset-x-0 max-md:top-[54%] max-md:h-[40%] max-md:w-auto ${
+          playable.open ? "z-40" : "z-20"
+        }`}
+      >
         <button
           type="button"
           className={`absolute inset-0 cursor-pointer bg-transparent ${playable.open ? "pointer-events-none" : ""}`}
