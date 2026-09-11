@@ -9,7 +9,7 @@ export function ProductJsonLd({ item }: { item: CatalogItem }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: item.kind === "skill" ? `Teach ${item.name}` : item.name,
+    name: item.name,
     description: item.description,
     sku: item.sku,
     brand: { "@type": "Brand", name: brand.name },

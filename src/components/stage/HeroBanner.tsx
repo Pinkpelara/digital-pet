@@ -8,7 +8,8 @@ import { Creature } from "@/components/creatures/Creature";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
 import { brand } from "@/lib/brand";
-import { useVoiceMode } from "@/lib/state/voice";
+import { adoptFromCents } from "@/data/catalog";
+import { formatPrice } from "@/lib/format";
 
 const HeroStage = dynamic(() => import("@/components/stage/HeroStage").then((mod) => mod.HeroStage), {
   ssr: false,
@@ -17,11 +18,8 @@ const HeroStage = dynamic(() => import("@/components/stage/HeroStage").then((mod
 export function HeroBanner() {
   const playable = usePlayableCompanion({ species: "bloop" });
   const [stageReady, setStageReady] = useState(false);
-  const { mode } = useVoiceMode();
-  const headline =
-    mode === "kid"
-      ? "Meet a Companion with a mind of their own — and a backpack of skills you can teach."
-      : brand.heroHeadline;
+  const headline = brand.heroHeadline;
+  const adoptFrom = formatPrice(adoptFromCents());
 
   useEffect(() => {
     let cancelled = false;
@@ -63,24 +61,22 @@ export function HeroBanner() {
 
       <div className="pointer-events-none relative z-20 mx-auto flex min-h-[92svh] max-w-6xl flex-col justify-center px-5 py-16 md:px-10 md:py-24">
         <p className="text-sm font-medium text-moss">{brand.tagline}</p>
-        <h1 className="relative mt-4 max-w-[18ch] font-display text-4xl leading-[0.98] text-ink md:text-6xl">
+        <h1 className="relative mt-4 max-w-[14ch] font-display text-4xl leading-[0.98] text-ink md:text-6xl">
           {headline}
           <span className="headline-peek pointer-events-none absolute -right-10 -top-6 hidden md:block" aria-hidden>
             <Creature species="niblet" size={72} mood="climb" decorative equipped={{ face: "outfit-sunglasses" }} />
           </span>
         </h1>
-        <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
-          Dress it. Teach it tricks. Find out who showed up.
-        </p>
+        <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">{brand.heroSub}</p>
         <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
-          <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-            Meet one individual
+          <Link href="/companions" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+            Adopt from {adoptFrom}
           </Link>
-          <Link href="/companions" className="rounded-full border border-ink/15 bg-paper px-6 py-3 text-sm text-ink">
-            Adopt
+          <Link href="/companions/bloop" className="rounded-full border border-ink/15 bg-paper px-6 py-3 text-sm text-ink">
+            Adopt one
           </Link>
         </div>
-        <p className="mt-5 max-w-md text-sm text-ink-soft">You do not choose its personality. You meet it.</p>
+        <p className="mt-5 max-w-md text-sm text-ink-soft">{brand.heroSupport}</p>
         <p className="pointer-events-auto mt-2 max-w-md text-sm text-ink-soft">
           They never vanish from neglect. Mute the chaos anytime.{" "}
           <Link href="/browser" className="underline underline-offset-4">
@@ -110,7 +106,7 @@ export function HeroBanner() {
           name="Bloop"
         />
         <p className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-ink/75 px-3 py-1 text-xs text-paper max-md:bottom-3">
-          {playable.demo ? playable.caption : playable.sulk ? "They’re waiting." : "Tap Bloop for tricks."}
+          {playable.demo ? playable.caption : playable.sulk ? "They’re waiting." : "Click them."}
         </p>
       </div>
     </section>

@@ -16,7 +16,7 @@ import {
 const steps = [
   {
     title: "Adopt",
-    body: "Meet one individual — not a copy of someone else’s. Soft trial before a paywall.",
+    body: "Pick a species. Bring one home. Soft trial before a paywall.",
   },
   {
     title: "Discover",
@@ -86,16 +86,17 @@ export default function HomePage() {
       </div>
 
       <section className="mx-auto max-w-6xl px-5 pb-24 pt-8 text-center md:px-10">
-        <h2 className="font-display text-4xl text-ink md:text-6xl">Meet one individual</h2>
-        <p className="mx-auto mt-4 max-w-lg text-ink-soft">
-          Pick a species. Give it a name. Find out who showed up. Personality is not for sale.
+        <h2 className="font-display text-4xl text-ink md:text-6xl">Adopt one</h2>
+        <p className="mx-auto mt-4 max-w-lg text-ink-soft">Pick a species. Bring one home.</p>
+        <p className="mx-auto mt-2 max-w-lg text-sm text-ink-soft">
+          You do not choose its personality. You meet it.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/companions/bloop" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
-            Meet Bloop
+          <Link href="/companions" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+            Adopt one
           </Link>
-          <Link href="/companions" className="inline-block rounded-full border border-ink/15 px-7 py-3.5 text-ink">
-            Adopt one individual
+          <Link href="/companions/bloop" className="inline-block rounded-full border border-ink/15 px-7 py-3.5 text-ink">
+            Start with Bloop
           </Link>
         </div>
       </section>

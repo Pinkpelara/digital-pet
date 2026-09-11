@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
-import { adoptHref, isShopSafe, pdpCtaLabel } from "@/lib/catalog-paths";
+import { adoptHref, isShopSafe, pdpCtaLabel, shopTitle } from "@/lib/catalog-paths";
 import { demoActionForItem, showOffMs } from "@/lib/demo-actions";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
@@ -61,8 +61,7 @@ export function TryOnStage({
   }
 
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
-  const heading =
-    product.kind === "skill" ? `Teach ${product.name}` : product.kind === "companion" ? `Meet ${product.name}.` : product.name;
+  const heading = product.kind === "companion" ? `Adopt ${product.name}` : shopTitle(product);
   const shopSafe = isShopSafe(product);
   const cta = pdpCtaLabel(product);
   const waitMs = showOffMs(playAction ?? demoActionForItem(product));
@@ -94,7 +93,7 @@ export function TryOnStage({
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
           <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
           {product.kind === "skill" && product.skillId === "moonwalk" ? (
-            <p className="mt-3 max-w-md font-medium text-ink">Teach moonwalk. Backward, smooth, slightly illegal.</p>
+            <p className="mt-3 max-w-md font-medium text-ink">Moonwalk. Backward, smooth, slightly illegal.</p>
           ) : null}
           {product.kind === "companion" ? (
             <p className="mt-3 max-w-md text-sm text-ink-soft">
@@ -126,7 +125,7 @@ export function TryOnStage({
             ) : (
               <p className="max-w-md rounded-[1.2rem] bg-cream px-4 py-3 text-sm text-ink-soft">
                 Preview only. Watch the trick first. If you cannot see it in a second, we do not sell
-                it yet. Shop line: Yellow Raincoat · Pocket Umbrella.
+                it yet. Shop what you can see: Raincoat · Pocket Umbrella.
               </p>
             )}
           </div>
@@ -150,7 +149,7 @@ export function TryOnStage({
                         active ? "border-ink bg-ink text-paper" : "border-ink/15 bg-paper text-ink hover:border-ink/40"
                       }`}
                     >
-                      {item.kind === "skill" ? `Teach ${item.name}` : item.name}
+                      {shopTitle(item)}
                     </Link>
                   );
                 })}

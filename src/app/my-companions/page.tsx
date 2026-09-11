@@ -35,8 +35,8 @@ export default function MyCompanionsPage() {
           </div>
           <div className="p-8">
             <p className="text-lg text-ink">Nobody lives here yet.</p>
-            <Link href="/companions/bloop" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
-              Meet one individual
+            <Link href="/companions" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
+              Adopt one
             </Link>
           </div>
         </div>

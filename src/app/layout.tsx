@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     locale: "en_US",
     siteName: brand.name,
     title: brand.heroHeadline,
-    description: brand.heroSupport,
+    description: brand.heroSub,
     url: "https://pinkpelara.github.io/digital-pet/",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: brand.heroHeadline }],
   },
   twitter: {
     card: "summary_large_image",
     title: brand.heroHeadline,
-    description: brand.heroSupport,
+    description: brand.heroSub,
     images: ["/og.png"],
   },
   appleWebApp: {

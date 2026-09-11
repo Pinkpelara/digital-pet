@@ -4,9 +4,14 @@ import type { CatalogItem } from "@/lib/types";
 /** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
 export const FEATURED_SHOP_IDS = ["outfit-raincoat", "gadget-umbrella"] as const;
 
+/** Toy-first names on shop cards and PDPs. Radial / studio may still say Teach X. */
+export function shopTitle(item: CatalogItem): string {
+  return item.name;
+}
+
 /**
  * Adopt Me / Eilik rule: gadgets sell only when silhouette or motion changes in under a second.
- * Outfits and Teach skills use their own flags. Explicit `shopSafe: false` always blocks checkout.
+ * Outfits and skills use their own flags. Explicit `shopSafe: false` always blocks checkout.
  */
 export function isShopSafe(item: CatalogItem): boolean {
   if (item.shopSafe === false) return false;
@@ -14,11 +19,10 @@ export function isShopSafe(item: CatalogItem): boolean {
   return true;
 }
 
-/** Unified PDP checkout label: Adopt / Add / Teach + name — price. */
+/** Unified PDP checkout label: Adopt / Add + name — price. Shop stays toy-first. */
 export function pdpCtaLabel(item: CatalogItem): string {
   const price = formatPrice(item.priceCents);
   if (item.kind === "companion") return `Adopt ${item.name} — ${price}`;
-  if (item.kind === "skill") return `Teach ${item.name} — ${price}`;
   return `Add ${item.name} — ${price}`;
 }
 
@@ -49,22 +53,22 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "companion":
       return {
         title: "Companions",
-        lede: "Meet one individual. Every one arrives with a personality you did not pick — and cannot buy.",
+        lede: "Pick a species. Bring one home. You do not choose its personality. You meet it.",
       };
     case "outfit":
       return {
         title: "Closet",
-        lede: "Outfits are permanent. Personality is not for sale. Birthday and habit magic stay free — we sell the coat they wear that day. Shop line: Yellow Raincoat · Pocket Umbrella.",
+        lede: "Raincoat. Visible in a second. Birthday and the day they notice you stay free — we sell the coat, not the cake.",
       };
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "If it does not change how they look or move in a second, it is not a gadget we sell. Watch the exaggerated demo. Shop now: Pocket Umbrella. Headphones and a party hat change the silhouette on contact.",
+        lede: "If it does not change how they look or move in a second, it is not for sale. Shop what you can see: Pocket Umbrella. Headphones and a party hat change the silhouette on contact.",
       };
     case "skill":
       return {
         title: "Skills",
-        lede: "Teach moonwalk. Backward, smooth, slightly illegal. Teach skills stay yours. Personality is not for sale.",
+        lede: "Moonwalk. Backward, smooth, slightly illegal. Shop cards use the toy name. Teach lives in the radial.",
       };
     case "drop":
       return {

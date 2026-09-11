@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { formatPrice } from "@/lib/format";
-import { isShopSafe } from "@/lib/catalog-paths";
+import { isShopSafe, shopTitle } from "@/lib/catalog-paths";
 import { demoActionForItem, loadoutForCatalogItem, speciesForCatalogItem } from "@/lib/demo-actions";
 import type { CatalogItem } from "@/lib/types";
 
@@ -16,7 +16,7 @@ export function ProductCard({
   href: string;
   owned?: boolean;
 }) {
-  const title = item.kind === "skill" ? `Teach ${item.name}` : item.name;
+  const title = shopTitle(item);
   const shopSafe = isShopSafe(item);
   const showStage =
     item.kind === "gadget" ||
@@ -50,7 +50,7 @@ export function ProductCard({
                 className="flex h-24 w-24 items-center justify-center rounded-full text-sm text-ink"
                 style={{ background: item.accent }}
               >
-                {item.kind === "skill" ? "Teach" : item.kind}
+                {item.kind === "skill" ? item.name : item.kind}
               </span>
             </div>
           )}
