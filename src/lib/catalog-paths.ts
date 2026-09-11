@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/format";
+import { brand } from "@/lib/brand";
 import type { CatalogItem } from "@/lib/types";
 
 /** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
@@ -53,7 +54,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "companion":
       return {
         title: "Companions",
-        lede: "Pick a species, name them, personality shows up as you live together. You do not choose it. You meet it.",
+        lede: brand.meetBody,
       };
     case "outfit":
       return {
@@ -63,7 +64,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "Raincoat, Skateboard, Moonwalk — if you can’t see it move in a second, it’s not for sale. Shop what you can see now: Pocket Umbrella. Headphones and a party hat change the silhouette on contact.",
+        lede: brand.shopBody,
       };
     case "skill":
       return {

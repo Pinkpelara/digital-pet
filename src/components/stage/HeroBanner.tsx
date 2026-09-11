@@ -70,7 +70,7 @@ export function HeroBanner() {
         <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">{brand.heroSub}</p>
         <div className="pointer-events-auto mt-8 flex flex-wrap gap-3">
           <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-            Adopt from {adoptFrom} — start with Bloop
+            Adopt from {adoptFrom}. Start with Bloop.
           </Link>
           <Link href="/companions" className="rounded-full border border-ink/15 bg-paper px-6 py-3 text-sm text-ink">
             Adopt one

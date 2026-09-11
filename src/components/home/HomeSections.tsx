@@ -10,6 +10,7 @@ import { DayVignette } from "@/components/home/DayVignette";
 import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
 import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
+import { brand } from "@/lib/brand";
 import type { DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 function StageBox({
@@ -84,10 +85,7 @@ export function TwinBloops() {
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
         Two Bloops. Completely different problems.
       </h2>
-      <p className="mt-4 max-w-xl text-ink-soft">
-        Pick a species, name them, personality shows up as you live together. Same store page. Not
-        the same creature.
-      </p>
+      <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
 
       <div className="mt-10 grid gap-6 md:grid-cols-2">
         <article>
@@ -171,9 +169,7 @@ export function MakeYoursDemo() {
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
         Raincoat. Skateboard. Moonwalk.
       </h2>
-      <p className="mt-4 max-w-xl text-ink-soft">
-        Raincoat, Skateboard, Moonwalk — if you can’t see it move in a second, it’s not for sale.
-      </p>
+      <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <StageBox
           stageKey={look.id}
@@ -369,13 +365,11 @@ export function LetLoose() {
 export function LiveYourDay() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Free magic — no price</p>
+      <p className="text-sm font-medium text-moss">Free magic</p>
       <h2 className="mt-3 max-w-[18ch] font-display text-4xl text-ink md:text-5xl">
         They notice your day. Birthday cake appears before you remember.
       </h2>
-      <p className="mt-4 max-w-xl text-ink-soft">
-        Birthday and noticing your day stay gifts, not gadgets. We do not paywall the cake.
-      </p>
+      <p className="mt-4 max-w-xl text-ink-soft">{brand.freeMagicBody}</p>
       <CareChips className="mt-6" />
 
       <div className="mt-10">

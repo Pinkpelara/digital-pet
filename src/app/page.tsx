@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { companions } from "@/data/catalog";
+import { adoptFromCents, companions } from "@/data/catalog";
+import { brand } from "@/lib/brand";
+import { formatPrice } from "@/lib/format";
 import { HeroBanner } from "@/components/stage/HeroBanner";
 import { ResidentGallery } from "@/components/stage/ResidentGallery";
 import { HomeProductJsonLd } from "@/components/store/ProductJsonLd";
@@ -17,15 +19,15 @@ import {
 const steps = [
   {
     title: "Meet",
-    body: "Pick a species, name them, personality shows up as you live together.",
+    body: brand.meetBody,
   },
   {
     title: "Shop",
-    body: "Raincoat, Skateboard, Moonwalk — if you can’t see it move in a second, it’s not for sale.",
+    body: brand.shopBody,
   },
   {
     title: "Free magic",
-    body: "Birthday and noticing your day stay gifts, not gadgets. No price on those moments.",
+    body: brand.freeMagicBody,
   },
   {
     title: "Let it loose",
@@ -62,9 +64,7 @@ export default function HomePage() {
               See all
             </Link>
           </div>
-          <p className="mt-4 max-w-xl text-ink-soft">
-            Pick a species, name them, personality shows up as you live together.
-          </p>
+          <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
         </div>
         <div className="mt-6 h-[min(58vh,520px)] w-full overflow-hidden bg-cream">
           <ResidentGallery className="h-full w-full" />
@@ -92,16 +92,10 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-5 pb-24 pt-8 text-center md:px-10">
         <h2 className="font-display text-4xl text-ink md:text-6xl">Adopt one</h2>
-        <p className="mx-auto mt-4 max-w-lg text-ink-soft">Pick a species. Bring one home.</p>
-        <p className="mx-auto mt-2 max-w-lg text-sm text-ink-soft">
-          You do not choose its personality. You meet it.
-        </p>
+        <p className="mx-auto mt-4 max-w-lg text-ink-soft">{brand.meetBody}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/companions" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
-            Adopt one
-          </Link>
-          <Link href="/companions/bloop" className="inline-block rounded-full border border-ink/15 px-7 py-3.5 text-ink">
-            Start with Bloop
+          <Link href="/companions/bloop" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+            Adopt from {formatPrice(adoptFromCents())}. Start with Bloop.
           </Link>
         </div>
       </section>
