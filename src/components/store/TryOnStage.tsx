@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
 import { adoptHref } from "@/lib/catalog-paths";
 import { formatPrice } from "@/lib/format";
-import type { CatalogItem, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import { demoActionForItem } from "@/lib/demo-actions";
+import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
   species,
@@ -32,6 +33,7 @@ export function TryOnStage({
         : {},
   );
   const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
+  const [playAction, setPlayAction] = useState<DemoActionId | null>(() => demoActionForItem(product));
 
   const tryOns = useMemo(
     () => suggestions.filter((item) => item.slot || item.skillId),
@@ -48,6 +50,8 @@ export function TryOnStage({
         return next;
       });
     }
+    const action = demoActionForItem(item);
+    if (action) setPlayAction(action);
     if (item.skillId) {
       setSkill(item.skillId);
       track("skill_performed", { skill: item.skillId });
@@ -68,14 +72,18 @@ export function TryOnStage({
   return (
     <div className="bg-paper">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
-        <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
-          <LiveStage
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
+          <PlayableStage
             species={species}
             equipped={equipped}
             skill={skill}
             mood={skill ? "skill" : "idle"}
             className="h-full w-full"
             cameraZ={5.15}
+            companionName={product.kind === "companion" ? product.name : species}
+            hint="Tap the companion — tricks play here, not in the catalog."
+            autoPlay={demoActionForItem(product)}
+            playAction={playAction}
           />
         </div>
         <div>

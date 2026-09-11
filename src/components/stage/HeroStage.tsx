@@ -7,7 +7,7 @@ import { MathUtils } from "three";
 import { FigurineMesh } from "@/components/stage/FigurineMesh";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows } from "@/components/stage/StudioKit";
-import type { CreatureMood } from "@/lib/types";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId } from "@/lib/types";
 
 const moods: CreatureMood[] = ["follow", "climb", "happy", "follow", "nap", "follow"];
 
@@ -16,11 +16,19 @@ function Rig({
   scroll,
   mobile,
   mood,
+  skill,
+  demo,
+  sulk,
+  equipped,
 }: {
   pointer: { x: number; y: number };
   scroll: number;
   mobile: boolean;
   mood: CreatureMood;
+  skill: SkillId | null;
+  demo: DemoActionId | null;
+  sulk: boolean;
+  equipped: EquipmentLoadout;
 }) {
   const group = useRef<Group>(null);
   useFrame((state) => {
@@ -32,18 +40,40 @@ function Rig({
     cam.position.y = MathUtils.lerp(cam.position.y, targetY, 0.045);
     cam.position.z = MathUtils.lerp(cam.position.z, targetZ, 0.05);
     cam.lookAt(mobile ? 0 : 0.68, 0.18, 0);
-    if (group.current) {
+    if (group.current && !demo && !sulk) {
       group.current.rotation.y = MathUtils.lerp(group.current.rotation.y, pointer.x * 0.16, 0.045);
     }
   });
   return (
     <group ref={group} position={mobile ? [0, 0, 0] : [0.82, 0.02, 0]} scale={mobile ? 1.16 : 1.32}>
-      <FigurineMesh species="bloop" followPointer pointer={pointer} quality="high" mood={mood} />
+      <FigurineMesh
+        species="bloop"
+        followPointer={!demo && !sulk}
+        pointer={pointer}
+        quality="high"
+        mood={mood}
+        skill={skill}
+        demo={demo}
+        sulk={sulk}
+        equipped={equipped}
+      />
     </group>
   );
 }
 
-export function HeroStage() {
+export function HeroStage({
+  mood: moodOverride,
+  skill = null,
+  demo = null,
+  sulk = false,
+  equipped = {},
+}: {
+  mood?: CreatureMood;
+  skill?: SkillId | null;
+  demo?: DemoActionId | null;
+  sulk?: boolean;
+  equipped?: EquipmentLoadout;
+}) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scroll, setScroll] = useState(0);
   const [mobile, setMobile] = useState(false);
@@ -62,7 +92,7 @@ export function HeroStage() {
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    if (!reduce.current) {
+    if (!reduce.current && !demo) {
       let index = 0;
       const timer = window.setInterval(() => {
         index = (index + 1) % moods.length;
@@ -78,7 +108,7 @@ export function HeroStage() {
       window.removeEventListener("scroll", onScroll);
       mq.removeEventListener("change", syncMobile);
     };
-  }, []);
+  }, [demo]);
 
   return (
     <StageCanvas
@@ -94,7 +124,16 @@ export function HeroStage() {
       }}
     >
       <StudioLights />
-      <Rig pointer={pointer} scroll={scroll} mobile={mobile} mood={mood} />
+      <Rig
+        pointer={pointer}
+        scroll={scroll}
+        mobile={mobile}
+        mood={moodOverride ?? (demo ? "skill" : mood)}
+        skill={skill}
+        demo={demo}
+        sulk={sulk}
+        equipped={equipped}
+      />
       <StudioShadows position={[0, -0.96, 0]} scale={10} />
     </StageCanvas>
   );

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { items } from "@/data/catalog";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { useNest } from "@/lib/state/nest-context";
 import { fullLabels } from "@/lib/personality";
@@ -50,12 +50,14 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="min-h-[52vh] overflow-hidden rounded-2xl bg-cream lg:min-h-[64vh]">
-        <LiveStage
+        <PlayableStage
           species={instance.speciesId}
           equipped={equipped}
           skill={skill}
           className="h-full min-h-[52vh] w-full lg:min-h-[64vh]"
           cameraZ={5.5}
+          companionName={instance.name}
+          unlockedSkills={instance.unlockedSkills}
         />
       </div>
       <div>

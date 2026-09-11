@@ -331,6 +331,176 @@ body {
   animation: letter-tip 1.2s ease;
 }
 
+.playable-stage {
+  isolation: isolate;
+}
+
+.action-wheel {
+  position: absolute;
+  inset: 0;
+  z-index: 24;
+}
+
+.action-wheel-scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(34, 30, 26, 0.18);
+  cursor: pointer;
+}
+
+.action-wheel-orbit {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: 1;
+  width: min(92%, 420px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: wheel-in 280ms ease;
+}
+
+.action-wheel-ring {
+  position: absolute;
+  inset: 12%;
+  border: 1px dashed rgba(34, 30, 26, 0.22);
+  border-radius: 50%;
+}
+
+.action-wheel-slots {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.action-wheel-slots li {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.action-wheel-slot {
+  display: flex;
+  width: 5.75rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: 1px solid rgba(34, 30, 26, 0.12);
+  border-radius: 1.15rem;
+  background: color-mix(in srgb, var(--slot-accent, #faf6ef) 22%, #faf6ef);
+  padding: 0.55rem 0.35rem 0.5rem;
+  color: var(--ink);
+  box-shadow: 0 10px 24px rgba(34, 30, 26, 0.12);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.action-wheel-slot:hover,
+.action-wheel-slot:focus-visible {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 14px 28px rgba(34, 30, 26, 0.16);
+}
+
+.action-wheel-icon {
+  display: grid;
+  height: 2rem;
+  width: 2rem;
+  place-items: center;
+  color: var(--ink);
+}
+
+.action-wheel-label {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.action-wheel-preview {
+  border-radius: 999px;
+  background: rgba(34, 30, 26, 0.08);
+  padding: 0.05rem 0.35rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.action-wheel-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: rgba(250, 246, 239, 0.92);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  pointer-events: none;
+}
+
+.stage-rain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+}
+
+.stage-rain span {
+  position: absolute;
+  top: -12%;
+  width: 2px;
+  height: 18%;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, transparent, rgba(91, 141, 239, 0.85));
+  animation: rain-fall 0.9s linear infinite;
+}
+
+.stage-flash {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background: rgba(255, 255, 255, 0.72);
+  animation: flash-pop 0.55s ease forwards;
+}
+
+@keyframes wheel-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes rain-fall {
+  from {
+    transform: translateY(0);
+    opacity: 0.15;
+  }
+  to {
+    transform: translateY(140%);
+    opacity: 0.9;
+  }
+}
+
+@keyframes flash-pop {
+  0% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes letter-tip {
   0% {
     transform: none;
@@ -370,6 +540,9 @@ body {
   .creature-svg.is-juggle .orb-c,
   .creature-svg.is-skate,
   .creature-mishap,
+  .action-wheel-orbit,
+  .stage-rain span,
+  .stage-flash,
   .parcel.is-shaking,
   .creature-crawl,
   .hero-word.is-bumped {

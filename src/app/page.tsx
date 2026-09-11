@@ -11,6 +11,7 @@ import {
   TinyProblem,
   TwinBloops,
 } from "@/components/home/HomeSections";
+import { BirthdayVignette } from "@/components/home/BirthdayVignette";
 import { brand } from "@/lib/brand";
 
 const steps = [
@@ -78,6 +79,7 @@ export default function HomePage() {
       <MakeYoursDemo />
       <ThingsChange />
       <TheyNotice />
+      <BirthdayVignette />
       <SomethingHappened />
       <TinyProblem />
       <LetLoose />

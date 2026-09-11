@@ -37,7 +37,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "Objects that change what they do. A skateboard makes a skater. An umbrella makes a rain-walker.",
+        lede: "Objects that change what they do. Try them on the live companion — a skateboard makes a skater. The catalog stays a catalog.",
       };
     case "skill":
       return {

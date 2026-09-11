@@ -7,18 +7,21 @@ import { FigurineMesh } from "@/components/stage/FigurineMesh";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows, StudioSill } from "@/components/stage/StudioKit";
 import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
-import type { CreatureMood, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export type CreatureStageProps = {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
   mood?: CreatureMood;
   skill?: SkillId | null;
+  demo?: DemoActionId | null;
+  sulk?: boolean;
   className?: string;
   followPointer?: boolean;
   cameraZ?: number;
   autoRotate?: boolean;
   placement?: "center" | "stage-right";
+  onStageClick?: () => void;
 };
 
 function Aim({
@@ -47,10 +50,13 @@ export function CreatureStage({
   equipped,
   mood = "idle",
   skill = null,
+  demo = null,
+  sulk = false,
   className,
   followPointer = true,
   cameraZ = 5.7,
   placement = "center",
+  onStageClick,
 }: CreatureStageProps) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const figureX = placement === "stage-right" ? 0.82 : 0;
@@ -66,6 +72,7 @@ export function CreatureStage({
         const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
         setPointer({ x, y });
       }}
+      onClick={() => onStageClick?.()}
     >
       <color attach="background" args={[STAGE_BG]} />
       <fog attach="fog" args={[STAGE_FOG, 14, 28]} />
@@ -78,6 +85,8 @@ export function CreatureStage({
           equipped={equipped}
           mood={mood}
           skill={skill}
+          demo={demo}
+          sulk={sulk}
           followPointer={followPointer}
           pointer={pointer}
         />

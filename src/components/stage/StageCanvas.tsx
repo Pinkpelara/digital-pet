@@ -12,6 +12,8 @@ type StageCanvasProps = {
   alpha?: boolean;
   dprMax?: number;
   onPointerMove?: (event: PointerEvent<HTMLDivElement>) => void;
+  onPointerDown?: (event: PointerEvent<HTMLDivElement>) => void;
+  onClick?: (event: PointerEvent<HTMLDivElement>) => void;
 };
 
 export function StageCanvas({
@@ -21,6 +23,8 @@ export function StageCanvas({
   alpha = true,
   dprMax = 1.6,
   onPointerMove,
+  onPointerDown,
+  onClick,
 }: StageCanvasProps) {
   const host = useRef<HTMLDivElement>(null);
   const renderer = useRef<WebGLRenderer | null>(null);
@@ -56,6 +60,8 @@ export function StageCanvas({
       ref={host}
       className={className}
       onPointerMove={onPointerMove}
+      onPointerDown={onPointerDown}
+      onClick={onClick}
       style={alpha ? undefined : { background: STAGE_BG }}
     >
       {visible ? (

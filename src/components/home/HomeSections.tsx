@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
+import { PlayableStage } from "@/components/stage/PlayableStage";
 import { companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
 import type { EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
@@ -13,23 +14,40 @@ function StageBox({
   skill,
   mood,
   className = "aspect-[4/5]",
+  playable = false,
+  companionName,
 }: {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
   skill?: SkillId | null;
   mood?: "idle" | "nap" | "follow" | "climb" | "happy" | "hide";
   className?: string;
+  playable?: boolean;
+  companionName?: string;
 }) {
   return (
     <div className={`overflow-hidden rounded-[1.8rem] bg-cream ${className}`}>
-      <LiveStage
-        species={species}
-        equipped={equipped}
-        skill={skill}
-        mood={mood}
-        className="h-full min-h-[280px] w-full"
-        cameraZ={5.6}
-      />
+      {playable ? (
+        <PlayableStage
+          species={species}
+          equipped={equipped}
+          skill={skill}
+          autoPlay={skill ?? undefined}
+          mood={mood}
+          companionName={companionName}
+          className="h-full min-h-[280px] w-full"
+          cameraZ={5.6}
+        />
+      ) : (
+        <LiveStage
+          species={species}
+          equipped={equipped}
+          skill={skill}
+          mood={mood}
+          className="h-full min-h-[280px] w-full"
+          cameraZ={5.6}
+        />
+      )}
     </div>
   );
 }
@@ -98,11 +116,18 @@ export function MakeYoursDemo() {
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
         Dress it. Hand it a gadget. Teach it a trick.
       </h2>
-      <p className="mt-4 max-w-xl text-ink-soft">
-        Try it on this Bloop. Nothing is saved until you adopt one.
-      </p>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            Tap Bloop for the trick wheel. Catalog grids stay catalogs — the pet is the demo stage.
+          </p>
       <div className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
-        <StageBox species="bloop" equipped={look.equipped} skill={look.skill} className="min-h-[420px] md:min-h-[520px]" />
+        <StageBox
+          species="bloop"
+          equipped={look.equipped}
+          skill={look.skill}
+          playable
+          companionName="Bloop"
+          className="min-h-[420px] md:min-h-[520px]"
+        />
         <div>
           <div className="flex flex-wrap gap-2">
             {tryLooks.map((entry) => (
@@ -243,17 +268,17 @@ export function TinyProblem() {
 export function LetLoose() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Eventually let them loose</p>
+      <p className="text-sm font-medium text-moss">Lives in the corner while you work</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
-        Desktop roaming is coming. It is not here yet.
+        Pin the browser today. Desktop roaming comes later.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
-        Today they live on this website. You can add the page to a browser. Walking across your
-        whole computer is the flagship — and we are not pretending the app exists.
+        The real now-path on a work machine is a pinned browser window — they sit in the corner
+        while you write. A full OS desktop app is coming. We are not pretending it exists.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/live" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-          Where they live today
+        <Link href="/browser" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+          Add to browser
         </Link>
         <Link href="/desktop" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
           Desktop, honestly

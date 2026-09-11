@@ -14,6 +14,14 @@ export type SkillId =
   | "skate"
   | "nap";
 
+/** On-stage demo played from the live-pet radial wheel. Includes skills + gadget behaviours. */
+export type DemoActionId =
+  | SkillId
+  | "rain-walk"
+  | "photo-pose"
+  | "hover"
+  | "tidy";
+
 export type CreatureMood =
   | "idle"
   | "walk"
@@ -268,4 +276,7 @@ export type AnalyticsEventName =
   | "auth_started"
   | "gift_redeemed"
   | "personality_revealed"
-  | "clip_shared";
+  | "clip_shared"
+  | "action_wheel_opened"
+  | "demo_played"
+  | "birthday_opened";

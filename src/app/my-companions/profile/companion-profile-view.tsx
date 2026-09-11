@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { PlayableStage } from "@/components/stage/PlayableStage";
 import { PersonalityReveal } from "@/components/share/PersonalityReveal";
 import { WhatDidTheyDo } from "@/components/share/WhatDidTheyDo";
 import { liveHref, studioHref } from "@/lib/catalog-paths";
@@ -82,9 +82,11 @@ export function CompanionProfileView() {
     <div className="mx-auto max-w-5xl px-5 py-12 md:px-10">
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
         <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
-          <LiveStage
+          <PlayableStage
             species={instance.speciesId}
             equipped={instance.equipped}
+            unlockedSkills={instance.unlockedSkills}
+            companionName={instance.name}
             className="h-full w-full"
             cameraZ={5.5}
           />
