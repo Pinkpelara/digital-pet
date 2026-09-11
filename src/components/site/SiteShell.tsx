@@ -28,6 +28,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </main>
         <SiteFooter />
       </div>
+      <div aria-hidden className="site-grain grain-layer" />
     </NestProvider>
   );
 }

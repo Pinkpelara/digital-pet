@@ -5,8 +5,10 @@ import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
 import { MathUtils } from "three";
 import { FigurineMesh } from "@/components/stage/FigurineMesh";
+import { FollowLight } from "@/components/stage/FollowLight";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows } from "@/components/stage/StudioKit";
+import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
 import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId } from "@/lib/types";
 
 const moods: CreatureMood[] = ["follow", "climb", "happy", "follow", "nap", "follow"];
@@ -33,19 +35,20 @@ function Rig({
   const group = useRef<Group>(null);
   useFrame((state) => {
     const cam = state.camera;
-    const targetX = mobile ? pointer.x * 0.22 : 0.48 + pointer.x * 0.32;
-    const targetY = 0.42 + pointer.y * -0.14;
-    const targetZ = (mobile ? 5.9 : 5.45) + scroll * 0.45;
-    cam.position.x = MathUtils.lerp(cam.position.x, targetX, 0.045);
-    cam.position.y = MathUtils.lerp(cam.position.y, targetY, 0.045);
-    cam.position.z = MathUtils.lerp(cam.position.z, targetZ, 0.05);
-    cam.lookAt(mobile ? 0 : 0.68, 0.18, 0);
+    const targetX = mobile ? pointer.x * 0.38 : 0.28 + pointer.x * 0.55;
+    const targetY = 0.38 + pointer.y * -0.22;
+    const targetZ = (mobile ? 5.7 : 5.15) + scroll * 0.55;
+    cam.position.x = MathUtils.lerp(cam.position.x, targetX, 0.05);
+    cam.position.y = MathUtils.lerp(cam.position.y, targetY, 0.05);
+    cam.position.z = MathUtils.lerp(cam.position.z, targetZ, 0.055);
+    cam.lookAt(mobile ? 0 : 0.42, 0.16, 0);
     if (group.current && !demo && !sulk) {
-      group.current.rotation.y = MathUtils.lerp(group.current.rotation.y, pointer.x * 0.16, 0.045);
+      group.current.rotation.y = MathUtils.lerp(group.current.rotation.y, pointer.x * 0.28, 0.055);
+      group.current.rotation.x = MathUtils.lerp(group.current.rotation.x, pointer.y * -0.08, 0.05);
     }
   });
   return (
-    <group ref={group} position={mobile ? [0, 0, 0] : [0.82, 0.02, 0]} scale={mobile ? 1.16 : 1.32}>
+    <group ref={group} position={mobile ? [0, 0.04, 0] : [0.48, 0.02, 0]} scale={mobile ? 1.28 : 1.48}>
       <FigurineMesh
         species="bloop"
         followPointer={!demo && !sulk}
@@ -78,10 +81,12 @@ export function HeroStage({
   const [scroll, setScroll] = useState(0);
   const [mobile, setMobile] = useState(true);
   const [mood, setMood] = useState<CreatureMood>("follow");
+  const [reducedMotion, setReducedMotion] = useState(false);
   const reduce = useRef(false);
 
   useEffect(() => {
     reduce.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setReducedMotion(reduce.current);
     const mq = window.matchMedia("(max-width: 768px)");
     const syncMobile = () => setMobile(mq.matches);
     syncMobile();
@@ -113,9 +118,9 @@ export function HeroStage({
   return (
     <StageCanvas
       className="absolute inset-0"
-      alpha
+      alpha={false}
       dprMax={mobile ? 1.15 : 1.5}
-      camera={{ position: [0.2, 0.42, 5.6], fov: 30, far: 40 }}
+      camera={{ position: [0.2, 0.42, 5.4], fov: 32, far: 40 }}
       onPointerMove={(event) => {
         if (reduce.current) return;
         const x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -123,7 +128,10 @@ export function HeroStage({
         setPointer({ x, y });
       }}
     >
+      <color attach="background" args={[STAGE_BG]} />
+      <fog attach="fog" args={[STAGE_FOG, 10, 24]} />
       <StudioLights />
+      {!reducedMotion ? <FollowLight pointer={pointer} /> : null}
       <Rig
         pointer={pointer}
         scroll={scroll}
@@ -134,7 +142,7 @@ export function HeroStage({
         sulk={sulk}
         equipped={equipped}
       />
-      <StudioShadows position={[0, -0.96, 0]} scale={10} />
+      <StudioShadows position={[0, -0.96, 0]} scale={12} />
     </StageCanvas>
   );
 }

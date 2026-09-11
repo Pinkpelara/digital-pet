@@ -39,8 +39,9 @@ export default async function CompanionPage({ params }: { params: Promise<{ slug
         />
       </Suspense>
 
-      <section className="mx-auto max-w-6xl px-5 pb-16 md:px-10">
-        <div className="grid gap-8 border-t border-ink/8 pt-12 md:grid-cols-3">
+      <section className="mx-auto max-w-6xl px-5 pb-20 md:px-10">
+        <p className="text-[11px] font-semibold tracking-[0.28em] text-moss">{companion.alias}</p>
+        <div className="mt-6 grid gap-8 border-t border-ink/10 pt-12 md:grid-cols-3">
           <div>
             <p className="text-sm font-medium text-ink-soft">Known habits</p>
             <ul className="mt-3 space-y-1 text-ink">

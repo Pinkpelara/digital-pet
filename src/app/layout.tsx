@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Syne } from "next/font/google";
 import { SiteShell } from "@/components/site/SiteShell";
 import { OrganizationJsonLd } from "@/components/store/ProductJsonLd";
 import { brand } from "@/lib/brand";
@@ -10,6 +10,13 @@ import "./globals.css";
 const sans = Outfit({
   variable: "--font-sans-face",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const display = Syne({
+  variable: "--font-display-face",
+  subsets: ["latin"],
+  weight: ["700", "800"],
   display: "swap",
 });
 
@@ -41,7 +48,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: brand.name,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
   },
   icons: {
     apple: `${publicBasePath()}/apple-touch-icon.png`,
@@ -49,12 +56,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#faf6ef",
+  themeColor: "#0C0021",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} h-full antialiased`}>
+    <html lang="en" className={`${sans.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full">
         <OrganizationJsonLd />
         <SiteShell>{children}</SiteShell>

@@ -22,8 +22,8 @@ export function WhereTheyLive({
 
   return (
     <section aria-labelledby="where-they-live-heading">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Three places, same inventory</p>
-      <Heading id="where-they-live-heading" className="mt-2 font-display text-4xl text-ink md:text-5xl">
+      <p className="kicker">Three places, same inventory</p>
+      <Heading id="where-they-live-heading" className="mt-3 font-display text-5xl leading-[0.92] text-ink md:text-7xl">
         {copy.title}
       </Heading>
       <p className="mt-3 max-w-2xl text-lg text-ink-soft">{copy.lede}</p>
@@ -33,7 +33,7 @@ export function WhereTheyLive({
             <Link
               href={path.href(instanceId)}
               onClick={() => choose(path.id)}
-              className="flex h-full flex-col rounded-2xl bg-paper p-6 text-left ring-1 ring-ink/10 transition hover:-translate-y-0.5 hover:ring-ink/20"
+              className="flex h-full flex-col rounded-[1.5rem] bg-mist p-6 text-left ring-1 ring-ink/10 transition hover:-translate-y-1 hover:ring-moss/40"
             >
               <p className="text-xs uppercase tracking-[0.16em] text-moss">{path.kicker}</p>
               <p className="mt-2 w-fit rounded-full bg-cream px-2 py-0.5 text-[11px] uppercase tracking-wider text-ink">

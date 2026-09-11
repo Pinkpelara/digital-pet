@@ -160,6 +160,8 @@ export type CompanionSpecies = {
   title: string;
   /** One funny, specific line. Not poetry. */
   tagline: string;
+  /** Roster poster name — attitude, not a shop SKU. */
+  alias: string;
   description: string;
   priceCents: number;
   traits: string[];

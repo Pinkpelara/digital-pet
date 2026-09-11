@@ -30,7 +30,7 @@ function StudioInner() {
 
   return (
     <>
-      <h1 className="mt-2 font-display text-5xl text-ink">{instance.name}</h1>
+      <h1 className="mt-2 font-display text-6xl leading-[0.92] text-ink">{instance.name}</h1>
       <p className="mt-2 text-ink-soft">
         Equip what you own, teach what you have taught, and save the look.
       </p>
@@ -52,7 +52,7 @@ function StudioInner() {
 export default function CompanionStudioPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Customization studio</p>
+      <p className="kicker">Customization studio</p>
       <ClientOnly fallback={<p className="mt-4 text-ink-soft">Warming the studio lamp…</p>}>
         <StudioInner />
       </ClientOnly>

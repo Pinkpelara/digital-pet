@@ -22,11 +22,12 @@ export function ProductCard({
     item.kind === "gadget" ||
     item.kind === "skill" ||
     item.kind === "outfit" ||
+    item.kind === "drop" ||
     (item.kind === "companion" && Boolean(item.speciesId));
   const demo = item.kind === "companion" ? null : demoActionForItem(item);
 
   return (
-    <article className="card-lift overflow-hidden rounded-[1.6rem] bg-cream/70 ring-1 ring-ink/8">
+    <article className="poster-card card-lift rounded-[1.6rem]">
       <Link href={href} className="block">
         <div className="aspect-[4/5] bg-cream">
           {showStage ? (
@@ -37,7 +38,7 @@ export function ProductCard({
                 skill={item.skillId ?? null}
                 demo={demo}
                 className="h-full w-full"
-                cameraZ={5.7}
+                cameraZ={5.55}
                 followPointer={false}
                 quality="medium"
                 dprMax={1.2}
@@ -55,13 +56,14 @@ export function ProductCard({
             </div>
           )}
         </div>
-        <div className="bg-paper px-5 py-4">
-          <p className="text-xs uppercase tracking-[0.16em] text-ink-soft">
+        <div className="film-wash" aria-hidden />
+        <div className="poster-copy">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-moss">
             {item.kind}
             {owned ? " · owned" : shopSafe ? "" : " · preview"}
           </p>
-          <h3 className="mt-1 font-display text-2xl text-ink">{title}</h3>
-          <p className="mt-1 text-sm text-ink-soft">{item.behaviorNote ?? item.tagline}</p>
+          <h3 className="mt-1 font-display text-3xl leading-none text-ink">{title}</h3>
+          <p className="mt-2 text-sm text-ink-soft">{item.behaviorNote ?? item.tagline}</p>
           <p className="mt-3 text-sm tabular-nums text-ink">
             {shopSafe ? formatPrice(item.priceCents) : "Preview — not for sale yet"}
           </p>

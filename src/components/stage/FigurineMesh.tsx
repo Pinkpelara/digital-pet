@@ -26,7 +26,7 @@ function ClayMaterial({ color }: { color: string }) {
       sheen={clay.sheen}
       sheenRoughness={clay.sheenRoughness}
       sheenColor={clay.sheenColor}
-      envMapIntensity={0.55}
+      envMapIntensity={0.92}
     />
   );
 }

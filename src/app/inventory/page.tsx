@@ -18,8 +18,8 @@ export default function InventoryPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <p className="text-xs uppercase tracking-[0.2em] text-moss">Inventory</p>
-      <h1 className="mt-2 font-display text-5xl text-ink">What you own</h1>
+      <p className="kicker">Inventory</p>
+      <h1 className="mt-3 font-display text-5xl leading-[0.92] text-ink md:text-7xl">What you own</h1>
       <p className="mt-3 text-ink-soft">
         On this static preview, entitlements live in your browser (localStorage). A later Vercel deploy can grant them
         from Stripe + Supabase instead — the inventory looks the same. Permanent. Not a file.
@@ -42,7 +42,7 @@ export default function InventoryPage() {
       {rows.length === 0 ? (
         <p className="mt-8 text-ink-soft">Nothing here yet. Adopt, dress, or redeem a gift.</p>
       ) : (
-        <ul className="mt-8 divide-y divide-ink/8 rounded-[1.6rem] bg-paper ring-1 ring-ink/8">
+        <ul className="mt-8 divide-y divide-ink/10 rounded-[1.6rem] bg-mist ring-1 ring-ink/10">
           {rows.map(({ row, item }) => (
             <li key={row.id} className="flex items-center justify-between gap-4 px-5 py-4">
               <div>

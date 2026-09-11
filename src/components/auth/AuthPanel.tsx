@@ -22,7 +22,7 @@ export function AuthPanel() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded-[2rem] bg-paper p-8 shadow-sm ring-1 ring-ink/8">
+    <div className="mx-auto max-w-md rounded-[2rem] bg-mist p-8 ring-1 ring-ink/10">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">No passwords</p>
       <h1 className="mt-2 font-display text-4xl text-ink">Come in quietly.</h1>
       <p className="mt-3 text-ink-soft">

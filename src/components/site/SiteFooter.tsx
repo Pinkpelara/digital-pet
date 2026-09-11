@@ -34,10 +34,10 @@ const footer = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-ink/8 bg-paper text-ink">
+    <footer className="mt-auto border-t border-ink/10 bg-void text-ink">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-4">
         <div>
-          <p className="font-display text-3xl text-ink">{brand.name}</p>
+          <p className="font-display text-4xl text-ink">{brand.name}</p>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-soft">{brand.tagline}</p>
         </div>
         {footer.map((column) => (

@@ -7,6 +7,7 @@ import { ActionWheel } from "@/components/stage/ActionWheel";
 import { Creature } from "@/components/creatures/Creature";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
+import { KineticTitle } from "@/components/site/KineticTitle";
 import { brand } from "@/lib/brand";
 import { adoptFromCents } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
@@ -44,8 +45,8 @@ export function HeroBanner() {
   }, []);
 
   return (
-    <section className="relative isolate min-h-[92svh] overflow-hidden bg-paper">
-      <div className="pointer-events-none absolute inset-y-0 -right-[12%] w-[72%] max-md:inset-x-[-8%] max-md:top-[28%] max-md:h-[58%] max-md:w-auto">
+    <section className="relative isolate min-h-[100svh] overflow-hidden bg-void">
+      <div className="absolute inset-0">
         {stageReady ? (
           <>
             <HeroStage
@@ -58,15 +59,22 @@ export function HeroBanner() {
             <StageFx demo={playable.demo} />
           </>
         ) : (
-          <div className="absolute inset-0 bg-cream" />
+          <div className="absolute inset-0 bg-void" />
         )}
       </div>
+      <div aria-hidden className="hero-vignette pointer-events-none absolute inset-0 z-10" />
+      <div aria-hidden className="grain-layer pointer-events-none absolute inset-0 z-10 opacity-[0.12] mix-blend-overlay" />
 
-      <div className="pointer-events-none relative z-20 mx-auto flex min-h-[92svh] max-w-6xl flex-col justify-center px-5 py-16 md:px-10 md:py-24">
-        <p className="text-sm font-medium text-moss">{brand.tagline}</p>
-        <h1 className="relative mt-4 max-w-[14ch] font-display text-4xl leading-[0.98] text-ink md:text-6xl">
-          {headline}
-          <span className="headline-peek pointer-events-none absolute -right-10 -top-6 hidden md:block" aria-hidden>
+      <div className="pointer-events-none relative z-20 mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-24 md:justify-center md:px-10 md:pb-24 md:pt-20">
+        <p className="kicker">{brand.tagline}</p>
+        <h1 className="relative mt-5 max-w-[13ch]">
+          <KineticTitle
+            as="span"
+            className="block text-5xl leading-[0.9] text-ink md:text-7xl lg:text-[5.6rem]"
+          >
+            {headline}
+          </KineticTitle>
+          <span className="headline-peek pointer-events-none absolute -right-8 -top-8 hidden md:block" aria-hidden>
             <Creature species="niblet" size={72} mood="climb" decorative equipped={{ face: "outfit-sunglasses" }} />
           </span>
         </h1>
@@ -75,7 +83,7 @@ export function HeroBanner() {
           <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
             Adopt from {adoptFrom}. Start with Bloop.
           </Link>
-          <Link href="/companions" className="rounded-full border border-ink/15 bg-paper px-6 py-3 text-sm text-ink">
+          <Link href="/companions" className="rounded-full border border-ink/20 bg-void/40 px-6 py-3 text-sm text-ink backdrop-blur">
             Adopt one
           </Link>
         </div>
@@ -90,7 +98,7 @@ export function HeroBanner() {
       </div>
 
       <div
-        className={`absolute inset-y-[18%] right-0 w-[42%] max-md:inset-x-0 max-md:top-[54%] max-md:h-[40%] max-md:w-auto ${
+        className={`absolute inset-y-[12%] right-0 w-[58%] max-md:inset-x-0 max-md:top-[38%] max-md:h-[52%] max-md:w-auto ${
           playable.open ? "z-40" : "z-20"
         }`}
       >
@@ -108,8 +116,8 @@ export function HeroBanner() {
           onClose={playable.closeWheel}
           name="Bloop"
         />
-        <p className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-ink/75 px-3 py-1 text-xs text-paper max-md:bottom-3">
-          {playable.demo ? playable.caption : playable.sulk ? "They’re waiting." : "Click them."}
+        <p className="stage-caption max-md:bottom-4">
+          {playable.demo ? playable.caption : playable.sulk ? "They’re waiting." : "Move. Click them."}
         </p>
       </div>
     </section>

@@ -11,13 +11,13 @@ export const figurineLook: Record<
   niblet: { body: "#F0B03A", belly: "#FFF0C8", shade: "#C48420", gloss: "#FFE08A", extra: "#FFD060" },
 };
 
-/** Soft clay / toy plastic. Some sheen, not luxury clearcoat. */
+/** Soft clay / toy plastic — more stage light, still a companion not chrome. */
 export const clay = {
-  roughness: 0.4,
-  metalness: 0,
-  clearcoat: 0.26,
-  clearcoatRoughness: 0.52,
-  sheen: 0.68,
-  sheenRoughness: 0.78,
-  sheenColor: "#fff4e8",
+  roughness: 0.32,
+  metalness: 0.04,
+  clearcoat: 0.42,
+  clearcoatRoughness: 0.36,
+  sheen: 0.58,
+  sheenRoughness: 0.62,
+  sheenColor: "#f0e4ff",
 } as const;

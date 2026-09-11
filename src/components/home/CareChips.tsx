@@ -9,10 +9,10 @@ export function CareChips({ className = "" }: { className?: string }) {
   if (!mounted) {
     return (
       <ul className={`flex flex-wrap gap-2 ${className}`}>
-        <li className="rounded-full bg-cream px-3 py-1.5 text-sm text-ink">
+        <li className="rounded-full bg-mist px-3 py-1.5 text-sm text-ink ring-1 ring-ink/10">
           <span className="text-ink-soft">Energy · </span>Rested
         </li>
-        <li className="rounded-full bg-cream px-3 py-1.5 text-sm text-ink">
+        <li className="rounded-full bg-mist px-3 py-1.5 text-sm text-ink ring-1 ring-ink/10">
           <span className="text-ink-soft">Mood · </span>Curious
         </li>
       </ul>
@@ -25,15 +25,15 @@ export function CareChips({ className = "" }: { className?: string }) {
 
   return (
     <ul className={`flex flex-wrap gap-2 ${className}`}>
-      <li className="rounded-full bg-cream px-3 py-1.5 text-sm text-ink">
+      <li className="rounded-full bg-mist px-3 py-1.5 text-sm text-ink ring-1 ring-ink/10">
         <span className="text-ink-soft">Energy · </span>
         {energy}
       </li>
-      <li className="rounded-full bg-cream px-3 py-1.5 text-sm text-ink">
+      <li className="rounded-full bg-mist px-3 py-1.5 text-sm text-ink ring-1 ring-ink/10">
         <span className="text-ink-soft">Mood · </span>
         {mood}
       </li>
-      <li className="rounded-full bg-cream px-3 py-1.5 text-sm text-ink-soft">from today’s habits</li>
+      <li className="rounded-full bg-mist px-3 py-1.5 text-sm text-ink-soft ring-1 ring-ink/10">from today’s habits</li>
     </ul>
   );
 }
