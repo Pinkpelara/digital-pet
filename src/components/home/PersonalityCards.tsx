@@ -28,6 +28,7 @@ export function PersonalityCards({
                 cameraZ={5.45}
                 followPointer
                 quality="medium"
+                dprMax={1}
               />
             </div>
             <div className="film-wash" aria-hidden />

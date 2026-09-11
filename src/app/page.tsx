@@ -5,8 +5,7 @@ import { formatPrice } from "@/lib/format";
 import { HeroBanner } from "@/components/stage/HeroBanner";
 import { HomeProductJsonLd } from "@/components/store/ProductJsonLd";
 import { KineticTitle } from "@/components/site/KineticTitle";
-import { PersonalityCards } from "@/components/home/PersonalityCards";
-import { MakeYoursDemo } from "@/components/home/HomeSections";
+import { DeferredMeet, DeferredTheirStuff } from "@/components/home/DeferredHome";
 
 export default function HomePage() {
   const adoptFrom = formatPrice(adoptFromCents());
@@ -32,11 +31,20 @@ export default function HomePage() {
             <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
           </div>
           <div className="mx-auto mt-10 max-w-6xl px-5 md:px-10">
-            <PersonalityCards featured />
+            <DeferredMeet />
           </div>
         </section>
 
-        <MakeYoursDemo />
+        <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
+          <p className="kicker">Their stuff</p>
+          <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
+            Try it on. It’s theirs.
+          </KineticTitle>
+          <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
+          <div className="mt-10">
+            <DeferredTheirStuff />
+          </div>
+        </section>
       </div>
 
       <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-28 pt-12 text-center md:px-10">

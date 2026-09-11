@@ -10,7 +10,7 @@ export function WhenVisible({
   children,
   fallback = null,
   className,
-  rootMargin = "180px",
+  rootMargin = "40px",
   once = false,
 }: {
   children: ReactNode;

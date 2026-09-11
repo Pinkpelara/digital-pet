@@ -6,6 +6,10 @@
   --cream: #16082e;
   --paper: #0c0021;
   --moss: #5ce6d8;
+  /* Text on dark paper/mist/cream (≥4.5:1). Halo covers light 3D highlights. */
+  --moss-text: #5ce6d8;
+  /* Text on light ink chips / paper-like surfaces (≥4.5:1 on #f4eeff). */
+  --moss-text-on-light: #0a6e66;
   --peach: #ff7a93;
   --sky: #7ab8ff;
   --blush: #ff5aa8;
@@ -344,7 +348,22 @@ body {
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--moss);
+  color: var(--moss-text);
+  text-shadow: 0 0 10px rgba(12, 0, 33, 0.92), 0 1px 2px rgba(12, 0, 33, 0.88);
+}
+
+.text-moss,
+.hover\:text-moss:hover,
+.group:hover .group-hover\:text-moss {
+  color: var(--moss-text);
+  text-shadow: 0 0 10px rgba(12, 0, 33, 0.92), 0 1px 2px rgba(12, 0, 33, 0.88);
+}
+
+.bg-ink .text-moss,
+.bg-ink .kicker,
+.bg-ink\/80 .text-moss {
+  color: var(--moss-text-on-light);
+  text-shadow: none;
 }
 
 .stage-frame {

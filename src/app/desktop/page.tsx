@@ -14,8 +14,7 @@ export default function DesktopPage() {
       />
       <div className="mx-auto max-w-3xl px-5 md:px-10">
       <p className="text-ink-soft">
-        Mute chaos is always one tap. Goose-mode is an opt-in Teach — never the default. They do not
-        starve. They do not die if you forget them.
+        Mute chaos is always one tap. They do not starve. They do not die if you forget them.
       </p>
       <p className="mt-3 text-ink-soft">
         For work machines today, they live in the corner of a pinned browser. That is the real
