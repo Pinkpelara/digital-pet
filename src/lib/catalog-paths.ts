@@ -44,22 +44,22 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "companion":
       return {
         title: "Companions",
-        lede: "New species to adopt. Every one arrives with a personality you did not pick.",
+        lede: "Meet one individual. Every one arrives with a personality you did not pick — and cannot buy.",
       };
     case "outfit":
       return {
         title: "Closet",
-        lede: "Raincoats first. Clothing changes how they look, not who they are. Shop line: Yellow Raincoat · Pocket Umbrella.",
+        lede: "Outfits are permanent. Personality is not for sale. Birthday and habit magic stay free — we sell the coat they wear that day. Shop line: Yellow Raincoat · Pocket Umbrella.",
       };
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "Objects that change what they do. In the shop now: Pocket Umbrella. If you cannot see the trick in a second, we do not sell it yet.",
+        lede: "Objects that change what they do. Watch them do the thing. In the shop now: Pocket Umbrella. If you cannot see the trick in a second, we do not sell it yet.",
       };
     case "skill":
       return {
         title: "Skills",
-        lede: "Teach them something. Skills stay in the catalog as previews until the motion is obvious in a second.",
+        lede: "Teach moonwalk. Backward, smooth, slightly illegal. Teach skills stay yours. Personality is not for sale.",
       };
     case "drop":
       return {

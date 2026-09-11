@@ -4,9 +4,10 @@ import { useMemo, useState } from "react";
 import { items } from "@/data/catalog";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
+import { demoActionForItem } from "@/lib/demo-actions";
 import { useNest } from "@/lib/state/nest-context";
 import { fullLabels } from "@/lib/personality";
-import type { CompanionInstance, EquipSlot, SkillId } from "@/lib/types";
+import type { CompanionInstance, DemoActionId, EquipSlot, SkillId } from "@/lib/types";
 
 const tabs = ["LOOK", "GADGET", "SKILLS"] as const;
 type Tab = (typeof tabs)[number];
@@ -22,6 +23,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
   const [tab, setTab] = useState<Tab>("LOOK");
   const [equipped, setEquipped] = useState(instance.equipped);
   const [skill, setSkill] = useState<SkillId | null>(null);
+  const [playAction, setPlayAction] = useState<DemoActionId | null>(null);
   const [saved, setSaved] = useState(false);
 
   const options = useMemo(
@@ -31,6 +33,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
   const remaining = fullLabels(instance.seed).length - instance.discovered.length;
 
   function toggle(itemId: string, slot?: EquipSlot, skillId?: SkillId) {
+    const item = items.find((entry) => entry.id === itemId);
     if (slot) {
       setEquipped((prev) => {
         const next = { ...prev };
@@ -40,6 +43,8 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
       });
       setSaved(false);
     }
+    const action = item ? demoActionForItem(item) : null;
+    if (action) setPlayAction(action);
     if (skillId) {
       setSkill(skillId);
       track("skill_performed", { skill: skillId, instanceId: instance.id });
@@ -54,10 +59,12 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
           species={instance.speciesId}
           equipped={equipped}
           skill={skill}
+          playAction={playAction}
           className="h-full min-h-[52vh] w-full lg:min-h-[64vh]"
           cameraZ={5.5}
           companionName={instance.name}
           unlockedSkills={instance.unlockedSkills}
+          hint="Tap them — Teach, Gadget, Outfit, Nap."
         />
       </div>
       <div>
@@ -142,8 +149,8 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
         </div>
 
         <p className="mt-6 text-sm text-ink-soft">
-          Gadgets are not decoration. A skateboard means skating; an umbrella means rain-walks.
-          Personality is not something you can equip.
+          Equip still lives here. Every look does a 1–2s show-off on them first. Gadgets change what
+          they do; personality is not something you can equip. Cosmetics and Teach skills stay yours.
         </p>
       </div>
     </div>

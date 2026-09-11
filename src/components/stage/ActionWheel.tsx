@@ -93,6 +93,40 @@ function Icon({ id }: { id: WheelIconId }) {
           <circle cx="12" cy="14" r="2" fill="currentColor" />
         </svg>
       );
+    case "outfit":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <path {...common} d="M8 6l4-2 4 2 3 3-3 1v8H8V10L5 9l3-3Z" />
+        </svg>
+      );
+    case "mood":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <circle cx="12" cy="12" r="7" {...common} />
+          <path {...common} d="M8.5 11v.5M15.5 11v.5M9 15c1.2 1.2 4.8 1.2 6 0" />
+        </svg>
+      );
+    case "gift":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <rect x="5" y="11" width="14" height="8" rx="1" {...common} />
+          <path {...common} d="M5 15h14M12 11v8M9 7c0-1.5 1.2-2.5 3-1.2C13.8 4.5 15 5.5 15 7c0 1-3 4-3 4s-3-3-3-4Z" />
+        </svg>
+      );
+    case "study":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <path {...common} d="M4 7l8-3 8 3v10l-8 3-8-3V7Z" />
+          <path {...common} d="M12 4v16M4 7l8 3 8-3" />
+        </svg>
+      );
+    case "mad":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden className="h-6 w-6">
+          <circle cx="12" cy="12" r="7" {...common} />
+          <path {...common} d="M8 10l2.5 1.2M16 10l-2.5 1.2M9 16c1.4-1 4.6-1 6 0" />
+        </svg>
+      );
   }
 }
 
@@ -112,7 +146,7 @@ export function ActionWheel({
   if (!open) return null;
 
   return (
-    <div className="action-wheel" role="dialog" aria-label={`${name}’s gadgets and skills`}>
+    <div className="action-wheel" role="dialog" aria-label={`${name}’s day`}>
       <button type="button" className="action-wheel-scrim" onClick={onClose} aria-label="Close wheel" />
       <div className="action-wheel-orbit">
         <div className="action-wheel-ring" aria-hidden />
@@ -141,7 +175,7 @@ export function ActionWheel({
             );
           })}
         </ul>
-        <p className="action-wheel-center">Pick a trick</p>
+        <p className="action-wheel-center">They’re listening</p>
       </div>
     </div>
   );

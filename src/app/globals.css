@@ -470,6 +470,83 @@ body {
   animation: flash-pop 0.55s ease forwards;
 }
 
+.stage-confetti {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+}
+
+.stage-confetti span {
+  position: absolute;
+  top: -8%;
+  width: 8px;
+  height: 10px;
+  border-radius: 2px;
+  background: #e86b6b;
+  animation: confetti-fall 1.6s ease-in infinite;
+}
+
+.stage-confetti span:nth-child(odd) {
+  background: #f2c14e;
+}
+
+.stage-confetti span:nth-child(3n) {
+  background: #5b8def;
+}
+
+.show-off-stack {
+  position: relative;
+  min-height: 3.2rem;
+  --show-off: 1.85s;
+}
+
+.show-off-wait {
+  animation: wait-hide var(--show-off) ease forwards;
+}
+
+.show-off-cta {
+  animation: cta-in var(--show-off) ease forwards;
+}
+
+@keyframes wait-hide {
+  0%,
+  82% {
+    opacity: 1;
+    max-height: 4rem;
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes cta-in {
+  0%,
+  82% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateY(120%) rotate(140deg);
+    opacity: 0.95;
+  }
+}
+
 @keyframes wheel-in {
   from {
     opacity: 0;
@@ -543,9 +620,22 @@ body {
   .action-wheel-orbit,
   .stage-rain span,
   .stage-flash,
+  .stage-confetti span,
+  .show-off-wait,
+  .show-off-cta,
   .parcel.is-shaking,
   .creature-crawl,
   .hero-word.is-bumped {
     animation: none !important;
+  }
+
+  .show-off-wait {
+    display: none !important;
+  }
+
+  .show-off-cta {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
   }
 }

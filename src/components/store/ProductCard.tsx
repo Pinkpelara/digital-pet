@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { formatPrice } from "@/lib/format";
 import { isShopSafe } from "@/lib/catalog-paths";
+import { demoActionForItem, loadoutForCatalogItem, speciesForCatalogItem } from "@/lib/demo-actions";
 import type { CatalogItem } from "@/lib/types";
 
 export function ProductCard({
@@ -17,13 +18,32 @@ export function ProductCard({
 }) {
   const title = item.kind === "skill" ? `Teach ${item.name}` : item.name;
   const shopSafe = isShopSafe(item);
+  const showStage =
+    item.kind === "gadget" ||
+    item.kind === "skill" ||
+    item.kind === "outfit" ||
+    (item.kind === "companion" && Boolean(item.speciesId));
+  const demo = item.kind === "companion" ? null : demoActionForItem(item);
 
   return (
     <article className="card-lift overflow-hidden rounded-[1.6rem] bg-cream/70 ring-1 ring-ink/8">
       <Link href={href} className="block">
         <div className="aspect-[4/5] bg-cream">
-          {item.kind === "companion" && item.speciesId ? (
-            <LiveStage species={item.speciesId} className="h-full w-full" cameraZ={5.7} />
+          {showStage ? (
+            <div className="pointer-events-none h-full w-full">
+              <LiveStage
+                species={speciesForCatalogItem(item)}
+                equipped={item.kind === "companion" ? undefined : loadoutForCatalogItem(item)}
+                skill={item.skillId ?? null}
+                demo={demo}
+                className="h-full w-full"
+                cameraZ={5.7}
+                followPointer={false}
+                quality="medium"
+                dprMax={1.2}
+                loop
+              />
+            </div>
           ) : (
             <div className="flex h-full items-center justify-center">
               <span

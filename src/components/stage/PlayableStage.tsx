@@ -67,10 +67,10 @@ export function PlayableStage({
   }
 
   const liveDemo =
+    playable.demo ??
     playAction ??
     stage.skill ??
     actionFromLoadout(playable.equipped, null, null) ??
-    playable.demo ??
     autoPlay ??
     null;
 
