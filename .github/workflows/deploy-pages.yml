@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - opencode/companion-first-fixes
       - cursor/sillkin-website-mvp-8cd7
       - cursor/where-pets-live-8cd7
   workflow_dispatch:
