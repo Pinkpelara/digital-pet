@@ -288,7 +288,7 @@ export function FigurineMesh({
   const umbrella = useRef<Group>(null);
   const actionStarted = useRef(0);
   const lastAction = useRef<string | null>(null);
-  const hold = useRef<IdlePose>({ x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, scale: 1 });
+  const hold = useRef<IdlePose | null>(null);
   const look = figurineLook[species];
   const segs = quality === "high" ? 48 : quality === "medium" ? 28 : 16;
   const proportions = useMemo(() => {
@@ -317,7 +317,9 @@ export function FigurineMesh({
     }
     if (!action) {
       const target = idlePose(species, mood, t, seed, followPointer || mood === "follow" ? pointer : null);
-      const next = poseLerp(hold.current, target, mood === "follow" ? 0.08 : 0.045);
+      const next = hold.current
+        ? poseLerp(hold.current, target, mood === "follow" ? 0.1 : 0.06)
+        : target;
       hold.current = next;
       group.position.set(next.x, next.y, next.z);
       group.rotation.x += (next.rx - group.rotation.x) * 0.1;

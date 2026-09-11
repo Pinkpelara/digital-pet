@@ -121,9 +121,9 @@ function sproutEdges(t: number, mood: CreatureMood, seed?: PersonalitySeed): Idl
 }
 
 const NIBLET_PERCHES = [
-  { x: 0.96, y: -0.34, z: 0.18 },
-  { x: 0.82, y: 0.52, z: 0.08 },
-  { x: -0.12, y: -0.3, z: 0.14 },
+  { x: 1.05, y: -0.48, z: 0.22 },
+  { x: 0.88, y: 0.58, z: 0.1 },
+  { x: -0.55, y: -0.42, z: 0.16 },
 ];
 
 /** Niblet sits on chrome — buttons, corners, the thing you meant to press. */
@@ -145,7 +145,7 @@ function nibletPerch(t: number, mood: CreatureMood, seed?: PersonalitySeed): Idl
     rx: sitting ? 0.12 : 0.04,
     ry: 0.55,
     rz: sitting ? -0.08 : Math.sin(t * 5) * 0.1,
-    scale: sitting ? 0.88 : 1,
+    scale: sitting ? 0.82 : 1,
   };
 }
 
