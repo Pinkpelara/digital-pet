@@ -14,6 +14,14 @@ export type SkillId =
   | "skate"
   | "nap";
 
+/** On-stage demo played from the live-pet radial wheel. Includes skills + gadget behaviours. */
+export type DemoActionId =
+  | SkillId
+  | "rain-walk"
+  | "photo-pose"
+  | "hover"
+  | "tidy";
+
 export type CreatureMood =
   | "idle"
   | "walk"
@@ -121,6 +129,11 @@ export type CatalogItem = {
   unlocksBehavior?: string;
   /** Short line shown on the "things change what they do" rail. */
   behaviorNote?: string;
+  /**
+   * Shop-gate: only true when the live demo shows a silhouette or motion change in under a second.
+   * False means try-on/preview only — no checkout until the trick is obvious.
+   */
+  shopSafe?: boolean;
   looksGoodWith: string[];
   compatibleSpecies?: SpeciesId[];
   accent: string;
@@ -268,4 +281,7 @@ export type AnalyticsEventName =
   | "auth_started"
   | "gift_redeemed"
   | "personality_revealed"
-  | "clip_shared";
+  | "clip_shared"
+  | "action_wheel_opened"
+  | "demo_played"
+  | "birthday_opened";

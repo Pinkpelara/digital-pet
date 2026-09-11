@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
-import { adoptHref } from "@/lib/catalog-paths";
-import { formatPrice } from "@/lib/format";
-import type { CatalogItem, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import { adoptHref, isShopSafe, pdpCtaLabel } from "@/lib/catalog-paths";
+import { demoActionForItem } from "@/lib/demo-actions";
+import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
   species,
@@ -32,6 +32,7 @@ export function TryOnStage({
         : {},
   );
   const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
+  const [playAction, setPlayAction] = useState<DemoActionId | null>(() => demoActionForItem(product));
 
   const tryOns = useMemo(
     () => suggestions.filter((item) => item.slot || item.skillId),
@@ -48,6 +49,8 @@ export function TryOnStage({
         return next;
       });
     }
+    const action = demoActionForItem(item);
+    if (action) setPlayAction(action);
     if (item.skillId) {
       setSkill(item.skillId);
       track("skill_performed", { skill: item.skillId });
@@ -58,24 +61,24 @@ export function TryOnStage({
   const wearParam = Object.values(equipped).filter(Boolean).join(",");
   const heading =
     product.kind === "skill" ? `Teach ${product.name}` : product.kind === "companion" ? `Meet ${product.name}.` : product.name;
-  const cta =
-    product.kind === "companion"
-      ? `Adopt ${formatPrice(product.priceCents)}`
-      : product.kind === "skill"
-        ? `Teach ${product.name} ${formatPrice(product.priceCents)}`
-        : `Add to inventory ${formatPrice(product.priceCents)}`;
+  const shopSafe = isShopSafe(product);
+  const cta = pdpCtaLabel(product);
 
   return (
     <div className="bg-paper">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
-        <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
-          <LiveStage
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
+          <PlayableStage
             species={species}
             equipped={equipped}
             skill={skill}
             mood={skill ? "skill" : "idle"}
             className="h-full w-full"
             cameraZ={5.15}
+            companionName={product.kind === "companion" ? product.name : species}
+            hint="Tap the companion — tricks play here, not in the catalog."
+            autoPlay={demoActionForItem(product)}
+            playAction={playAction}
           />
         </div>
         <div>
@@ -86,19 +89,26 @@ export function TryOnStage({
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
           <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
           <div className="mt-8">
-            <Link
-              href={adoptHref([product.id])}
-              onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-              className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
-            >
-              {cta}
-            </Link>
+            {shopSafe ? (
+              <Link
+                href={adoptHref([product.id])}
+                onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+                className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
+              >
+                {cta}
+              </Link>
+            ) : (
+              <p className="max-w-md rounded-[1.2rem] bg-cream px-4 py-3 text-sm text-ink-soft">
+                Preview only. If you cannot see the trick in a second, we do not sell it yet. Shop
+                line: Yellow Raincoat · Pocket Umbrella.
+              </p>
+            )}
           </div>
-          {tryOns.length > 0 && (
+          {tryOns.filter(isShopSafe).length > 0 && (
             <div className="mt-10">
               <p className="text-sm text-ink-soft">Try a look on this one</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {tryOns.map((item) => {
+                {tryOns.filter(isShopSafe).map((item) => {
                   const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
                   const href = item.skillId
                     ? `?wear=${wearParam || ""}&play=${item.skillId}`

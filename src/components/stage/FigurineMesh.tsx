@@ -4,7 +4,8 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
 import { clay, figurineLook } from "@/lib/figurine-look";
-import type { CreatureMood, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+import { actionFromLoadout } from "@/lib/demo-actions";
+import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 function ClayMaterial({ color }: { color: string }) {
   return (
@@ -43,13 +44,25 @@ function Ball({
   );
 }
 
-function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) {
+function Gear({
+  equipped,
+  segs,
+  skating,
+  photographing,
+  raining,
+}: {
+  equipped: EquipmentLoadout;
+  segs: number;
+  skating: boolean;
+  photographing: boolean;
+  raining: boolean;
+}) {
   const body = equipped.body;
   const face = equipped.face;
   const head = equipped.head;
   const back = equipped.back;
-  const hand = equipped.hand;
-  const feet = equipped.feet;
+  const hand = photographing ? "gadget-camera" : raining ? "gadget-umbrella" : equipped.hand;
+  const feet = skating ? "gadget-skateboard" : equipped.feet;
   return (
     <group>
       {(body === "outfit-raincoat" || body === "drop-starrycoat") && (
@@ -131,6 +144,66 @@ function Gear({ equipped, segs }: { equipped: EquipmentLoadout; segs: number }) 
           </mesh>
         </group>
       )}
+      {hand === "gadget-camera" && (
+        <group position={[0.42, 0.22, 0.62]} rotation={[0.08, -0.55, 0.12]} scale={1.35}>
+          <mesh castShadow>
+            <boxGeometry args={[0.38, 0.26, 0.22]} />
+            <ClayMaterial color="#3a3a3a" />
+          </mesh>
+          <mesh position={[0, 0.02, 0.14]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.09, 0.09, 0.12, 20]} />
+            <meshStandardMaterial color="#9BE7F2" metalness={0.45} roughness={0.18} />
+          </mesh>
+          <mesh position={[0.1, 0.16, 0]}>
+            <boxGeometry args={[0.1, 0.08, 0.12]} />
+            <ClayMaterial color="#6B6B6B" />
+          </mesh>
+          <mesh position={[-0.12, 0.14, 0.04]}>
+            <sphereGeometry args={[0.035, 10, 10]} />
+            <meshStandardMaterial color="#E86B6B" emissive="#E86B6B" emissiveIntensity={0.6} />
+          </mesh>
+        </group>
+      )}
+      {hand === "gadget-broom" && (
+        <group position={[0.58, -0.08, 0.28]} rotation={[0.35, 0.2, -0.55]}>
+          <mesh>
+            <cylinderGeometry args={[0.018, 0.022, 0.92, 8]} />
+            <meshStandardMaterial color="#C4A574" />
+          </mesh>
+          <mesh position={[0, -0.48, 0]} rotation={[0.15, 0, 0]}>
+            <coneGeometry args={[0.14, 0.26, 8]} />
+            <ClayMaterial color="#E8C98A" />
+          </mesh>
+        </group>
+      )}
+      {feet === "gadget-skateboard" && (
+        <group position={[0, -0.78, 0.28]} rotation={[0.12, 0.18, 0.04]}>
+          <mesh castShadow>
+            <boxGeometry args={[1.28, 0.1, 0.42]} />
+            <ClayMaterial color="#C47F28" />
+          </mesh>
+          <mesh position={[0, 0.06, 0]}>
+            <boxGeometry args={[1.02, 0.04, 0.22]} />
+            <meshStandardMaterial color="#5B8DEF" roughness={0.4} />
+          </mesh>
+          <mesh position={[-0.42, -0.08, 0.16]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.09, 0.09, 0.1, 14]} />
+            <meshStandardMaterial color="#1a1c1b" />
+          </mesh>
+          <mesh position={[0.42, -0.08, 0.16]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.09, 0.09, 0.1, 14]} />
+            <meshStandardMaterial color="#1a1c1b" />
+          </mesh>
+          <mesh position={[-0.42, -0.08, -0.16]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.09, 0.09, 0.1, 14]} />
+            <meshStandardMaterial color="#1a1c1b" />
+          </mesh>
+          <mesh position={[0.42, -0.08, -0.16]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.09, 0.09, 0.1, 14]} />
+            <meshStandardMaterial color="#1a1c1b" />
+          </mesh>
+        </group>
+      )}
       {feet === "outfit-rainboots" && (
         <group>
           <Ball color="#3a3d3b" position={[-0.2, -0.92, 0.12]} scale={[0.18, 0.13, 0.24]} segs={20} />
@@ -146,6 +219,8 @@ export function FigurineMesh({
   equipped = {},
   mood = "idle",
   skill = null,
+  demo = null,
+  sulk = false,
   followPointer = false,
   pointer,
   quality = "high",
@@ -154,11 +229,15 @@ export function FigurineMesh({
   equipped?: EquipmentLoadout;
   mood?: CreatureMood;
   skill?: SkillId | null;
+  demo?: DemoActionId | null;
+  sulk?: boolean;
   followPointer?: boolean;
   pointer?: { x: number; y: number };
   quality?: "high" | "medium";
 }) {
   const root = useRef<Group>(null);
+  const actionStarted = useRef(0);
+  const lastAction = useRef<string | null>(null);
   const look = figurineLook[species];
   const segs = quality === "high" ? 48 : 28;
   const proportions = useMemo(() => {
@@ -172,37 +251,129 @@ export function FigurineMesh({
     const group = root.current;
     if (!group) return;
     const t = state.clock.elapsedTime;
-    const maxY = 0.42;
-    const watching = followPointer || mood === "follow";
-    const nap = mood === "nap" || skill === "nap";
-    const climbing = mood === "climb" || skill === "climb";
-    const hiding = mood === "hide" || skill === "hide";
-    const targetY = watching ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.09;
-    const targetX = watching ? (pointer?.y ?? 0) * -0.16 : Math.sin(t * 0.24) * 0.04;
-    group.rotation.y += (targetY - group.rotation.y) * 0.08;
-    group.rotation.x += (targetX - group.rotation.x) * 0.08;
-    group.position.y = nap
-      ? -0.1 + Math.sin(t * 0.8) * 0.01
-      : climbing
-        ? 0.18 + Math.sin(t * 2.4) * 0.1
-        : hiding
-          ? -0.18
-          : Math.sin(t * (skill ? 3.2 : 1.15)) * (skill ? 0.08 : 0.045);
-    group.scale.setScalar(hiding ? 0.72 : nap ? 0.94 : 1);
-    group.position.x = 0;
-    group.rotation.z = 0;
-    if (skill === "moonwalk") group.position.x = Math.sin(t * 2.2) * 0.16;
-    if (skill === "skate") {
-      group.position.x = Math.sin(t * 2.6) * 0.22;
-      group.rotation.z = Math.sin(t * 2.6) * 0.12;
+    const action: DemoActionId | null = actionFromLoadout(equipped, skill, demo);
+    if (action !== lastAction.current) {
+      lastAction.current = action;
+      actionStarted.current = t;
     }
-    if (skill === "dance") group.rotation.z = Math.sin(t * 7) * 0.12;
-    if (skill === "cartwheel") group.rotation.z = t * 4.2;
-    if (skill === "juggle") group.position.y += Math.abs(Math.sin(t * 5)) * 0.04;
-    if (mood === "happy") group.position.y += Math.abs(Math.sin(t * 4)) * 0.05;
+    const local = t - actionStarted.current;
+    const maxY = 0.42;
+    const watching = !action && (followPointer || mood === "follow");
+    const nap = !action && (mood === "nap" || skill === "nap");
+    const climbing = action === "climb" || (!action && mood === "climb");
+    const hiding = action === "hide" || (!action && mood === "hide");
+    const sulking = sulk && !action;
+
+    group.position.x = 0;
+    group.position.z = 0;
+    group.rotation.z = 0;
+    group.scale.setScalar(1);
+
+    const lookY = watching ? (pointer?.x ?? 0) * maxY : Math.sin(t * 0.32) * 0.09;
+    const lookX = watching ? (pointer?.y ?? 0) * -0.16 : Math.sin(t * 0.24) * 0.04;
+    if (!action && !sulking) {
+      group.rotation.y += (lookY - group.rotation.y) * 0.08;
+      group.rotation.x += (lookX - group.rotation.x) * 0.08;
+    }
+
+    if (sulking) {
+      group.rotation.y += (0.9 - group.rotation.y) * 0.06;
+      group.rotation.x += (0.12 - group.rotation.x) * 0.06;
+      group.position.y = -0.1;
+      group.scale.setScalar(0.9);
+      return;
+    }
+
+    if (action === "moonwalk") {
+      const slide = ((local * 0.55) % 1.6) - 0.8;
+      group.position.x = slide;
+      group.rotation.y += (-0.85 - group.rotation.y) * 0.2;
+      group.rotation.x += (0.06 - group.rotation.x) * 0.16;
+      group.rotation.z = Math.sin(local * 10) * 0.08;
+      group.position.y = 0.06 + Math.abs(Math.sin(local * 14)) * 0.04;
+      return;
+    }
+    if (action === "skate") {
+      group.position.x = Math.sin(local * 2.8) * 0.42;
+      group.rotation.z = Math.sin(local * 2.8) * 0.22;
+      group.rotation.y += (0.45 - group.rotation.y) * 0.18;
+      group.position.y = 0.16 + Math.abs(Math.sin(local * 5.6)) * 0.07;
+      return;
+    }
+    if (action === "rain-walk") {
+      group.position.x = Math.sin(local * 1.6) * 0.18;
+      group.rotation.z = Math.sin(local * 3.4) * 0.08;
+      group.rotation.y += (0.28 - group.rotation.y) * 0.12;
+      group.position.y = Math.abs(Math.sin(local * 3.4)) * 0.05;
+      return;
+    }
+    if (action === "climb" || climbing) {
+      group.position.y = 0.22 + Math.sin(local * 2.5) * 0.14;
+      group.rotation.z = Math.sin(local * 2.5) * 0.1;
+      group.rotation.x += (-0.12 - group.rotation.x) * 0.08;
+      return;
+    }
+    if (action === "nap" || nap) {
+      group.position.y = -0.14 + Math.sin(t * 0.8) * 0.012;
+      group.rotation.z += (0.62 - group.rotation.z) * 0.1;
+      group.rotation.y += (0.2 - group.rotation.y) * 0.08;
+      group.scale.setScalar(0.94);
+      return;
+    }
+    if (action === "photo-pose") {
+      const snap = Math.sin(local * 5.2) > 0.65 ? 1.08 : 1;
+      group.rotation.y += (0.55 - group.rotation.y) * 0.22;
+      group.rotation.z += (-0.12 - group.rotation.z) * 0.22;
+      group.position.y = 0.08;
+      group.scale.setScalar(snap);
+      return;
+    }
+    if (action === "hover") {
+      group.position.y = 0.32 + Math.sin(local * 1.55) * 0.09;
+      group.rotation.z = Math.sin(local * 1.2) * 0.06;
+      group.rotation.y += (Math.sin(local * 0.7) * 0.2 - group.rotation.y) * 0.08;
+      return;
+    }
+    if (action === "tidy") {
+      group.rotation.z = Math.sin(local * 6.2) * 0.2;
+      group.position.x = Math.sin(local * 3.1) * 0.1;
+      group.position.y = Math.abs(Math.sin(local * 6.2)) * 0.03;
+      return;
+    }
+    if (action === "dance") {
+      group.rotation.z = Math.sin(local * 7.2) * 0.16;
+      group.position.y = Math.abs(Math.sin(local * 7.2)) * 0.09;
+      group.rotation.y += (Math.sin(local * 3) * 0.25 - group.rotation.y) * 0.1;
+      return;
+    }
+    if (action === "cartwheel") {
+      group.rotation.z = local * 5.2;
+      group.position.y = 0.22 + Math.sin(local * 5.2) * 0.04;
+      return;
+    }
+    if (action === "juggle") {
+      group.position.y = Math.abs(Math.sin(local * 5.4)) * 0.06;
+      group.rotation.z = Math.sin(local * 5.4) * 0.05;
+      return;
+    }
+    if (action === "hide" || hiding) {
+      group.scale.setScalar(0.7);
+      group.position.y = -0.2;
+      group.position.x = 0.2;
+      group.rotation.y += (0.8 - group.rotation.y) * 0.1;
+      return;
+    }
+
+    group.position.y =
+      Math.sin(t * 1.15) * 0.045 + (mood === "happy" ? Math.abs(Math.sin(t * 4)) * 0.05 : 0);
   });
 
-  const napping = mood === "nap" || skill === "nap";
+  const napping = mood === "nap" || skill === "nap" || demo === "nap";
+  const juggling = demo === "juggle" || skill === "juggle";
+  const liveAction = actionFromLoadout(equipped, skill, demo);
+  const skating = liveAction === "skate";
+  const photographing = liveAction === "photo-pose";
+  const raining = liveAction === "rain-walk";
 
   return (
     <group ref={root}>
@@ -214,8 +385,12 @@ export function FigurineMesh({
             <torusGeometry args={[0.42, 0.012, 8, 28]} />
             <meshStandardMaterial color={look.shade} roughness={0.55} metalness={0.04} />
           </mesh>
-          <Ball color={look.shade} position={[-0.2, -0.88, 0.06]} scale={[0.16, 0.11, 0.15]} segs={20} />
-          <Ball color={look.shade} position={[0.2, -0.88, 0.06]} scale={[0.16, 0.11, 0.15]} segs={20} />
+          {!skating && (
+            <>
+              <Ball color={look.shade} position={[-0.2, -0.88, 0.06]} scale={[0.16, 0.11, 0.15]} segs={20} />
+              <Ball color={look.shade} position={[0.2, -0.88, 0.06]} scale={[0.16, 0.11, 0.15]} segs={20} />
+            </>
+          )}
           <Ball color={look.body} position={[-0.48, -0.08, 0.08]} scale={[0.14, 0.16, 0.14]} segs={24} />
           <Ball color={look.body} position={[0.48, -0.08, 0.08]} scale={[0.14, 0.16, 0.14]} segs={24} />
           {species === "mochi" && (
@@ -294,7 +469,20 @@ export function FigurineMesh({
             </group>
           )}
         </group>
-        <Gear equipped={equipped} segs={segs} />
+        <Gear
+          equipped={equipped}
+          segs={segs}
+          skating={skating}
+          photographing={photographing}
+          raining={raining}
+        />
+        {juggling && (
+          <group position={[0, 0.7, 0.35]}>
+            <Ball color="#E89B6C" position={[-0.22, 0.28, 0]} scale={0.08} segs={12} />
+            <Ball color="#7E8CFF" position={[0.02, 0.48, 0.04]} scale={0.08} segs={12} />
+            <Ball color="#F2C14E" position={[0.24, 0.22, 0]} scale={0.08} segs={12} />
+          </group>
+        )}
       </group>
     </group>
   );

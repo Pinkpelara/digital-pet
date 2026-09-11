@@ -1,4 +1,21 @@
+import { formatPrice } from "@/lib/format";
 import type { CatalogItem } from "@/lib/types";
+
+/** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
+export const FEATURED_SHOP_IDS = ["outfit-raincoat", "gadget-umbrella"] as const;
+
+export function isShopSafe(item: CatalogItem): boolean {
+  if (item.shopSafe === false) return false;
+  return true;
+}
+
+/** Unified PDP checkout label: Adopt / Add / Teach + name — price. */
+export function pdpCtaLabel(item: CatalogItem): string {
+  const price = formatPrice(item.priceCents);
+  if (item.kind === "companion") return `Adopt ${item.name} — ${price}`;
+  if (item.kind === "skill") return `Teach ${item.name} — ${price}`;
+  return `Add ${item.name} — ${price}`;
+}
 
 export function hrefForItem(item: CatalogItem): string {
   if (item.kind === "companion") return `/companions/${item.slug}`;
@@ -32,17 +49,17 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "outfit":
       return {
         title: "Closet",
-        lede: "Raincoats, hoodies, sunglasses. Clothing changes how they look, not who they are.",
+        lede: "Raincoats first. Clothing changes how they look, not who they are. Shop line: Yellow Raincoat · Pocket Umbrella.",
       };
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "Objects that change what they do. A skateboard makes a skater. An umbrella makes a rain-walker.",
+        lede: "Objects that change what they do. In the shop now: Pocket Umbrella. If you cannot see the trick in a second, we do not sell it yet.",
       };
     case "skill":
       return {
         title: "Skills",
-        lede: "Teach them something. Teach moonwalk. Teach cartwheel. Teach climb. Fixed prices, yours permanently.",
+        lede: "Teach them something. Skills stay in the catalog as previews until the motion is obvious in a second.",
       };
     case "drop":
       return {
