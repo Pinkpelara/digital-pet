@@ -7,6 +7,7 @@ import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
 import { adoptHref, isShopSafe, pdpCtaLabel, shopTitle } from "@/lib/catalog-paths";
 import { demoActionForItem, showOffMs } from "@/lib/demo-actions";
+import { useNest } from "@/lib/state/nest-context";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
@@ -34,6 +35,8 @@ export function TryOnStage({
   const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
   const [playAction, setPlayAction] = useState<DemoActionId | null>(() => demoActionForItem(product));
   const [showOffKey, setShowOffKey] = useState(0);
+  const nest = useNest();
+  const roommate = nest.instances[0] ?? null;
 
   const tryOns = useMemo(
     () => suggestions.filter((item) => item.slot || item.skillId),
@@ -79,7 +82,10 @@ export function TryOnStage({
             mood={skill ? "skill" : "idle"}
             className="h-full w-full"
             cameraZ={5.15}
-            companionName={product.kind === "companion" ? product.name : species}
+            companionName={roommate?.name ?? (product.kind === "companion" ? product.name : species)}
+            instanceId={roommate?.id}
+            seed={roommate?.seed}
+            persistEquip={nest.hydrated}
             autoPlay={demoActionForItem(product)}
             playAction={playAction}
           />

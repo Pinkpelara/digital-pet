@@ -144,10 +144,13 @@ export function usePlayableCompanion(input: {
 
   const instance = nest.instances.find((row) => row.id === input.instanceId) ?? nest.instances[0];
   const seed = input.seed ?? instance?.seed;
-  const baseEquip = useMemo(
-    () => input.equipped ?? instance?.equipped ?? {},
-    [input.equipped, instance?.equipped],
-  );
+  const nestEquip = instance?.equipped;
+  const overlay = input.equipped;
+  const baseEquip = useMemo(() => {
+    const saved = nestEquip ?? {};
+    if (!overlay || Object.keys(overlay).length === 0) return saved;
+    return { ...saved, ...overlay };
+  }, [nestEquip, overlay]);
   const unlocked = input.unlockedSkills ?? instance?.unlockedSkills;
 
   const stats = useMemo(
@@ -238,16 +241,13 @@ export function usePlayableCompanion(input: {
   const persistIfOwned = useCallback(
     (loadout: EquipmentLoadout) => {
       if (!input.persistEquip) return;
-      const target = input.instanceId ?? instance?.id;
-      if (!target) return;
-      const next = { ...baseEquip };
-      for (const [slot, itemId] of Object.entries(loadout)) {
-        if (!itemId) continue;
-        if (nest.owns(itemId)) next[slot as keyof EquipmentLoadout] = itemId;
-      }
-      nest.saveOutfit(target, next);
+      if (!Object.values(loadout).some(Boolean)) return;
+      nest.claimAndEquip(loadout, {
+        instanceId: input.instanceId ?? instance?.id,
+        species: input.species,
+      });
     },
-    [baseEquip, input.instanceId, input.persistEquip, instance?.id, nest],
+    [input.instanceId, input.persistEquip, input.species, instance?.id, nest],
   );
 
   const fireDemo = useCallback(

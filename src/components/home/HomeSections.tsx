@@ -48,10 +48,26 @@ const tryLooks: StageLook[] = [
   },
 ];
 
+function lookFromEquipped(equipped: EquipmentLoadout | undefined): StageLook | undefined {
+  if (!equipped) return undefined;
+  if (equipped.hand === "gadget-umbrella") return tryLooks.find((entry) => entry.id === "umbrella");
+  if (equipped.feet === "gadget-skateboard") return tryLooks.find((entry) => entry.id === "skate");
+  if (equipped.body === "outfit-raincoat") return tryLooks.find((entry) => entry.id === "coat");
+  return undefined;
+}
+
 export function MakeYoursDemo() {
-  const [look, setLook] = useState<StageLook>(tryLooks[0]);
+  const [picked, setPicked] = useState<StageLook | null>(null);
   const nest = useNest();
   const roommate = nest.instances[0] ?? null;
+  const look = picked ?? (nest.hydrated ? lookFromEquipped(roommate?.equipped) : undefined) ?? tryLooks[0];
+
+  function chooseLook(entry: StageLook) {
+    setPicked(entry);
+    if (Object.keys(entry.equipped).length > 0) {
+      nest.claimAndEquip(entry.equipped);
+    }
+  }
 
   function giveCamera() {
     nest.signInDemo();
@@ -84,7 +100,7 @@ export function MakeYoursDemo() {
               <button
                 key={entry.id}
                 type="button"
-                onClick={() => setLook(entry)}
+                onClick={() => chooseLook(entry)}
                 className={`rounded-full px-4 py-2 text-sm ${
                   look.id === entry.id ? "bg-ink text-paper" : "border border-ink/15 bg-paper text-ink"
                 }`}
