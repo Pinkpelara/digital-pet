@@ -87,6 +87,7 @@ export function CompanionProfileView() {
             equipped={instance.equipped}
             unlockedSkills={instance.unlockedSkills}
             companionName={instance.name}
+            hint="Tap them — Moonwalk, Skateboard, Umbrella."
             className="h-full w-full"
             cameraZ={5.5}
           />

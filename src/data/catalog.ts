@@ -374,7 +374,7 @@ export const items: CatalogItem[] = [
     behaviorNote: "Puts the phones on. Goes quiet. Visible in a second.",
     looksGoodWith: ["companion-bloop", "skill-focus", "outfit-hoodie"],
     accent: "#3a3a3a",
-    shopSafe: true,
+    shopSafe: false,
     active: true,
   },
   {
@@ -393,7 +393,7 @@ export const items: CatalogItem[] = [
     behaviorNote: "Hat pops on. Confetti. Balloon Bunch stays free that day.",
     looksGoodWith: ["skill-balloon-bunch", "gadget-balloon", "companion-bloop"],
     accent: "#E86B6B",
-    shopSafe: true,
+    shopSafe: false,
     active: true,
   },
   {

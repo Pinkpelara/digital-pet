@@ -30,7 +30,7 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
           equipped={instance.equipped}
           unlockedSkills={instance.unlockedSkills}
           companionName={instance.name}
-          hint="Tap them — Teach, Gadget, Outfit, Nap."
+          hint="Tap them — Moonwalk, Skateboard, Umbrella."
           className="h-full w-full"
           cameraZ={5.5}
         />

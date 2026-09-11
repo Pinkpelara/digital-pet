@@ -64,7 +64,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
           cameraZ={5.5}
           companionName={instance.name}
           unlockedSkills={instance.unlockedSkills}
-          hint="Tap them — Teach, Gadget, Outfit, Nap."
+          hint="Tap them — Moonwalk, Skateboard, Umbrella."
         />
       </div>
       <div>
