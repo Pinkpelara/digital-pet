@@ -10,8 +10,13 @@ export default function DesktopPage() {
       <h1 className="mt-2 font-display text-5xl text-ink">Eventually they roam the whole machine.</h1>
       <p className="mt-4 text-lg text-ink-soft">
         The version we are building toward walks across your real desktop — over windows, along the
-        dock, asleep on the clock. That is co-presence at OS scale. It is not finished, and we are
-        not selling an installer we do not have.
+        dock, asleep on the clock. That is co-presence at OS scale, OpenPets-style: a shell and a
+        skills shelf, not a humanoid robot. It is not finished, and we are not selling an installer
+        we do not have.
+      </p>
+      <p className="mt-3 text-ink-soft">
+        Mute chaos is always one tap. Goose-mode is an opt-in Teach — never the default. They do not
+        starve. They do not die if you forget them.
       </p>
       <p className="mt-3 text-ink-soft">
         For work machines today, they live in the corner of a pinned browser. That is the real
@@ -20,6 +25,9 @@ export default function DesktopPage() {
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/browser" className="rounded-full bg-ink px-5 py-3 text-paper">
           Pin them in the corner
+        </Link>
+        <Link href="/skills" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
+          Skills shelf
         </Link>
         <Link href="/download/windows" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
           Windows (coming soon)

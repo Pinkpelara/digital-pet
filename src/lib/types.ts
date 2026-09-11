@@ -12,7 +12,10 @@ export type SkillId =
   | "hide"
   | "juggle"
   | "skate"
-  | "nap";
+  | "nap"
+  | "focus"
+  | "balloon-bunch"
+  | "chaos";
 
 /** On-stage demo played from the live-pet radial wheel. Includes skills + gadget behaviours. */
 export type DemoActionId =
@@ -25,7 +28,10 @@ export type DemoActionId =
   | "mood-peek"
   | "gift"
   | "study"
-  | "mad";
+  | "mad"
+  | "stretch"
+  | "adventure"
+  | "party";
 
 export type CreatureMood =
   | "idle"

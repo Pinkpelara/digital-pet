@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { companionBySlug, items } from "@/data/catalog";
+import { ProductJsonLd } from "@/components/store/ProductJsonLd";
 import { TryOnStage } from "@/components/store/TryOnStage";
 
 export function generateStaticParams() {
@@ -28,6 +29,7 @@ export default async function CompanionPage({ params }: { params: Promise<{ slug
 
   return (
     <div className="bg-paper">
+      <ProductJsonLd item={product} />
       <Suspense>
         <TryOnStage
           species={companion.id}

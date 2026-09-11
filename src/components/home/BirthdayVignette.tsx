@@ -8,6 +8,8 @@ import { useClientMounted } from "@/lib/state/use-client-mounted";
 import {
   dismissBirthday,
   forceBirthday,
+  grantBalloonBunch,
+  hasBalloonBunch,
   readPresence,
   shouldShowBirthday,
 } from "@/lib/state/presence";
@@ -26,6 +28,7 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
   const visible = shouldShowBirthday(state) || compact;
 
   function openParcel() {
+    grantBalloonBunch();
     setOpen(true);
     track("birthday_opened", { compact });
   }
@@ -82,10 +85,11 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
               <div className="h-[300px] w-full">
                 <PlayableStage
                   species="bloop"
-                  equipped={{ body: "outfit-raincoat" }}
-                  autoPlay="dance"
+                  equipped={{ head: "gadget-partyhat", back: "gadget-balloon" }}
+                  autoPlay="party"
+                  playAction="party"
                   companionName="Bloop"
-                  hint="They saved you a corner of the desk."
+                  hint="Party hat + confetti. Balloon Bunch is free for 24 hours."
                   className="h-full"
                   cameraZ={5.4}
                 />
@@ -121,6 +125,19 @@ export function BirthdayVignette({ compact = false }: { compact?: boolean }) {
               {force ? "That’s enough cake" : "It’s my birthday (demo)"}
             </button>
           </div>
+          {open || hasBalloonBunch() ? (
+            <p className="mt-4 text-sm text-moss">
+              Balloon Bunch is a free 24-hour Teach — we sell the{" "}
+              <Link href="/item/party-hat" className="underline underline-offset-4">
+                Party Hat
+              </Link>
+              , not the cake.{" "}
+              <Link href="/item/balloon-bunch" className="underline underline-offset-4">
+                See the Teach
+              </Link>
+              .
+            </p>
+          ) : null}
           <p className="mt-4 text-xs text-ink-soft">
             Demo uses a local birthday flag. Nothing is sent anywhere. No wellness scores.
           </p>

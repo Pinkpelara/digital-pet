@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { PageView } from "@/components/site/PageView";
 import { PwaRegister } from "@/components/live/PwaRegister";
 import { HomeCreatures } from "@/components/creatures/HomeCreatures";
+import { IdleMount } from "@/components/site/IdleMount";
 import { NestProvider } from "@/lib/state/nest-context";
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
@@ -18,7 +19,9 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           <SiteHeader />
         </Suspense>
         <Suspense fallback={null}>
-          <HomeCreatures />
+          <IdleMount delay={1400}>
+            <HomeCreatures />
+          </IdleMount>
         </Suspense>
         <main id="content" className="relative z-10 flex-1">
           {children}

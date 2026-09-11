@@ -6,10 +6,11 @@ import {
   demoDurationMs,
   loadoutForAction,
   moodFromDemo,
+  skillFromDemo,
   wheelForCompanion,
   type ResolvedWheelItem,
 } from "@/lib/demo-actions";
-import { markPresenceInteract } from "@/lib/state/presence";
+import { grantBalloonBunch, markPresenceInteract } from "@/lib/state/presence";
 import { useNest } from "@/lib/state/nest-context";
 import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
@@ -45,17 +46,7 @@ export function usePlayableCompanion(input: {
   );
 
   const mood: CreatureMood = sulk && !demo ? "idle" : moodFromDemo(demo);
-  const skill: SkillId | null =
-    demo === "moonwalk" ||
-    demo === "cartwheel" ||
-    demo === "climb" ||
-    demo === "dance" ||
-    demo === "hide" ||
-    demo === "juggle" ||
-    demo === "skate" ||
-    demo === "nap"
-      ? demo
-      : null;
+  const skill: SkillId | null = skillFromDemo(demo);
 
   const poke = useCallback(() => {
     lastAt.current = Date.now();
@@ -83,6 +74,7 @@ export function usePlayableCompanion(input: {
       setDemoEquip(item.equip);
       setCaption(item.caption ?? item.label);
       track("demo_played", { action: item.action, itemId: item.itemId, preview: item.preview });
+      if (item.action === "party" || item.action === "balloon-bunch") grantBalloonBunch();
       if (demoTimer.current) window.clearTimeout(demoTimer.current);
       const duration = demoDurationMs(item.action);
       if (duration > 0) {
@@ -105,6 +97,7 @@ export function usePlayableCompanion(input: {
       poke();
       setDemo(action);
       setDemoEquip(loadout ?? loadoutForAction(null, action));
+      if (action === "party" || action === "balloon-bunch") grantBalloonBunch();
       if (demoTimer.current) window.clearTimeout(demoTimer.current);
       const duration = demoDurationMs(action);
       if (duration > 0) {

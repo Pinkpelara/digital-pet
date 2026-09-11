@@ -4,8 +4,13 @@ import type { CatalogItem } from "@/lib/types";
 /** Featured homepage shop line. If you cannot see it in a second, it does not belong here. */
 export const FEATURED_SHOP_IDS = ["outfit-raincoat", "gadget-umbrella"] as const;
 
+/**
+ * Adopt Me / Eilik rule: gadgets sell only when silhouette or motion changes in under a second.
+ * Outfits and Teach skills use their own flags. Explicit `shopSafe: false` always blocks checkout.
+ */
 export function isShopSafe(item: CatalogItem): boolean {
   if (item.shopSafe === false) return false;
+  if (item.kind === "gadget") return item.shopSafe === true;
   return true;
 }
 
@@ -54,7 +59,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "gadget":
       return {
         title: "Gadgets",
-        lede: "Objects that change what they do. Watch them do the thing. In the shop now: Pocket Umbrella. If you cannot see the trick in a second, we do not sell it yet.",
+        lede: "If it does not change how they look or move in a second, it is not a gadget we sell. Watch the exaggerated demo. Shop now: Pocket Umbrella. Headphones and a party hat change the silhouette on contact.",
       };
     case "skill":
       return {

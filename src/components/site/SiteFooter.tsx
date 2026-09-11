@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { brand } from "@/lib/brand";
+import { VoiceToggle } from "@/components/site/VoiceToggle";
 
 const footer = [
   {
@@ -55,7 +56,11 @@ export function SiteFooter() {
         ))}
       </div>
       <div className="border-t border-ink/8 px-4 py-4 text-center text-xs text-ink-soft">
-        {brand.audienceNote}
+        <p>{brand.audienceNote}</p>
+        <p className="mt-2">They sulk. They wait. They never die from neglect. Mute chaos anytime.</p>
+        <p className="mt-2">
+          <VoiceToggle />
+        </p>
       </div>
     </footer>
   );
