@@ -69,7 +69,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Moonwalk. Backward, smooth, slightly illegal. Shop cards use the toy name. Teach lives in the radial.",
+        lede: "Teach lives in the radial. Preview tricks until the motion is unmistakable. Shop what you can see: Raincoat · Pocket Umbrella.",
       };
     case "drop":
       return {

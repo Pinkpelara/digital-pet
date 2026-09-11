@@ -26,17 +26,20 @@ export function HeroBanner() {
     const onReady = () => {
       if (!cancelled) setStageReady(true);
     };
-    if (typeof window.requestIdleCallback === "function") {
-      const idleId = window.requestIdleCallback(onReady, { timeout: 900 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(idleId);
-      };
-    }
-    const timeoutId = window.setTimeout(onReady, 400);
+    let idleId = 0;
+    let timeoutId = 0;
+    const raf = window.requestAnimationFrame(() => {
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(onReady, { timeout: 280 });
+        return;
+      }
+      timeoutId = window.setTimeout(onReady, 120);
+    });
     return () => {
       cancelled = true;
-      window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(raf);
+      if (idleId) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
     };
   }, []);
 

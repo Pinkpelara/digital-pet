@@ -19,7 +19,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           <SiteHeader />
         </Suspense>
         <Suspense fallback={null}>
-          <IdleMount delay={1400}>
+          <IdleMount delay={2200}>
             <HomeCreatures />
           </IdleMount>
         </Suspense>

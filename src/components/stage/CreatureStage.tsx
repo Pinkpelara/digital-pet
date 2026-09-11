@@ -6,6 +6,7 @@ import { MathUtils } from "three";
 import { FigurineMesh } from "@/components/stage/FigurineMesh";
 import { StageCanvas } from "@/components/stage/StageCanvas";
 import { StudioLights, StudioShadows, StudioSill } from "@/components/stage/StudioKit";
+import { useBudgetGpu } from "@/components/site/use-budget-gpu";
 import { STAGE_BG, STAGE_FOG } from "@/lib/stage-theme";
 import type { CreatureMood, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
@@ -22,7 +23,7 @@ export type CreatureStageProps = {
   autoRotate?: boolean;
   placement?: "center" | "stage-right";
   onStageClick?: () => void;
-  quality?: "high" | "medium";
+  quality?: "high" | "medium" | "low";
   dprMax?: number;
   loop?: boolean;
 };
@@ -65,13 +66,15 @@ export function CreatureStage({
   loop = false,
 }: CreatureStageProps) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const budget = useBudgetGpu();
   const figureX = placement === "stage-right" ? 0.82 : 0;
+  const meshQuality = budget ? (quality === "low" ? "low" : "medium") : quality;
 
   return (
     <StageCanvas
       className={className}
       alpha={false}
-      dprMax={dprMax ?? (quality === "medium" ? 1.2 : 1.6)}
+      dprMax={dprMax ?? (meshQuality === "high" ? 1.5 : meshQuality === "medium" ? 1.2 : 1.1)}
       camera={{ position: [placement === "stage-right" ? 0.42 : 0, 0.42, cameraZ], fov: 30 }}
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -96,7 +99,7 @@ export function CreatureStage({
           sulk={sulk}
           followPointer={followPointer}
           pointer={pointer}
-          quality={quality}
+          quality={meshQuality}
           loop={loop}
         />
       </group>
