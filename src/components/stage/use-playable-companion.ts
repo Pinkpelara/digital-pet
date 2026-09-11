@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@/lib/analytics";
 import {
   demoDurationMs,
+  loadoutForAction,
   moodFromDemo,
   wheelForCompanion,
   type ResolvedWheelItem,
@@ -63,12 +64,12 @@ export function usePlayableCompanion(input: {
   }, []);
 
   const toggleWheel = useCallback(() => {
-    poke();
     setOpen((prev) => {
       const next = !prev;
       if (next) track("action_wheel_opened", { species: input.species });
       return next;
     });
+    poke();
   }, [input.species, poke]);
 
   const closeWheel = useCallback(() => setOpen(false), []);
@@ -80,7 +81,7 @@ export function usePlayableCompanion(input: {
       setOpen(false);
       setDemo(item.action);
       setDemoEquip(item.equip);
-      setCaption(item.label);
+      setCaption(item.caption ?? item.label);
       track("demo_played", { action: item.action, itemId: item.itemId, preview: item.preview });
       if (demoTimer.current) window.clearTimeout(demoTimer.current);
       const duration = demoDurationMs(item.action);
@@ -103,7 +104,15 @@ export function usePlayableCompanion(input: {
       }
       poke();
       setDemo(action);
-      if (loadout) setDemoEquip(loadout);
+      setDemoEquip(loadout ?? loadoutForAction(null, action));
+      if (demoTimer.current) window.clearTimeout(demoTimer.current);
+      const duration = demoDurationMs(action);
+      if (duration > 0) {
+        demoTimer.current = window.setTimeout(() => {
+          setDemo(null);
+          setDemoEquip({});
+        }, duration);
+      }
     },
     [play, poke, wheel],
   );

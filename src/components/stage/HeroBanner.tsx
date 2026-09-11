@@ -37,15 +37,14 @@ export function HeroBanner() {
           </span>
         </h1>
         <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
-          Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be.
-          No two grow up exactly alike.
+          Meet one individual. Dress it, teach it tricks, and discover who it turns out to be.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/companions" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-            Meet the companions
+          <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+            Meet one individual
           </Link>
-          <Link href="#how-they-live" className="rounded-full border border-ink/15 bg-paper px-6 py-3 text-sm text-ink">
-            See how they live
+          <Link href="/companions" className="rounded-full border border-ink/15 bg-paper px-6 py-3 text-sm text-ink">
+            Adopt
           </Link>
         </div>
         <p className="mt-5 max-w-md text-sm text-ink-soft">You do not choose its personality. You meet it.</p>

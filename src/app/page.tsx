@@ -4,6 +4,7 @@ import { HeroBanner } from "@/components/stage/HeroBanner";
 import { ResidentGallery } from "@/components/stage/ResidentGallery";
 import {
   LetLoose,
+  LiveYourDay,
   MakeYoursDemo,
   SomethingHappened,
   TheyNotice,
@@ -11,13 +12,11 @@ import {
   TinyProblem,
   TwinBloops,
 } from "@/components/home/HomeSections";
-import { BirthdayVignette } from "@/components/home/BirthdayVignette";
-import { brand } from "@/lib/brand";
 
 const steps = [
   {
     title: "Adopt",
-    body: "Pick a species. You get one individual — not a copy of someone else's.",
+    body: "Meet one individual — not a copy of someone else’s. Soft trial before a paywall.",
   },
   {
     title: "Discover",
@@ -76,22 +75,27 @@ export default function HomePage() {
       </section>
 
       <TwinBloops />
+      <LiveYourDay />
       <MakeYoursDemo />
       <ThingsChange />
       <TheyNotice />
-      <BirthdayVignette />
       <SomethingHappened />
       <TinyProblem />
       <LetLoose />
 
       <section className="mx-auto max-w-6xl px-5 pb-24 pt-8 text-center md:px-10">
-        <h2 className="font-display text-4xl text-ink md:text-6xl">Meet the companions</h2>
+        <h2 className="font-display text-4xl text-ink md:text-6xl">Meet one individual</h2>
         <p className="mx-auto mt-4 max-w-lg text-ink-soft">
-          Pick a species. Give it a name. Find out who showed up.
+          Pick a species. Give it a name. Find out who showed up. Personality is not for sale.
         </p>
-        <Link href="/companions" className="mt-8 inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
-          {brand.concept[0]} someone
-        </Link>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link href="/companions/bloop" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+            Meet Bloop
+          </Link>
+          <Link href="/companions" className="inline-block rounded-full border border-ink/15 px-7 py-3.5 text-ink">
+            Adopt one individual
+          </Link>
+        </div>
       </section>
     </div>
   );

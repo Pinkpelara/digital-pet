@@ -1,4 +1,4 @@
-import { catalogById, items } from "@/data/catalog";
+import { catalogById } from "@/data/catalog";
 import type {
   CatalogItem,
   DemoActionId,
@@ -7,15 +7,16 @@ import type {
   SpeciesId,
 } from "@/lib/types";
 
-export type WheelKind = "gadget" | "skill";
+export type WheelKind = "gadget" | "skill" | "outfit" | "presence";
 
 export type WheelAction = {
   itemId: string;
   action: DemoActionId;
   kind: WheelKind;
-  /** Radial label: toy name, or "Teach X" for skills. */
+  /** Radial label: Teach / Gadget / Outfit / Mood peek / Nap / Gift. */
   label: string;
   shortLabel: string;
+  caption: string;
   accent: string;
   icon: WheelIconId;
   equip: EquipmentLoadout;
@@ -35,7 +36,12 @@ export type WheelIconId =
   | "dance"
   | "cartwheel"
   | "hide"
-  | "juggle";
+  | "juggle"
+  | "outfit"
+  | "mood"
+  | "gift"
+  | "study"
+  | "mad";
 
 export type ResolvedWheelItem = WheelAction & {
   preview: boolean;
@@ -48,6 +54,14 @@ const ACTION_BY_ITEM: Record<string, DemoActionId> = {
   "gadget-camera": "photo-pose",
   "gadget-balloon": "hover",
   "gadget-broom": "tidy",
+  "outfit-raincoat": "twirl",
+  "outfit-hoodie": "twirl",
+  "outfit-sunglasses": "twirl",
+  "outfit-sproutcap": "twirl",
+  "outfit-scarf": "twirl",
+  "outfit-rainboots": "twirl",
+  "drop-starrycoat": "twirl",
+  "drop-cape": "twirl",
   "skill-moonwalk": "moonwalk",
   "skill-climb": "climb",
   "skill-nap": "nap",
@@ -71,11 +85,16 @@ const ICON_BY_ACTION: Record<DemoActionId, WheelIconId> = {
   cartwheel: "cartwheel",
   hide: "hide",
   juggle: "juggle",
+  twirl: "outfit",
+  "mood-peek": "mood",
+  gift: "gift",
+  study: "study",
+  mad: "mad",
 };
 
+/** Loops forever on a live stage. Moonwalk is three steps, then a hold. */
 const LOOPING: Set<DemoActionId> = new Set([
   "skate",
-  "moonwalk",
   "rain-walk",
   "climb",
   "nap",
@@ -84,6 +103,7 @@ const LOOPING: Set<DemoActionId> = new Set([
   "hide",
   "tidy",
   "photo-pose",
+  "study",
 ]);
 
 /** Equip is the demo. If a board is on the feet, they skate this frame — no effect delay. */
@@ -103,28 +123,10 @@ export function actionFromLoadout(
   return null;
 }
 
-/** Signature demos everyone can preview on a live stage. */
-const PREVIEW_QUEUE = [
-  "gadget-skateboard",
-  "gadget-umbrella",
-  "skill-moonwalk",
-  "skill-climb",
-  "skill-nap",
-  "gadget-camera",
-  "skill-dance",
-  "gadget-balloon",
-] as const;
-
-const SPECIES_EXTRAS: Record<SpeciesId, string[]> = {
-  bloop: ["skill-climb", "gadget-umbrella", "gadget-camera"],
-  niblet: ["gadget-skateboard", "skill-moonwalk", "skill-dance"],
-  mochi: ["skill-nap", "gadget-broom", "outfit-hoodie"],
-  sprout: ["gadget-balloon", "skill-hide", "gadget-camera"],
-};
-
 export function demoActionForItem(item: CatalogItem): DemoActionId | null {
   if (item.skillId) return item.skillId;
   if (item.id in ACTION_BY_ITEM) return ACTION_BY_ITEM[item.id];
+  if (item.kind === "outfit" || item.kind === "drop") return "twirl";
   return null;
 }
 
@@ -139,26 +141,44 @@ export function skillFromDemo(action: DemoActionId | null): SkillId | null {
   return skills.includes(action as SkillId) ? (action as SkillId) : null;
 }
 
-export function moodFromDemo(action: DemoActionId | null): "idle" | "nap" | "climb" | "happy" | "hide" | "skill" {
+export function moodFromDemo(action: DemoActionId | null): "idle" | "nap" | "climb" | "happy" | "hide" | "skill" | "follow" {
   if (!action) return "idle";
   if (action === "nap") return "nap";
   if (action === "climb") return "climb";
   if (action === "hide") return "hide";
-  if (action === "dance" || action === "skate" || action === "moonwalk") return "happy";
+  if (action === "dance" || action === "skate" || action === "moonwalk" || action === "gift" || action === "twirl") {
+    return "happy";
+  }
+  if (action === "mad") return "idle";
+  if (action === "study") return "follow";
   return "skill";
 }
 
 export function demoDurationMs(action: DemoActionId): number {
   if (LOOPING.has(action)) return 0;
+  if (action === "moonwalk") return 1850;
+  if (action === "twirl") return 1600;
+  if (action === "mood-peek") return 1600;
+  if (action === "gift") return 2000;
+  if (action === "mad") return 1500;
   if (action === "cartwheel") return 1400;
   if (action === "photo-pose") return 2600;
   if (action === "juggle") return 3200;
   return 2800;
 }
 
-function loadoutFor(item: CatalogItem, action: DemoActionId): EquipmentLoadout {
+/** 1–2s show-off before a price confirmation is allowed. */
+export function showOffMs(action: DemoActionId | null): number {
+  if (!action) return 1600;
+  if (action === "moonwalk") return 1850;
+  if (action === "rain-walk") return 1800;
+  if (action === "skate") return 1800;
+  return 1600;
+}
+
+export function loadoutForAction(item: CatalogItem | null, action: DemoActionId): EquipmentLoadout {
   const loadout: EquipmentLoadout = {};
-  if (item.slot) loadout[item.slot] = item.id;
+  if (item?.slot) loadout[item.slot] = item.id;
   if (action === "rain-walk") {
     loadout.hand = "gadget-umbrella";
     loadout.body = "outfit-raincoat";
@@ -169,47 +189,68 @@ function loadoutFor(item: CatalogItem, action: DemoActionId): EquipmentLoadout {
   if (action === "hover") loadout.back = "gadget-balloon";
   if (action === "tidy") loadout.hand = "gadget-broom";
   if (action === "nap") loadout.body = "outfit-hoodie";
+  if (action === "twirl" && item?.slot === "body") loadout.body = item.id;
+  if (action === "gift") loadout.back = "gadget-balloon";
+  if (action === "study") loadout.body = loadout.body ?? "outfit-hoodie";
   return loadout;
+}
+
+export function speciesForCatalogItem(item: CatalogItem): SpeciesId {
+  if (item.speciesId) return item.speciesId;
+  if (item.compatibleSpecies?.[0]) return item.compatibleSpecies[0];
+  if (item.looksGoodWith.includes("companion-niblet")) return "niblet";
+  if (item.looksGoodWith.includes("companion-mochi")) return "mochi";
+  if (item.looksGoodWith.includes("companion-sprout")) return "sprout";
+  return "bloop";
+}
+
+export function loadoutForCatalogItem(item: CatalogItem): EquipmentLoadout {
+  const action = demoActionForItem(item);
+  if (!action) return item.slot ? { [item.slot]: item.id } : {};
+  return loadoutForAction(item, action);
 }
 
 export function wheelActionFromItem(item: CatalogItem): WheelAction | null {
   const action = demoActionForItem(item);
   if (!action) return null;
-  const kind: WheelKind = item.kind === "skill" ? "skill" : "gadget";
+  const kind: WheelKind = item.kind === "skill" ? "skill" : item.kind === "outfit" || item.kind === "drop" ? "outfit" : "gadget";
   const name = item.name;
+  const label = kind === "skill" ? `Teach ${name}` : name;
   return {
     itemId: item.id,
     action,
     kind,
-    label: kind === "skill" ? `Teach ${name}` : name,
-    shortLabel: kind === "skill" ? `Teach ${name}` : name,
+    label,
+    shortLabel: label,
+    caption: kind === "skill" && item.skillId === "moonwalk" ? "Teach moonwalk. Backward, smooth, slightly illegal." : label,
     accent: item.accent,
     icon: ICON_BY_ACTION[action],
-    equip: loadoutFor(item, action),
+    equip: loadoutForAction(item, action),
     skill: skillFromDemo(action),
     loops: LOOPING.has(action),
   };
 }
 
-function uniqueActions(ids: string[]): WheelAction[] {
-  const seen = new Set<DemoActionId>();
-  const out: WheelAction[] = [];
-  for (const id of ids) {
-    const item = catalogById.get(id) ?? items.find((entry) => entry.id === id);
-    if (!item) continue;
-    const action = wheelActionFromItem(item);
-    if (!action || seen.has(action.action)) continue;
-    seen.add(action.action);
-    out.push(action);
-  }
-  return out;
+function ownedFlag(itemId: string, owned: Set<string>, unlocked: Set<SkillId>): boolean {
+  const item = catalogById.get(itemId);
+  return owned.has(itemId) || (item?.skillId ? unlocked.has(item.skillId) : false);
+}
+
+function slot(
+  action: WheelAction,
+  owned: Set<string>,
+  unlocked: Set<SkillId>,
+  free = false,
+): ResolvedWheelItem {
+  const ownedItem = free || ownedFlag(action.itemId, owned, unlocked);
+  return { ...action, owned: ownedItem, preview: !ownedItem };
 }
 
 /**
- * 6–8 radial slots for a live companion stage.
- * Owned gadgets/skills first, then signature previewables so demo mode always has a full wheel.
+ * Presence pie for companion stages: Teach / Gadget / Outfit / Mood peek / Nap / Gift
+ * plus Climb and Study so the wheel stays 6–8.
  */
-export function wheelForCompanion(input: {
+export function presencePieForCompanion(input: {
   species: SpeciesId;
   ownedItemIds?: Iterable<string>;
   unlockedSkills?: SkillId[];
@@ -217,32 +258,124 @@ export function wheelForCompanion(input: {
 }): ResolvedWheelItem[] {
   const owned = new Set(input.ownedItemIds ?? []);
   const unlocked = new Set(input.unlockedSkills ?? []);
-  const equippedIds = Object.values(input.equipped ?? {}).filter(Boolean) as string[];
+  const teach = catalogById.get("skill-moonwalk");
+  const gadget = catalogById.get("gadget-umbrella");
+  const outfit = catalogById.get("outfit-raincoat");
+  const nap = catalogById.get("skill-nap");
+  const climb = catalogById.get("skill-climb");
 
-  const ownedPlayables = items
-    .filter((item) => {
-      if (!owned.has(item.id) && !(item.skillId && unlocked.has(item.skillId))) return false;
-      return Boolean(demoActionForItem(item));
-    })
-    .map((item) => item.id);
+  const teachAction = teach ? wheelActionFromItem(teach) : null;
+  const gadgetAction = gadget ? wheelActionFromItem(gadget) : null;
+  const outfitAction = outfit ? wheelActionFromItem(outfit) : null;
+  const napAction = nap ? wheelActionFromItem(nap) : null;
+  const climbAction = climb ? wheelActionFromItem(climb) : null;
 
-  const queue = [
-    ...equippedIds,
-    ...ownedPlayables,
-    ...SPECIES_EXTRAS[input.species],
-    ...PREVIEW_QUEUE,
-  ];
+  const pie: ResolvedWheelItem[] = [];
 
-  const actions = uniqueActions(queue).slice(0, 8);
-  while (actions.length < 6) {
-    const filler = uniqueActions([...PREVIEW_QUEUE]).find((entry) => !actions.some((row) => row.action === entry.action));
-    if (!filler) break;
-    actions.push(filler);
+  if (teachAction) {
+    pie.push(
+      slot(
+        {
+          ...teachAction,
+          label: "Teach",
+          shortLabel: "Teach moonwalk",
+          caption: "Teach moonwalk. Backward, smooth, slightly illegal.",
+        },
+        owned,
+        unlocked,
+      ),
+    );
+  }
+  if (gadgetAction) {
+    pie.push(slot({ ...gadgetAction, label: "Gadget", shortLabel: "Pocket Umbrella" }, owned, unlocked));
+  }
+  if (outfitAction) {
+    pie.push(slot({ ...outfitAction, label: "Outfit", shortLabel: "Yellow Raincoat" }, owned, unlocked));
   }
 
-  return actions.map((action) => {
-    const item = catalogById.get(action.itemId);
-    const ownedItem = owned.has(action.itemId) || (item?.skillId ? unlocked.has(item.skillId) : false);
-    return { ...action, owned: ownedItem, preview: !ownedItem };
-  });
+  pie.push(
+    slot(
+      {
+        itemId: "presence-mood-peek",
+        action: "mood-peek",
+        kind: "presence",
+        label: "Mood peek",
+        shortLabel: "Mood peek",
+        caption: "They’re a little curious. Soft, not a health bar.",
+        accent: "#C5D4E0",
+        icon: "mood",
+        equip: {},
+        skill: null,
+        loops: false,
+      },
+      owned,
+      unlocked,
+      true,
+    ),
+  );
+
+  if (napAction) {
+    pie.push(slot({ ...napAction, label: "Nap", shortLabel: "Nap" }, owned, unlocked, true));
+  }
+
+  pie.push(
+    slot(
+      {
+        itemId: "presence-gift",
+        action: "gift",
+        kind: "presence",
+        label: "Gift",
+        shortLabel: "Gift",
+        caption: "A parcel. Birthday and habit magic stay free.",
+        accent: "#E86B6B",
+        icon: "gift",
+        equip: { back: "gadget-balloon" },
+        skill: null,
+        loops: false,
+      },
+      owned,
+      unlocked,
+      true,
+    ),
+  );
+
+  if (climbAction) {
+    pie.push(slot({ ...climbAction, label: "Climb", shortLabel: "Climb" }, owned, unlocked, true));
+  }
+
+  pie.push(
+    slot(
+      {
+        itemId: "presence-study",
+        action: "study",
+        kind: "presence",
+        label: "Study",
+        shortLabel: "Study together",
+        caption: "They study when you study.",
+        accent: "#6a7c86",
+        icon: "study",
+        equip: { body: "outfit-hoodie" },
+        skill: null,
+        loops: true,
+      },
+      owned,
+      unlocked,
+      true,
+    ),
+  );
+
+  return pie.slice(0, 8);
+}
+
+/**
+ * 6–8 radial slots for a live companion stage.
+ * Presence pie first: Teach / Gadget / Outfit / Mood peek / Nap / Gift.
+ */
+export function wheelForCompanion(input: {
+  species: SpeciesId;
+  ownedItemIds?: Iterable<string>;
+  unlockedSkills?: SkillId[];
+  equipped?: EquipmentLoadout;
+}): ResolvedWheelItem[] {
+  return presencePieForCompanion(input);
 }

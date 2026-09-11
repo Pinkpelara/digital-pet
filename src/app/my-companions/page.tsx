@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { CompanionCard } from "@/components/companions/CompanionCard";
+import { CareChips } from "@/components/home/CareChips";
 import { useNest } from "@/lib/state/nest-context";
 
 export default function MyCompanionsPage() {
@@ -17,9 +18,10 @@ export default function MyCompanionsPage() {
       <p className="text-sm font-medium text-moss">Your companions</p>
       <h1 className="mt-2 font-display text-5xl text-ink">Who lives with you</h1>
       <p className="mt-3 max-w-xl text-ink-soft">
-        This is their home. Each one is an individual. Everything you own stays in your account —
-        nothing here is a file you can lose.
+        This is their home. Tap a companion for Teach / Gadget / Outfit / Mood peek / Nap / Gift.
+        Each one is an individual. Personality is not for sale.
       </p>
+      <CareChips className="mt-5" />
       <p className="mt-3">
         <Link href="/live" className="text-sm text-moss underline">
           Where should they live?
@@ -33,8 +35,8 @@ export default function MyCompanionsPage() {
           </div>
           <div className="p-8">
             <p className="text-lg text-ink">Nobody lives here yet.</p>
-            <Link href="/companions" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
-              Meet the companions
+            <Link href="/companions/bloop" className="mt-4 inline-block rounded-full bg-ink px-5 py-3 text-paper">
+              Meet one individual
             </Link>
           </div>
         </div>

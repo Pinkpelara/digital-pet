@@ -5,6 +5,7 @@ import Link from "next/link";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { StageFx } from "@/components/stage/StageFx";
+import { CareChips } from "@/components/home/CareChips";
 import { catalogById, companions } from "@/data/catalog";
 import { applyTendencies, contrastLine, seedFromString } from "@/lib/personality";
 import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
@@ -16,20 +17,24 @@ function StageBox({
   skill,
   demo,
   mood,
+  sulk = false,
   className = "aspect-[4/5]",
   playable = false,
   companionName,
   stageKey,
+  loop = false,
 }: {
   species: SpeciesId;
   equipped?: EquipmentLoadout;
   skill?: SkillId | null;
   demo?: DemoActionId | null;
   mood?: "idle" | "nap" | "follow" | "climb" | "happy" | "hide";
+  sulk?: boolean;
   className?: string;
   playable?: boolean;
   companionName?: string;
   stageKey?: string;
+  loop?: boolean;
 }) {
   return (
     <div className={`overflow-hidden rounded-[1.8rem] bg-cream ${className}`}>
@@ -54,8 +59,12 @@ function StageBox({
             skill={skill}
             demo={demo ?? skill ?? null}
             mood={mood}
+            sulk={sulk}
             className="h-full min-h-[280px] w-full"
             cameraZ={5.6}
+            followPointer={false}
+            quality="medium"
+            loop={loop}
           />
           <StageFx demo={demo ?? skill ?? null} />
         </div>
@@ -296,22 +305,83 @@ export function TinyProblem() {
 export function LetLoose() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-      <p className="text-sm font-medium text-moss">Lives in the corner while you work</p>
+      <p className="text-sm font-medium text-moss">Always-there path</p>
       <h2 className="mt-3 max-w-[16ch] font-display text-4xl text-ink md:text-5xl">
-        Pin the browser today. Desktop roaming comes later.
+        Pin the browser. They stay in the corner.
       </h2>
       <p className="mt-4 max-w-xl text-ink-soft">
         The real now-path on a work machine is a pinned browser window — they sit in the corner
-        while you write. A full OS desktop app is coming. We are not pretending it exists.
+        while you write. A full OS desktop app is a stub until it exists. We are not pretending.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link href="/browser" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-          Add to browser
+          Pin the browser
         </Link>
         <Link href="/desktop" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
-          Desktop, honestly
+          Desktop stub
         </Link>
       </div>
+    </section>
+  );
+}
+
+export function LiveYourDay() {
+  return (
+    <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
+      <p className="text-sm font-medium text-moss">They live your day with you</p>
+      <h2 className="mt-3 max-w-[18ch] font-display text-4xl text-ink md:text-5xl">
+        They study when you study. Birthday cake appears before you remember.
+      </h2>
+      <p className="mt-4 max-w-xl text-ink-soft">
+        Attachment first. Soft presence, not a streak. You meet one individual — you do not buy a
+        personality.
+      </p>
+      <CareChips className="mt-6" />
+
+      <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <article>
+          <StageBox species="bloop" demo="study" equipped={{ body: "outfit-hoodie" }} loop className="aspect-[5/4]" />
+          <h3 className="mt-4 font-display text-2xl text-ink">Work / study together</h3>
+          <p className="mt-2 text-sm text-ink-soft">They sit in the corner while you write. Presence, not a coach.</p>
+        </article>
+        <article>
+          <StageBox species="bloop" sulk className="aspect-[5/4]" />
+          <h3 className="mt-4 font-display text-2xl text-ink">Sulk when ghosted</h3>
+          <p className="mt-2 text-sm text-ink-soft">Look away long enough and they turn their back. Tap them. They come back.</p>
+        </article>
+        <article>
+          <StageBox species="bloop" demo="mad" loop className="aspect-[5/4]" />
+          <h3 className="mt-4 font-display text-2xl text-ink">A little mad</h3>
+          <p className="mt-2 text-sm text-ink-soft">They get a little mad. It’s allowed. Still not a wellness score.</p>
+        </article>
+        <article>
+          <StageBox
+            species="bloop"
+            demo="gift"
+            equipped={{ body: "outfit-raincoat", back: "gadget-balloon" }}
+            loop
+            className="aspect-[5/4]"
+          />
+          <h3 className="mt-4 font-display text-2xl text-ink">Birthday surprise</h3>
+          <p className="mt-2 text-sm text-ink-soft">
+            Cake appears before you remember. Habit magic stays free — we sell the outfit around the
+            moment.
+          </p>
+        </article>
+      </div>
+
+      <div className="mt-10 flex flex-wrap gap-3">
+        <Link href="/companions/bloop" className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
+          Meet Bloop
+        </Link>
+        <Link href="/companions" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
+          Adopt one individual
+        </Link>
+        <Link href="/browser" className="rounded-full border border-ink/15 px-6 py-3 text-sm text-ink">
+          Pin the browser
+        </Link>
+      </div>
+      <p className="mt-4 text-sm text-ink-soft">Teach moonwalk. Backward, smooth, slightly illegal.</p>
     </section>
   );
 }

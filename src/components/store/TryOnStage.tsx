@@ -6,7 +6,7 @@ import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
 import { LooksGoodWith } from "@/components/store/LooksGoodWith";
 import { adoptHref, isShopSafe, pdpCtaLabel } from "@/lib/catalog-paths";
-import { demoActionForItem } from "@/lib/demo-actions";
+import { demoActionForItem, showOffMs } from "@/lib/demo-actions";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
 
 export function TryOnStage({
@@ -33,6 +33,7 @@ export function TryOnStage({
   );
   const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
   const [playAction, setPlayAction] = useState<DemoActionId | null>(() => demoActionForItem(product));
+  const [showOffKey, setShowOffKey] = useState(0);
 
   const tryOns = useMemo(
     () => suggestions.filter((item) => item.slot || item.skillId),
@@ -51,6 +52,7 @@ export function TryOnStage({
     }
     const action = demoActionForItem(item);
     if (action) setPlayAction(action);
+    setShowOffKey((value) => value + 1);
     if (item.skillId) {
       setSkill(item.skillId);
       track("skill_performed", { skill: item.skillId });
@@ -63,6 +65,9 @@ export function TryOnStage({
     product.kind === "skill" ? `Teach ${product.name}` : product.kind === "companion" ? `Meet ${product.name}.` : product.name;
   const shopSafe = isShopSafe(product);
   const cta = pdpCtaLabel(product);
+  const waitMs = showOffMs(playAction ?? demoActionForItem(product));
+  const waitCopy =
+    product.kind === "companion" ? "Meet them first." : "Watch them first — then the price.";
 
   return (
     <div className="bg-paper">
@@ -76,7 +81,7 @@ export function TryOnStage({
             className="h-full w-full"
             cameraZ={5.15}
             companionName={product.kind === "companion" ? product.name : species}
-            hint="Tap the companion — tricks play here, not in the catalog."
+            hint="Tap them — Teach, Gadget, Outfit, Nap."
             autoPlay={demoActionForItem(product)}
             playAction={playAction}
           />
@@ -88,19 +93,40 @@ export function TryOnStage({
           <h1 className="mt-3 max-w-[12ch] font-display text-4xl leading-[1.02] text-ink md:text-6xl">{heading}</h1>
           <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
           <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
+          {product.kind === "skill" && product.skillId === "moonwalk" ? (
+            <p className="mt-3 max-w-md font-medium text-ink">Teach moonwalk. Backward, smooth, slightly illegal.</p>
+          ) : null}
+          {product.kind === "companion" ? (
+            <p className="mt-3 max-w-md text-sm text-ink-soft">
+              Soft trial: live with this individual before anything else. Personality is not for sale.
+            </p>
+          ) : (
+            <p className="mt-3 max-w-md text-sm text-ink-soft">
+              Cosmetics and Teach skills stay yours. Birthday and habit magic stay free.
+            </p>
+          )}
           <div className="mt-8">
             {shopSafe ? (
-              <Link
-                href={adoptHref([product.id])}
-                onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-                className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
+              <div
+                key={`${product.id}-${showOffKey}`}
+                className="show-off-stack"
+                style={{ ["--show-off" as string]: `${waitMs}ms` }}
               >
-                {cta}
-              </Link>
+                <p className="show-off-wait text-sm text-ink-soft">{waitCopy}</p>
+                <div className="show-off-cta">
+                  <Link
+                    href={adoptHref([product.id])}
+                    onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+                    className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
+                  >
+                    {product.kind === "companion" ? `Adopt ${product.name}` : cta}
+                  </Link>
+                </div>
+              </div>
             ) : (
               <p className="max-w-md rounded-[1.2rem] bg-cream px-4 py-3 text-sm text-ink-soft">
-                Preview only. If you cannot see the trick in a second, we do not sell it yet. Shop
-                line: Yellow Raincoat · Pocket Umbrella.
+                Preview only. Watch the trick first. If you cannot see it in a second, we do not sell
+                it yet. Shop line: Yellow Raincoat · Pocket Umbrella.
               </p>
             )}
           </div>

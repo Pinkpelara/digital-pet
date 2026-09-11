@@ -22,6 +22,9 @@ export type CreatureStageProps = {
   autoRotate?: boolean;
   placement?: "center" | "stage-right";
   onStageClick?: () => void;
+  quality?: "high" | "medium";
+  dprMax?: number;
+  loop?: boolean;
 };
 
 function Aim({
@@ -57,6 +60,9 @@ export function CreatureStage({
   cameraZ = 5.7,
   placement = "center",
   onStageClick,
+  quality = "high",
+  dprMax,
+  loop = false,
 }: CreatureStageProps) {
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const figureX = placement === "stage-right" ? 0.82 : 0;
@@ -65,6 +71,7 @@ export function CreatureStage({
     <StageCanvas
       className={className}
       alpha={false}
+      dprMax={dprMax ?? (quality === "medium" ? 1.2 : 1.6)}
       camera={{ position: [placement === "stage-right" ? 0.42 : 0, 0.42, cameraZ], fov: 30 }}
       onPointerMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -89,6 +96,8 @@ export function CreatureStage({
           sulk={sulk}
           followPointer={followPointer}
           pointer={pointer}
+          quality={quality}
+          loop={loop}
         />
       </group>
       <StudioShadows scale={placement === "stage-right" ? 12 : 10} />

@@ -20,7 +20,12 @@ export type DemoActionId =
   | "rain-walk"
   | "photo-pose"
   | "hover"
-  | "tidy";
+  | "tidy"
+  | "twirl"
+  | "mood-peek"
+  | "gift"
+  | "study"
+  | "mad";
 
 export type CreatureMood =
   | "idle"

@@ -15,5 +15,14 @@ export function StageFx({ demo }: { demo: DemoActionId | null }) {
   if (demo === "photo-pose") {
     return <div className="stage-flash" aria-hidden />;
   }
+  if (demo === "gift") {
+    return (
+      <div className="stage-confetti" aria-hidden>
+        {Array.from({ length: 10 }, (_, index) => (
+          <span key={index} style={{ left: `${8 + index * 9}%`, animationDelay: `${(index % 4) * 0.12}s` }} />
+        ))}
+      </div>
+    );
+  }
   return null;
 }

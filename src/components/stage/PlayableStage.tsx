@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent } from "react";
+import { useEffect, useRef } from "react";
 import { ActionWheel } from "@/components/stage/ActionWheel";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { StageFx } from "@/components/stage/StageFx";
@@ -28,7 +28,6 @@ export function PlayableStage({
   className,
   ...stage
 }: PlayableStageProps) {
-  const drag = useRef<{ x: number; y: number } | null>(null);
   const playable = usePlayableCompanion({ species, equipped, unlockedSkills });
   const lastExternal = useRef<DemoActionId | null>(null);
   const hintText = hint ?? (playable.open ? "" : playable.sulk ? playable.caption : "Tap them for tricks.");
@@ -51,35 +50,16 @@ export function PlayableStage({
     if (!playAction && !stage.skill) lastExternal.current = null;
   }, [applyExternal, playAction, stage.skill]);
 
-  function onPointerDown(event: PointerEvent<HTMLDivElement>) {
-    drag.current = { x: event.clientX, y: event.clientY };
-  }
-
-  function onPointerUp(event: PointerEvent<HTMLDivElement>) {
-    const origin = drag.current;
-    drag.current = null;
-    if (!origin) return;
-    const moved = Math.hypot(event.clientX - origin.x, event.clientY - origin.y);
-    if (moved > 10) return;
-    const target = event.target as HTMLElement;
-    if (target.closest(".action-wheel-slot") || target.closest(".action-wheel-scrim")) return;
-    playable.toggleWheel();
-  }
-
   const liveDemo =
+    playable.demo ??
     playAction ??
     stage.skill ??
     actionFromLoadout(playable.equipped, null, null) ??
-    playable.demo ??
     autoPlay ??
     null;
 
   return (
-    <div
-      className={`playable-stage relative h-full w-full ${className ?? ""}`}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-    >
+    <div className={`playable-stage relative h-full w-full ${className ?? ""}`}>
       <LiveStage
         {...stage}
         species={species}
@@ -91,6 +71,13 @@ export function PlayableStage({
         className="h-full w-full"
       />
       <StageFx demo={liveDemo} />
+      <button
+        type="button"
+        className={`absolute inset-0 z-[5] cursor-pointer bg-transparent ${playable.open ? "pointer-events-none" : ""}`}
+        onClick={playable.toggleWheel}
+        aria-label={`Open ${companionName}’s day`}
+        aria-expanded={playable.open}
+      />
       <ActionWheel
         items={playable.wheel}
         open={playable.open}

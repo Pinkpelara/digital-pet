@@ -66,9 +66,9 @@ export function CompanionProfileView() {
     return (
       <div className="mx-auto max-w-2xl px-5 py-16">
         <p className="font-display text-4xl text-ink">Nobody here yet.</p>
-        <Link href="/companions" className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-paper">
-          Meet the companions
-        </Link>
+            <Link href="/companions" className="mt-6 inline-block rounded-full bg-ink px-6 py-3 text-paper">
+              Meet one individual
+            </Link>
       </div>
     );
   }

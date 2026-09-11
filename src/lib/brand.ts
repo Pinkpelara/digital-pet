@@ -17,7 +17,7 @@ export const brand = {
   tagline: "Tiny creatures that live with you.",
   heroHeadline: "A tiny creature that lives on your screen.",
   heroSupport:
-    "Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be. No two grow up exactly alike.",
+    "Meet one individual. Dress it, teach it tricks, and discover who it turns out to be. You do not choose its personality. You meet it.",
   hero: "A tiny creature that lives on your screen. Adopt one. Give it a name. Dress it, teach it tricks, and discover who it turns out to be. No two grow up exactly alike.",
   concept: ["Adopt", "Discover", "Make it yours", "Let it loose"] as const,
   deepLinkScheme: "companions",

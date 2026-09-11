@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { PlayableStage } from "@/components/stage/PlayableStage";
 import { profileHref, studioHref } from "@/lib/catalog-paths";
 import {
   daysTogether,
@@ -24,16 +24,17 @@ export function CompanionCard({ instance }: { instance: CompanionInstance }) {
 
   return (
     <article className="rounded-[1.6rem] bg-paper p-6 ring-1 ring-ink/8">
-      <Link href={profileHref(instance.id)} className="block">
-        <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
-          <LiveStage
-            species={instance.speciesId}
-            equipped={instance.equipped}
-            className="h-full w-full"
-            cameraZ={5.5}
-          />
-        </div>
-      </Link>
+      <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
+        <PlayableStage
+          species={instance.speciesId}
+          equipped={instance.equipped}
+          unlockedSkills={instance.unlockedSkills}
+          companionName={instance.name}
+          hint="Tap them — Teach, Gadget, Outfit, Nap."
+          className="h-full w-full"
+          cameraZ={5.5}
+        />
+      </div>
 
       <div className="mt-4 flex items-baseline justify-between gap-3">
         <h2 className="font-display text-3xl text-ink">{instance.name}</h2>

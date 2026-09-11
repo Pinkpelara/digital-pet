@@ -64,5 +64,9 @@ export function readNest(): PersistedNest {
 
 export function writeNest(nest: PersistedNest): void {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(KEY, JSON.stringify(nest));
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(nest));
+  } catch {
+    /* private mode / blocked storage */
+  }
 }
