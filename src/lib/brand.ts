@@ -20,8 +20,12 @@ export const brand = {
   heroSupport: "You do not choose its personality. You meet it.",
   hero:
     "Someone small lives on your screen now. Adopt one. Name it. The rest you find out by living with it. You do not choose its personality. You meet it.",
+  meetBody:
+    "Pick a species. Name them. Who they are shows up while you live together. You do not choose its personality. You meet it.",
+  shopBody: "Raincoat. Skateboard. Moonwalk. If you can’t see it in a second, we don’t sell it.",
+  freeMagicBody: "Birthdays and noticing your day stay gifts. You can’t buy those.",
   bottomCta: "Adopt one",
-  bottomSupport: "Pick a species. Bring one home.",
+  bottomSupport: "Pick a species. Name them. Who they are shows up while you live together.",
   concept: ["Adopt", "Discover", "Make it yours", "Let it loose"] as const,
   deepLinkScheme: "companions",
   supportEmail: "hello@companions.app",

@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { companions } from "@/data/catalog";
+import { adoptFromCents, companions } from "@/data/catalog";
+import { brand } from "@/lib/brand";
+import { formatPrice } from "@/lib/format";
 import { HeroBanner } from "@/components/stage/HeroBanner";
 import { ResidentGallery } from "@/components/stage/ResidentGallery";
+import { HomeProductJsonLd } from "@/components/store/ProductJsonLd";
 import {
   LetLoose,
   LiveYourDay,
@@ -15,16 +18,16 @@ import {
 
 const steps = [
   {
-    title: "Adopt",
-    body: "Pick a species. Bring one home. Soft trial before a paywall.",
+    title: "Meet",
+    body: brand.meetBody,
   },
   {
-    title: "Discover",
-    body: "Its quirks show up on their own. Two of the same species never match.",
+    title: "Shop",
+    body: brand.shopBody,
   },
   {
-    title: "Make it yours",
-    body: "Name it, dress it, hand it gadgets, teach it tricks.",
+    title: "Free magic",
+    body: brand.freeMagicBody,
   },
   {
     title: "Let it loose",
@@ -35,6 +38,7 @@ const steps = [
 export default function HomePage() {
   return (
     <div className="bg-paper">
+      <HomeProductJsonLd />
       <HeroBanner />
 
       <section id="how-they-live" className="mx-auto max-w-6xl px-5 py-16 md:px-10">
@@ -53,13 +57,14 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-5 md:px-10">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="text-sm font-medium text-moss">Meet them</p>
+              <p className="text-sm font-medium text-moss">Meet</p>
               <h2 className="mt-2 font-display text-4xl text-ink md:text-5xl">Four species. Live.</h2>
             </div>
             <Link href="/companions" className="text-sm text-moss underline underline-offset-4">
               See all
             </Link>
           </div>
+          <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
         </div>
         <div className="mt-6 h-[min(58vh,520px)] w-full overflow-hidden bg-cream">
           <ResidentGallery className="h-full w-full" />
@@ -87,16 +92,10 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-5 pb-24 pt-8 text-center md:px-10">
         <h2 className="font-display text-4xl text-ink md:text-6xl">Adopt one</h2>
-        <p className="mx-auto mt-4 max-w-lg text-ink-soft">Pick a species. Bring one home.</p>
-        <p className="mx-auto mt-2 max-w-lg text-sm text-ink-soft">
-          You do not choose its personality. You meet it.
-        </p>
+        <p className="mx-auto mt-4 max-w-lg text-ink-soft">{brand.meetBody}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/companions" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
-            Adopt one
-          </Link>
-          <Link href="/companions/bloop" className="inline-block rounded-full border border-ink/15 px-7 py-3.5 text-ink">
-            Start with Bloop
+          <Link href="/companions/bloop" className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+            Adopt from {formatPrice(adoptFromCents())}. Start with Bloop.
           </Link>
         </div>
       </section>
