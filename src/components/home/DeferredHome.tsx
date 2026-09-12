@@ -5,13 +5,7 @@ import { IdleMount } from "@/components/site/IdleMount";
 import { WhenVisible } from "@/components/site/WhenVisible";
 
 function MeetFallback() {
-  return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4" aria-hidden>
-      {["bloop", "mochi", "sprout", "niblet"].map((id) => (
-        <div key={id} className="aspect-[4/5] rounded-[1.6rem] bg-cream" />
-      ))}
-    </div>
-  );
+  return <div className="min-h-[340px] rounded-[1.8rem] bg-cream md:min-h-[420px]" aria-hidden />;
 }
 
 function StuffFallback() {
@@ -19,16 +13,16 @@ function StuffFallback() {
 }
 
 function LazyMeet() {
-  const [Cards, setCards] = useState<ComponentType<{ featured?: boolean }> | null>(null);
+  const [Lineup, setLineup] = useState<ComponentType | null>(null);
 
   useEffect(() => {
-    void import("@/components/home/PersonalityCards").then((mod) => {
-      setCards(() => mod.PersonalityCards);
+    void import("@/components/home/MeetLineup").then((mod) => {
+      setLineup(() => mod.MeetLineup);
     });
   }, []);
 
-  if (!Cards) return <MeetFallback />;
-  return <Cards featured />;
+  if (!Lineup) return <MeetFallback />;
+  return <Lineup />;
 }
 
 function LazyStuff() {
@@ -44,7 +38,7 @@ function LazyStuff() {
   return <Demo />;
 }
 
-/** Meet grid — four R3F posters, only after LCP and when the section is on screen. */
+/** Meet lineup — one living canvas, only after LCP and when the section is on screen. */
 export function DeferredMeet() {
   return (
     <IdleMount delay={3600}>

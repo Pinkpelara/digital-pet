@@ -3,7 +3,7 @@ import { companions, items, adoptFromCents } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 import { brand } from "@/lib/brand";
 import { PageHero } from "@/components/site/KineticTitle";
-import { PersonalityCards } from "@/components/home/PersonalityCards";
+import { MeetLineup } from "@/components/home/MeetLineup";
 
 export const metadata = { title: "Companions" };
 
@@ -17,7 +17,7 @@ export default function CompanionsPage() {
       />
 
       <div className="mx-auto max-w-6xl px-5 pb-8 md:px-10">
-        <PersonalityCards />
+        <MeetLineup />
         <ol className="mt-8 grid gap-4 md:grid-cols-2">
           {companions.map((companion) => {
             const product = items.find((item) => item.id === companion.itemId);

@@ -19,16 +19,19 @@ export default function HomePage() {
           <div className="mx-auto max-w-6xl px-5 md:px-10">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="kicker">Meet</p>
+                <p className="kicker">Meet them</p>
                 <KineticTitle as="h2" className="mt-3 text-4xl text-ink md:text-6xl">
-                  Who’s this
+                  Four little weirdos looking for a screen.
                 </KineticTitle>
               </div>
               <Link href="/companions" prefetch={false} className="text-sm text-moss underline underline-offset-4">
                 See all
               </Link>
             </div>
-            <p className="mt-4 max-w-xl text-ink-soft">{brand.meetBody}</p>
+            <p className="mt-4 max-w-xl text-ink-soft">
+              They climb things, nap on things, follow your cursor and sit on buttons they
+              shouldn&apos;t. That one is asleep right now. We didn&apos;t ask him to be.
+            </p>
           </div>
           <div className="mx-auto mt-10 max-w-6xl px-5 md:px-10">
             <DeferredMeet />
@@ -38,22 +41,27 @@ export default function HomePage() {
         <section className="mx-auto max-w-6xl px-5 py-24 md:px-10">
           <p className="kicker">Their stuff</p>
           <KineticTitle as="h2" className="mt-4 max-w-[16ch] text-4xl text-ink md:text-6xl">
-            Try it on. It’s theirs.
+            Things change what they do.
           </KineticTitle>
-          <p className="mt-4 max-w-xl text-ink-soft">{brand.shopBody}</p>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            A skateboard means he skates. A camera means he takes photos, mostly of the floor.
+            A ball means play. Gadgets are not decorations — they are new things your companion
+            can do.
+          </p>
           <div className="mt-10">
             <DeferredTheirStuff />
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
-          <p className="kicker">Individuals</p>
+          <p className="kicker">Yours</p>
           <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
-            Same species. Different little weirdos.
+            Same species. Never the same one.
           </KineticTitle>
           <p className="mt-4 max-w-xl text-ink-soft">
-            Two Bloops. Completely different problems. Every companion gets its own hidden
-            personality. You don&apos;t choose it. You meet it.
+            Every companion is born with a hidden personality. Yours might climb everything and
+            fear nothing. Someone else&apos;s might nap all day and hide from the cursor. You
+            don&apos;t choose who they are. You meet them.
           </p>
           <p className="mt-6">
             <Link href="/my-companions" prefetch={false} className="text-sm text-moss underline underline-offset-4">
@@ -63,32 +71,14 @@ export default function HomePage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
-          <p className="kicker">Gadgets</p>
-          <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
-            Things change what they do.
-          </KineticTitle>
-          <p className="mt-4 max-w-xl text-ink-soft">
-            A gadget is not a hat with a strap. Give him the skateboard and he skates. Give him
-            the camera and he takes photos. Mostly of nothing.
-          </p>
-          <p className="mt-6 flex flex-wrap gap-4">
-            <Link href="/gadgets" prefetch={false} className="text-sm text-moss underline underline-offset-4">
-              All gadgets
-            </Link>
-            <Link href="/skills" prefetch={false} className="text-sm text-moss underline underline-offset-4">
-              Teach Moonwalk
-            </Link>
-          </p>
-        </section>
-
-        <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
-          <p className="kicker">Elsewhere</p>
+          <p className="kicker">While you&apos;re away</p>
           <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
             Something happened while you were gone.
           </KineticTitle>
           <p className="mt-4 max-w-xl text-ink-soft">
-            He knocked the plant over. Rare things only happen when nobody is watching. When one
-            does, you get a card — because nobody will believe you otherwise.
+            He knocked the plant over. Looked at you. Denied it. Rare things only happen when
+            nobody is watching — and when one does, you get a card, because nobody will believe
+            you otherwise.
           </p>
           <p className="mt-6 flex flex-wrap gap-4">
             <Link href="/live" prefetch={false} className="text-sm text-moss underline underline-offset-4">
@@ -101,13 +91,13 @@ export default function HomePage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
-          <p className="kicker">Desktop</p>
+          <p className="kicker">The dream</p>
           <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
             Eventually, let them loose.
           </KineticTitle>
           <p className="mt-4 max-w-xl text-ink-soft">
-            Your desktop is the real home. Not yet, though. The website is where you meet them,
-            dress them, and figure out who you got.
+            The website is their first home. Then your browser. Then your whole desktop — same
+            companion, same tricks, same history. He goes where you go. Not yet, though.
           </p>
           <p className="mt-6">
             <Link href="/desktop" prefetch={false} className="text-sm text-moss underline underline-offset-4">
@@ -122,11 +112,16 @@ export default function HomePage() {
         <KineticTitle as="h2" className="text-5xl text-ink md:text-7xl">
           Adopt one
         </KineticTitle>
-        <p className="mx-auto mt-4 max-w-lg text-ink-soft">{brand.meetBody}</p>
+        <p className="mx-auto mt-4 max-w-lg text-ink-soft">
+          Name it. Watch who shows up. Yours forever — no feeding schedules, no guilt. He
+          doesn&apos;t die. He just lives with you.
+        </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/companions/bloop" prefetch={false} className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
-            Adopt from {adoptFrom}. Start with Bloop.
-          </Link>
+          <span data-creature-spot="adopt" className="inline-block">
+            <Link href="/companions/bloop" prefetch={false} className="inline-block rounded-full bg-ink px-7 py-3.5 text-paper">
+              Adopt from {adoptFrom}. Start with Bloop.
+            </Link>
+          </span>
         </div>
       </section>
     </div>

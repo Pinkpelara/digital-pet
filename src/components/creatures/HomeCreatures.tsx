@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { WorldLayer } from "@/components/creatures/WorldLayer";
+import { SiteWorld } from "@/components/world/SiteWorld";
 
 export function HomeCreatures() {
   const params = useSearchParams();
   if (params.get("pause") === "1") return null;
-  return <WorldLayer enabled />;
+  return <SiteWorld />;
 }
