@@ -25,9 +25,9 @@ function LiveHubInner() {
       <div className="relative mx-auto max-w-6xl px-4 py-12 md:px-10 md:py-16">
       <WhereTheyLive heading="h1" instanceId={instance?.id ?? id ?? undefined} companionName={name} />
       <p className="mt-10 max-w-2xl text-sm text-ink-soft">
-        You can change your mind later. The website is always there. Browser pin is how they sit in
-        the corner on a work machine. Desktop is an extra door into the same inventory — never a
-        second checkout, never a loot box.
+        You can change your mind any time. The website is always home, the browser keeps them in
+        your corner, and the desktop app — when it is ready — is the same companions in a bigger
+        world. Never a second purchase. Never a loot box.
       </p>
       </div>
     </div>

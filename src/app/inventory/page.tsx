@@ -22,7 +22,7 @@ export default function InventoryPage() {
       <PageHero
         kicker="Inventory"
         title="What you own"
-        lede="Permanent. Not a file. On this static preview, entitlements live in your browser. A later deploy can grant them from Stripe + Supabase — the backpack looks the same."
+        lede="Everything you have ever bought for them, in one backpack. Yours forever."
       />
       <div className="mx-auto max-w-4xl px-5 md:px-10">
         {instances.length > 0 && (

@@ -25,7 +25,7 @@ export function AuthPanel() {
     <div className="mx-auto max-w-md rounded-[2rem] bg-mist p-8 ring-1 ring-ink/10">
       <p className="text-xs uppercase tracking-[0.2em] text-moss">No passwords</p>
       <p className="mt-3 text-ink-soft">
-        Google, Apple, or an email magic link. Demo mode signs you in locally — no keys required.
+        Google, Apple, or an email magic link. That&apos;s it — no passwords to forget.
       </p>
       {user && <p className="mt-3 text-sm text-moss">Already signed in as {user.displayName}.</p>}
       <div className="mt-6 space-y-3">

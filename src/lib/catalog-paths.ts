@@ -68,32 +68,37 @@ export function adoptHref(itemIds: string[]): string {
   return `/adopt/success?items=${itemIds.join(",")}`;
 }
 
-export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: string } {
+export function categoryCopy(kind: CatalogItem["kind"]): { kicker: string; title: string; lede: string } {
   switch (kind) {
     case "companion":
       return {
+        kicker: "Meet them",
         title: "Companions",
         lede: brand.meetBody,
       };
     case "outfit":
       return {
-        title: "Closet",
-        lede: "Raincoat. Try it on. It’s theirs.",
+        kicker: "Looks",
+        title: "The closet",
+        lede: "Raincoats, hats, ridiculous glasses. Dressing them changes how they look — and nothing else. They are still themselves.",
       };
     case "gadget":
       return {
+        kicker: "Watch what they do",
         title: "Gadgets",
-        lede: brand.shopBody,
+        lede: "Not decorations. A skateboard means he skates. A camera means he takes photos. Mostly of nothing.",
       };
     case "skill":
       return {
+        kicker: "Things you can teach them",
         title: "Skills",
-        lede: "Teach one. They know it forever.",
+        lede: "Teach one and they know it forever. They will show off when you least expect it.",
       };
     case "drop":
       return {
+        kicker: "Limited runs",
         title: "Collections & drops",
-        lede: "Coordinated sets and short seasonal windows. When a drop closes, it closes.",
+        lede: "Seasonal sets in short windows. When a drop closes, it closes.",
       };
   }
 }

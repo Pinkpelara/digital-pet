@@ -10,9 +10,9 @@ export default function BrowserPage() {
   return (
     <div className="bg-paper pb-20">
       <PageHero
-        kicker="The real now-path · work machines"
-        title="Lives in the corner while you work."
-        lede="Pin this site in Chrome or Edge and they sit beside your tabs. You write, they wander. You look back, they noticed. Nothing bad happens when you are away."
+        kicker="No install needed"
+        title="They can sit in the corner of your screen today."
+        lede="Add this site to your browser and your companions hang out beside your tabs. You work, they wander. You look over, they are up to something."
       />
       <div className="mx-auto max-w-6xl px-5 md:px-10">
         <WhenVisible once className="stage-frame mb-10 min-h-[360px] overflow-hidden rounded-[1.8rem] md:min-h-[460px]">
@@ -27,17 +27,15 @@ export default function BrowserPage() {
           />
         </WhenVisible>
         <p className="max-w-3xl text-ink-soft">
-          This is the honest path for a locked-down work computer. No IT ticket. Same inventory as the
-          website. A full OS desktop pet is coming later — until then, the browser pin is the live
-          product.
+          Works on locked-down work computers — no downloads, no IT ticket. Same companions, same
+          stuff, same history as the website. Nothing bad happens while you focus on something else.
         </p>
 
         <section className="mt-10 rounded-[1.6rem] bg-mist p-6 ring-1 ring-ink/10">
-          <h2 className="font-display text-3xl text-ink">Pin them here</h2>
+          <h2 className="font-display text-3xl text-ink">Give them a window</h2>
           <p className="mt-2 text-ink-soft">
-            Chrome and Edge can install this page as a slim window you leave in the corner. Other
-            browsers get a short menu path. If yours cannot install sites, keep a tab pinned — they
-            still live in your account.
+            Chrome and Edge can turn this site into a slim window you leave in the corner. Other
+            browsers take one extra menu step — the short version is below.
           </p>
           <div className="mt-5">
             <PwaInstall />
@@ -45,24 +43,23 @@ export default function BrowserPage() {
         </section>
 
         <section className="mt-8 rounded-[1.6rem] bg-mist p-6 ring-1 ring-ink/10">
-          <h2 className="font-display text-3xl text-ink">Browser extension</h2>
+          <h2 className="font-display text-3xl text-ink">Following you from tab to tab</h2>
           <p className="mt-2 text-ink-soft">
             <span className="mr-2 rounded-full bg-cream px-2 py-0.5 text-xs uppercase tracking-wider text-ink">
-              Coming later
+              Later
             </span>
-            A browser extension could sit a companion on any tab. It is not built yet. You do not need it
-            to have them in the corner today.
+            A browser extension that puts a companion on any page you visit. We are working on it.
+            You do not need it to keep them in the corner today.
           </p>
         </section>
 
         <p className="mt-8 text-ink-soft">
-          Want the full site?{" "}
           <Link href="/my-companions" className="underline">
             Open your companions
           </Link>
-          . Curious about the future OS pet?{" "}
+          , or see{" "}
           <Link href="/desktop" className="underline">
-            Desktop is coming — not here
+            where this is all going
           </Link>
           .
         </p>

@@ -1,5 +1,7 @@
 # Companions
 
+**Product source of truth: [PRODUCT.md](PRODUCT.md). Read it before changing anything — it answers what we are building, for whom, and what to keep, delete, or park.**
+
 Companions that live with you. Adopt one. Name it. Who they are shows up while you live together.
 
 **Temporary brand name:** `Companions` — centralized in `src/lib/brand.ts` as `TEMP_BRAND_NAME`. The previous working name was Sillkin; user-visible copy no longer uses it.

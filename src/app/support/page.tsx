@@ -5,24 +5,28 @@ export const metadata = { title: "Support" };
 
 const faqs = [
   {
-    q: "Did I buy a file?",
-    a: "No. You bought a digital entitlement stored on your account. The companion is not a downloadable asset you copy around.",
+    q: "What exactly do I own?",
+    a: "A companion or item that lives on your account forever — like a backpack in a game. Nothing to download, nothing to lose, nothing that expires.",
   },
   {
     q: "Do I have to install something?",
-    a: "No. The website is the home. You can pin this site in Chrome or Edge (helpful on work computers). A Windows/Mac app is optional and not ready yet. Nothing is a loot box, and nothing is required after you adopt.",
+    a: "No. The website is their home. You can pin this site in Chrome or Edge so they sit in the corner of your screen while you work. A Windows/Mac app is the dream — not ready yet, never required.",
   },
   {
     q: "Can I gift a companion?",
-    a: "Yes — try /gift/WELCOME-BLOOP in demo mode.",
+    a: "Yes. They get a link, a parcel shakes, something climbs out, they name it. Try the sample gift: /gift/WELCOME-BLOOP.",
   },
   {
     q: "Are there loot boxes?",
     a: "Never. Limited drops are timed, priced, and listed. What you see is what you pay.",
   },
   {
+    q: "Do they die if I forget them?",
+    a: "No. Nothing bad happens while you are away. Come back in three weeks and they are just there — possibly up to something.",
+  },
+  {
     q: "Can I name them?",
-    a: "Yes. A box arrives, they climb out, you name them, they’re yours.",
+    a: "Yes. A box arrives, they climb out, you name them, they're yours.",
   },
 ];
 
@@ -32,7 +36,7 @@ export default function SupportPage() {
       <PageHero
         kicker="Support"
         title="We are here."
-        lede={`Write ${brand.supportEmail}. Demo mode needs no ticket — it runs without Stripe or Supabase keys.`}
+        lede={`Write ${brand.supportEmail}. A person reads it.`}
       />
       <dl className="mx-auto max-w-2xl space-y-8 px-5 md:px-10">
         {faqs.map((faq) => (

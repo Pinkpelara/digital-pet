@@ -512,6 +512,30 @@ export function FigurineMesh({
       group.scale.setScalar(0.94);
       return;
     }
+    if (action === "greet") {
+      const duration = 1.8;
+      const t = loop ? local % duration : Math.min(local, duration);
+      group.position.y = Math.abs(Math.sin(t * 7)) * 0.14;
+      group.rotation.x += ((t < 0.9 ? -0.16 : 0.08) - group.rotation.x) * 0.15;
+      group.rotation.y += (0.22 - group.rotation.y) * 0.1;
+      return;
+    }
+    if (action === "sip") {
+      const cycle = 2.6;
+      const t = loop ? local % cycle : local;
+      const lift = Math.sin(Math.min(t, 1.6) * (Math.PI / 1.6));
+      group.rotation.x += (-0.14 * lift - group.rotation.x) * 0.2;
+      group.position.y = Math.sin(t * 1.2) * 0.015;
+      return;
+    }
+    if (action === "bedtime") {
+      const t = Math.min(local, 3);
+      const sink = Math.min(1, t / 1.4);
+      group.position.y = -0.16 * sink + Math.sin(t * 0.9) * 0.012;
+      group.rotation.z += (0.5 * sink - group.rotation.z) * 0.08;
+      group.scale.setScalar(1 - 0.06 * sink);
+      return;
+    }
     if (action === "photo-pose") {
       const snap = Math.sin(local * 6.4) > 0.5 ? 1.14 : 1;
       group.rotation.y += (0.7 - group.rotation.y) * 0.28;
@@ -569,6 +593,7 @@ export function FigurineMesh({
   const photographing = liveAction === "photo-pose";
   const raining = liveAction === "rain-walk";
   const studying = liveAction === "study" || liveAction === "focus";
+  const sipping = liveAction === "sip";
   const gifting = liveAction === "gift";
   const bunch = liveAction === "balloon-bunch" || liveAction === "party";
   const sticker = liveAction === "adventure";
@@ -676,6 +701,18 @@ export function FigurineMesh({
           raining={raining}
           umbrellaRef={umbrella}
         />
+        {sipping && (
+          <group position={[0.42, 0.16, 0.5]} rotation={[-0.3, 0, 0.22]}>
+            <mesh castShadow>
+              <cylinderGeometry args={[0.09, 0.07, 0.17, 14]} />
+              <ClayMaterial color="#E86B6B" />
+            </mesh>
+            <mesh position={[0, 0.09, 0]}>
+              <cylinderGeometry args={[0.075, 0.075, 0.02, 14]} />
+              <meshStandardMaterial color="#8EE6DF" roughness={0.3} />
+            </mesh>
+          </group>
+        )}
         {studying && (
           <group position={[0.08, -0.52, 0.52]} rotation={[-0.42, 0.18, 0]}>
             <mesh castShadow>

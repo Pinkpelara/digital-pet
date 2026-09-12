@@ -14,6 +14,9 @@ export type SkillId =
   | "skate"
   | "nap"
   | "focus"
+  | "greet"
+  | "sip"
+  | "bedtime"
   | "balloon-bunch"
   | "chaos";
 

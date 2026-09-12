@@ -32,7 +32,7 @@ function StudioInner() {
     <>
       <h1 className="mt-2 font-display text-6xl leading-[0.92] text-ink">{instance.name}</h1>
       <p className="mt-2 text-ink-soft">
-        Equip what you own, teach what you have taught, and save the look.
+        Dress them, teach them, save the look. Everything here is stuff you already own.
       </p>
       <p className="mt-3 flex flex-wrap gap-4 text-sm">
         <Link href={profileHref(instance.id)} className="text-moss underline">

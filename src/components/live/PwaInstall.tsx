@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
-import { publicBasePath } from "@/lib/site";
 import { useClientMounted } from "@/lib/state/use-client-mounted";
 
 type PromptEvent = Event & {
@@ -96,8 +95,7 @@ export function PwaInstall() {
         </li>
       </ol>
       <p className="text-sm text-ink-soft">
-        The site address stays {publicBasePath() ? "pinkpelara.github.io/digital-pet" : "this same origin"}. Pinning does not
-        move your companions off this computer’s browser storage in demo mode.
+        Your companions stay right where they are — pinning just gives them their own window.
       </p>
     </div>
   );

@@ -27,7 +27,6 @@ const footer = [
       { href: "/support", label: "Support" },
       { href: "/privacy", label: "Privacy" },
       { href: "/terms", label: "Terms" },
-      { href: "/admin", label: "Admin" },
     ],
   },
 ];

@@ -80,6 +80,9 @@ const ACTION_BY_ITEM: Record<string, DemoActionId> = {
   "skill-juggle": "juggle",
   "skill-skate": "skate",
   "skill-focus": "focus",
+  "skill-greet": "greet",
+  "skill-sip": "sip",
+  "skill-bedtime": "bedtime",
   "skill-balloon-bunch": "balloon-bunch",
   "skill-chaos": "chaos",
 };
@@ -103,6 +106,9 @@ const ICON_BY_ACTION: Record<DemoActionId, WheelIconId> = {
   study: "study",
   mad: "mad",
   focus: "focus",
+  greet: "mood",
+  sip: "mood",
+  bedtime: "nap",
   stretch: "stretch",
   adventure: "gift",
   party: "party",
@@ -170,6 +176,9 @@ export function skillFromDemo(action: DemoActionId | null): SkillId | null {
     "skate",
     "nap",
     "focus",
+    "greet",
+    "sip",
+    "bedtime",
     "balloon-bunch",
     "chaos",
   ];
@@ -186,6 +195,9 @@ export function moodFromDemo(action: DemoActionId | null): "idle" | "nap" | "cli
   }
   if (action === "mad") return "idle";
   if (action === "study" || action === "focus") return "follow";
+  if (action === "greet") return "happy";
+  if (action === "sip") return "idle";
+  if (action === "bedtime") return "nap";
   if (action === "stretch") return "idle";
   if (action === "adventure" || action === "party" || action === "balloon-bunch") return "happy";
   if (action === "chaos") return "skill";
@@ -204,6 +216,9 @@ export function demoDurationMs(action: DemoActionId): number {
   if (action === "party") return 0;
   if (action === "chaos") return 2400;
   if (action === "cartwheel") return 1400;
+  if (action === "greet") return 1800;
+  if (action === "sip") return 2600;
+  if (action === "bedtime") return 3000;
   if (action === "photo-pose") return 2600;
   if (action === "juggle") return 3200;
   return 2800;

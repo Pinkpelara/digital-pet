@@ -4,11 +4,19 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { track } from "@/lib/analytics";
-import { LooksGoodWith } from "@/components/store/LooksGoodWith";
-import { adoptHref, isShopSafe, pdpCtaLabel, shopTitle } from "@/lib/catalog-paths";
-import { demoActionForItem, showOffMs } from "@/lib/demo-actions";
+import { adoptHref, isShopSafe, pdpCtaLabel } from "@/lib/catalog-paths";
+import { demoActionForItem } from "@/lib/demo-actions";
+import { formatPrice } from "@/lib/format";
 import { useNest } from "@/lib/state/nest-context";
 import type { CatalogItem, DemoActionId, EquipmentLoadout, SkillId, SpeciesId } from "@/lib/types";
+
+const KIND_LABEL: Record<CatalogItem["kind"], string> = {
+  companion: "Companion",
+  outfit: "Look",
+  gadget: "Gadget",
+  skill: "Skill",
+  drop: "Limited",
+};
 
 export function TryOnStage({
   species,
@@ -17,6 +25,7 @@ export function TryOnStage({
   initialEquipped = {},
   initialSkill = null,
   oneLiner,
+  kicker,
 }: {
   species: SpeciesId;
   product: CatalogItem;
@@ -24,6 +33,7 @@ export function TryOnStage({
   initialEquipped?: EquipmentLoadout;
   initialSkill?: SkillId | null;
   oneLiner?: string;
+  kicker?: string;
 }) {
   const [equipped, setEquipped] = useState<EquipmentLoadout>(() =>
     Object.keys(initialEquipped).length
@@ -34,12 +44,12 @@ export function TryOnStage({
   );
   const [skill, setSkill] = useState<SkillId | null>(initialSkill ?? product.skillId ?? null);
   const [playAction, setPlayAction] = useState<DemoActionId | null>(() => demoActionForItem(product));
-  const [showOffKey, setShowOffKey] = useState(0);
   const nest = useNest();
   const roommate = nest.instances[0] ?? null;
+  const isCompanion = product.kind === "companion";
 
   const tryOns = useMemo(
-    () => suggestions.filter((item) => item.slot || item.skillId),
+    () => suggestions.filter((item) => (item.slot || item.skillId) && isShopSafe(item)),
     [suggestions],
   );
 
@@ -55,7 +65,6 @@ export function TryOnStage({
     }
     const action = demoActionForItem(item);
     if (action) setPlayAction(action);
-    setShowOffKey((value) => value + 1);
     if (item.skillId) {
       setSkill(item.skillId);
       track("skill_performed", { skill: item.skillId });
@@ -63,18 +72,12 @@ export function TryOnStage({
     }
   }
 
-  const wearParam = Object.values(equipped).filter(Boolean).join(",");
-  const heading = product.kind === "companion" ? `Adopt ${product.name}` : shopTitle(product);
   const shopSafe = isShopSafe(product);
-  const cta = pdpCtaLabel(product);
-  const waitMs = showOffMs(playAction ?? demoActionForItem(product));
-  const waitCopy =
-    product.kind === "companion" ? "Meet them first." : "Watch them first — then the price.";
 
   return (
     <div className="bg-paper">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-10 md:grid-cols-[1.15fr_0.85fr] md:px-10 md:py-14">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream stage-frame">
+        <div className="stage-frame relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-cream">
           <PlayableStage
             species={species}
             equipped={equipped}
@@ -82,7 +85,7 @@ export function TryOnStage({
             mood={skill ? "skill" : "idle"}
             className="h-full w-full"
             cameraZ={5.15}
-            companionName={roommate?.name ?? (product.kind === "companion" ? product.name : species)}
+            companionName={roommate?.name ?? (isCompanion ? product.name : species)}
             instanceId={roommate?.id}
             seed={roommate?.seed}
             persistEquip={nest.hydrated}
@@ -91,77 +94,69 @@ export function TryOnStage({
           />
         </div>
         <div>
-          <p className="kicker">
-            {product.kind === "companion" ? "Live companion" : "Live try-on"}
-          </p>
-          <h1 className="mt-3 max-w-[12ch] font-display text-5xl leading-[0.92] text-ink md:text-7xl">{heading}</h1>
-          <p className="mt-4 max-w-md text-lg leading-relaxed text-ink-soft">{oneLiner ?? product.tagline}</p>
-          <p className="mt-3 max-w-md text-ink-soft">{product.description}</p>
-          {product.kind === "skill" && product.skillId === "moonwalk" ? (
-            <p className="mt-3 max-w-md font-medium text-ink">Moonwalk. Backward, smooth, slightly illegal.</p>
-          ) : null}
-          {product.kind === "companion" ? (
-            <p className="mt-3 max-w-md text-sm text-ink-soft">
-              Watch them for a bit. Adopt when you are sure.
-            </p>
-          ) : (
-            <p className="mt-3 max-w-md text-sm text-ink-soft">
-              What you buy stays yours. Gadgets and skills change what they do on their own.
+          <p className="kicker">{kicker ?? KIND_LABEL[product.kind]}</p>
+          <h1 className="mt-3 max-w-[12ch] font-display text-5xl leading-[0.92] text-ink md:text-7xl">
+            {product.name}
+          </h1>
+          <p className="mt-4 max-w-md text-lg leading-relaxed text-ink">{oneLiner ?? product.tagline}</p>
+          <p className="mt-3 max-w-md leading-relaxed text-ink-soft">{product.description}</p>
+
+          {product.unlocksBehavior && (
+            <p className="mt-5 max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-ink ring-1 ring-ink/10">
+              <span className="font-medium">What changes: </span>
+              {product.behaviorNote ?? product.unlocksBehavior}
             </p>
           )}
-          <div className="mt-8">
+
+          <div className="mt-8 flex flex-wrap items-center gap-4">
             {shopSafe ? (
-              <div
-                key={`${product.id}-${showOffKey}`}
-                className="show-off-stack"
-                style={{ ["--show-off" as string]: `${waitMs}ms` }}
-              >
-                <p className="show-off-wait text-sm text-ink-soft">{waitCopy}</p>
-                <div className="show-off-cta">
-                  <Link
-                    href={adoptHref([product.id])}
-                    onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
-                    className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
-                  >
-                    {product.kind === "companion" ? `Adopt ${product.name}` : cta}
-                  </Link>
-                </div>
-              </div>
+              <>
+                <Link
+                  href={adoptHref([product.id])}
+                  onClick={() => track("checkout_started", { itemIds: product.id, demo: true })}
+                  className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-paper hover:bg-ink/90"
+                >
+                  {isCompanion ? `Adopt ${product.name}` : pdpCtaLabel(product)}
+                </Link>
+                <p className="text-lg font-medium tabular-nums text-ink">{formatPrice(product.priceCents)}</p>
+              </>
             ) : (
               <p className="max-w-md rounded-[1.2rem] bg-mist px-4 py-3 text-sm text-ink-soft ring-1 ring-ink/10">
-                Not in the shop yet — this is a preview. Watch what it does. On sale now: Raincoat ·
-                Pocket Umbrella.
+                Not in the shop yet. Watch what it does — it arrives in a later drop.
               </p>
             )}
           </div>
-          {tryOns.filter(isShopSafe).length > 0 && (
+          <p className="mt-4 max-w-md text-sm text-ink-soft">
+            {isCompanion
+              ? "Watch them for a bit. Adopt when you are sure."
+              : "Yours forever once you buy it. No subscriptions, no fake currency."}
+          </p>
+
+          {tryOns.length > 0 && (
             <div className="mt-10">
-              <p className="text-sm text-ink-soft">Try a look on this one</p>
+              <p className="text-sm text-ink-soft">
+                {isCompanion ? "Try a look on this one" : "See it on them with"}
+              </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {tryOns.filter(isShopSafe).map((item) => {
+                {tryOns.map((item) => {
                   const active = item.slot ? equipped[item.slot] === item.id : skill === item.skillId;
-                  const href = item.skillId
-                    ? `?wear=${wearParam || ""}&play=${item.skillId}`
-                    : `?wear=${item.id}`;
                   return (
-                    <Link
+                    <button
                       key={item.id}
-                      href={href}
-                      scroll={false}
+                      type="button"
                       onClick={() => apply(item)}
                       aria-pressed={active}
                       className={`rounded-full border px-3 py-1.5 text-sm ${
                         active ? "border-ink bg-ink text-paper" : "border-ink/15 bg-paper text-ink hover:border-ink/40"
                       }`}
                     >
-                      {shopTitle(item)}
-                    </Link>
+                      {item.name}
+                    </button>
                   );
                 })}
               </div>
             </div>
           )}
-          <LooksGoodWith ids={product.looksGoodWith} tone="light" />
         </div>
       </div>
     </div>
