@@ -250,7 +250,7 @@ export function SiteWorld() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-30">
-      <StageCanvas eager alpha dprMax={1.25} camera={{ position: [0, 0, 10], fov: 35, near: 0.1, far: 40 }} className="h-full w-full">
+      <StageCanvas eager alpha dprMax={2} camera={{ position: [0, 0, 10], fov: 35, near: 0.1, far: 40 }} className="h-full w-full">
         <StudioLights intensity={1.05} />
         <Roamer role="watcher" species="sprout" start={{ x: w * 0.3, y: h - 26 }} />
         <Roamer role="sleeper" species="mochi" start={{ x: w * 0.78, y: h - 26 }} />

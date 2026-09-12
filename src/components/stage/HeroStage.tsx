@@ -124,7 +124,7 @@ export function HeroStage({
     <StageCanvas
       className="absolute inset-0"
       alpha={false}
-      dprMax={mobile ? 1.15 : 1.5}
+      dprMax={mobile ? 1.5 : 2}
       camera={{ position: [0.2, 0.42, 5.4], fov: 32, far: 40 }}
       onPointerMove={(event) => {
         if (reduce.current) return;

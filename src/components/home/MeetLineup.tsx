@@ -26,7 +26,7 @@ export function MeetLineup() {
         <StageCanvas
           className="h-full w-full"
           alpha={false}
-          dprMax={1.25}
+          dprMax={2}
           camera={{ position: [0, 0.85, 8.6], fov: 28, far: 40 }}
           onPointerMove={(event) => {
             const rect = event.currentTarget.getBoundingClientRect();

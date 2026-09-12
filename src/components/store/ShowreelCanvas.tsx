@@ -19,7 +19,7 @@ export function ShowreelCanvas({ children }: { children: ReactNode }) {
       <div aria-hidden className="pointer-events-none fixed inset-0 z-20">
         <Canvas
           gl={{ alpha: true, antialias: true, stencil: false, depth: true }}
-          dpr={[1, 1.5]}
+          dpr={[1, 2]}
           frameloop="always"
           camera={{ position: [0, 0.3, 5.4], fov: 32, near: 0.1, far: 30 }}
         >

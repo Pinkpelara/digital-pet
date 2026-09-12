@@ -26,7 +26,7 @@ export function StageCanvas({
   className,
   camera = { position: [0, 0.45, 5.6], fov: 30 },
   alpha = true,
-  dprMax = 1.6,
+  dprMax = 2,
   eager = false,
   onReady,
   onPointerMove,
@@ -38,7 +38,7 @@ export function StageCanvas({
   const [visible, setVisible] = useState(eager);
   const [tabOn, setTabOn] = useState(true);
   const budget = useBudgetGpu();
-  const cap = budget ? Math.min(dprMax, 1) : dprMax;
+  const cap = budget ? Math.min(dprMax, 1.5) : dprMax;
   const dpr = useMemo<[number, number]>(() => [1, cap], [cap]);
   const playing = visible && tabOn;
 
@@ -98,7 +98,7 @@ export function StageCanvas({
           dpr={dpr}
           frameloop={playing ? "always" : "never"}
           gl={{
-            antialias: !budget,
+            antialias: true,
             alpha,
             powerPreference: budget ? "low-power" : "high-performance",
             stencil: false,

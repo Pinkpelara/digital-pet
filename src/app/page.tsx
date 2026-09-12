@@ -15,8 +15,38 @@ export default function HomePage() {
       <HeroBanner />
 
       <div className="below-fold">
+        <section className="border-b border-ink/10 bg-cream/60">
+          <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-3 md:px-10">
+            <div>
+              <p className="text-sm font-semibold tabular-nums text-moss">1 · Adopt</p>
+              <h3 className="mt-2 font-display text-2xl text-ink">Open the parcel. Name them.</h3>
+              <p className="mt-3 leading-relaxed text-ink-soft">
+                Pick a species from $5.99. A parcel arrives, it shakes, something climbs out, and you
+                give it a name. About a minute, start to finish.
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold tabular-nums text-moss">2 · They move in</p>
+              <h3 className="mt-2 font-display text-2xl text-ink">They live where you are.</h3>
+              <p className="mt-3 leading-relaxed text-ink-soft">
+                On this website first — wandering the pages, napping by buttons, watching your
+                cursor. Pin it in a browser window and they sit in the corner of your screen. The
+                desktop app comes later, and they move in with everything they own.
+              </p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold tabular-nums text-moss">3 · Find out who you got</p>
+              <h3 className="mt-2 font-display text-2xl text-ink">Nobody else has your exact one.</h3>
+              <p className="mt-3 leading-relaxed text-ink-soft">
+                Every companion is born with a hidden personality and a few secrets. You don&apos;t
+                choose who they are — you meet them. Their profile remembers every day of it.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="mx-auto max-w-6xl px-5 py-20 md:px-10">
-          <p className="kicker">A day with them</p>
+          <p className="kicker">What they do all day</p>
           <KineticTitle as="h2" className="mt-3 max-w-[18ch] text-4xl text-ink md:text-6xl">
             They fit into your day without asking for it.
           </KineticTitle>

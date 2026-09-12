@@ -22,8 +22,11 @@ export function HeroBanner() {
           {brand.heroHeadline}
         </h1>
         <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">{brand.heroSub}</p>
-        <div data-creature-spot="adopt" className="pointer-events-auto mt-8 flex flex-wrap gap-3">
+        <div data-creature-spot="adopt" className="pointer-events-auto mt-8 flex flex-wrap items-center gap-3">
           <HeroAdoptLink adoptFrom={adoptFrom} />
+          <a href="#meet" className="rounded-full border border-ink/20 px-6 py-3 text-sm text-ink hover:border-ink/40">
+            Meet the four species
+          </a>
         </div>
       </div>
     </section>
