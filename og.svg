@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#faf6ef"/>
+  <rect x="72" y="72" width="1056" height="486" rx="48" fill="#f3eadc"/>
+  <ellipse cx="820" cy="390" rx="168" ry="150" fill="#3db8b0"/>
+  <ellipse cx="820" cy="430" rx="78" ry="58" fill="#c8f3ee"/>
+  <circle cx="768" cy="350" r="18" fill="#241c16"/>
+  <circle cx="872" cy="350" r="18" fill="#241c16"/>
+  <circle cx="762" cy="344" r="5" fill="#fff"/>
+  <circle cx="866" cy="344" r="5" fill="#fff"/>
+  <path d="M790 410 Q820 438 850 410" stroke="#241c16" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <line x1="820" y1="252" x2="820" y2="188" stroke="#2a8f88" stroke-width="12"/>
+  <circle cx="820" cy="172" r="32" fill="#8ee6df"/>
+  <text x="110" y="250" fill="#241c16" font-family="Georgia, serif" font-size="48" font-weight="700">Someone small lives</text>
+  <text x="110" y="318" fill="#241c16" font-family="Georgia, serif" font-size="42">on your screen now.</text>
+  <text x="110" y="400" fill="#5c574f" font-family="Georgia, serif" font-size="24">You do not choose its personality. You meet it.</text>
+</svg>

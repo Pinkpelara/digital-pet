@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin
+
+Host: https://pinkpelara.github.io/digital-pet
+Sitemap: https://pinkpelara.github.io/digital-pet/sitemap.xml

@@ -1,0 +1,3 @@
+:HL["/digital-pet/_next/static/chunks/3u2ztric8xd2i.css","style"]
+:HC["/",""]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"profile","param":null,"prefetchHints":4192,"slots":{"children":{"name":"public-id","param":{"type":"d","key":"cmp-42","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"uDKeawze6NCK75zELtgMA"}
