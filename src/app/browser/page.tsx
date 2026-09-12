@@ -12,7 +12,7 @@ export default function BrowserPage() {
       <PageHero
         kicker="The real now-path · work machines"
         title="Lives in the corner while you work."
-        lede="Pin this site in Chrome or Edge and they sit beside your tabs. You write, they nap. You ignore them, they sulk. You look back, they noticed. Mute chaos anytime in the header."
+        lede="Pin this site in Chrome or Edge and they sit beside your tabs. You write, they wander. You look back, they noticed. Nothing bad happens when you are away."
       />
       <div className="mx-auto max-w-6xl px-5 md:px-10">
         <WhenVisible once className="stage-frame mb-10 min-h-[360px] overflow-hidden rounded-[1.8rem] md:min-h-[460px]">

@@ -45,6 +45,76 @@ export default function HomePage() {
             <DeferredTheirStuff />
           </div>
         </section>
+
+        <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
+          <p className="kicker">Individuals</p>
+          <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
+            Same species. Different little weirdos.
+          </KineticTitle>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            Two Bloops. Completely different problems. Every companion gets its own hidden
+            personality. You don&apos;t choose it. You meet it.
+          </p>
+          <p className="mt-6">
+            <Link href="/my-companions" prefetch={false} className="text-sm text-moss underline underline-offset-4">
+              Your companions live here
+            </Link>
+          </p>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
+          <p className="kicker">Gadgets</p>
+          <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
+            Things change what they do.
+          </KineticTitle>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            A gadget is not a hat with a strap. Give him the skateboard and he skates. Give him
+            the camera and he takes photos. Mostly of nothing.
+          </p>
+          <p className="mt-6 flex flex-wrap gap-4">
+            <Link href="/gadgets" prefetch={false} className="text-sm text-moss underline underline-offset-4">
+              All gadgets
+            </Link>
+            <Link href="/skills" prefetch={false} className="text-sm text-moss underline underline-offset-4">
+              Teach Moonwalk
+            </Link>
+          </p>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
+          <p className="kicker">Elsewhere</p>
+          <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
+            Something happened while you were gone.
+          </KineticTitle>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            He knocked the plant over. Rare things only happen when nobody is watching. When one
+            does, you get a card — because nobody will believe you otherwise.
+          </p>
+          <p className="mt-6 flex flex-wrap gap-4">
+            <Link href="/live" prefetch={false} className="text-sm text-moss underline underline-offset-4">
+              Where they live
+            </Link>
+            <Link href="/gift/WELCOME-BLOOP" prefetch={false} className="text-sm text-moss underline underline-offset-4">
+              Send someone a tiny problem
+            </Link>
+          </p>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
+          <p className="kicker">Desktop</p>
+          <KineticTitle as="h2" className="mt-4 max-w-[18ch] text-4xl text-ink md:text-6xl">
+            Eventually, let them loose.
+          </KineticTitle>
+          <p className="mt-4 max-w-xl text-ink-soft">
+            Your desktop is the real home. Not yet, though. The website is where you meet them,
+            dress them, and figure out who you got.
+          </p>
+          <p className="mt-6">
+            <Link href="/desktop" prefetch={false} className="text-sm text-moss underline underline-offset-4">
+              Read what exists
+            </Link>
+          </p>
+        </section>
       </div>
 
       <section className="relative mx-auto max-w-6xl overflow-hidden px-5 pb-28 pt-12 text-center md:px-10">

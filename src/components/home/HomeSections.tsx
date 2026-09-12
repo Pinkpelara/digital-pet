@@ -5,7 +5,6 @@ import Link from "next/link";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { catalogById } from "@/data/catalog";
 import { FEATURED_SHOP_IDS } from "@/lib/catalog-paths";
-import { brand } from "@/lib/brand";
 import { useNest } from "@/lib/state/nest-context";
 import type { DemoActionId, EquipmentLoadout, SkillId } from "@/lib/types";
 
@@ -69,11 +68,6 @@ export function MakeYoursDemo() {
     }
   }
 
-  function giveCamera() {
-    nest.signInDemo();
-    nest.grantItems(["gadget-camera"], "gift");
-  }
-
   return (
     <div className="grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
         <div className="stage-frame min-h-[460px] overflow-hidden rounded-[1.8rem] md:min-h-[560px]">
@@ -95,7 +89,8 @@ export function MakeYoursDemo() {
           />
         </div>
         <div>
-          <div className="flex flex-wrap gap-2">
+          <p className="text-sm text-ink-soft">Try a look on this one. Dressing them changes how they look. Gadgets and skills change what they get up to on their own.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
             {tryLooks.map((entry) => (
               <button
                 key={entry.id}
@@ -129,25 +124,8 @@ export function MakeYoursDemo() {
               );
             })}
           </div>
-          <div className="mt-6">
-            {nest.owns("gadget-camera") ? (
-              <p className="text-sm text-moss">The camera is theirs.</p>
-            ) : (
-              <button
-                type="button"
-                onClick={giveCamera}
-                className="text-sm text-moss underline underline-offset-4"
-              >
-                {brand.cameraLine}
-              </button>
-            )}
-          </div>
-          <p className="mt-4">
-            <Link href="/item/focus-headphones" className="text-sm text-ink-soft underline underline-offset-4">
-              Focus Headphones
-            </Link>
-          </p>
+          <p className="mt-4 text-sm text-moss">Give him the skateboard and he skates. Take it away and he mimes it, sadly.</p>
         </div>
-    </div>
+      </div>
   );
 }

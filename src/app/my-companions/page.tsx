@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { CompanionCard } from "@/components/companions/CompanionCard";
 import { LiveStage } from "@/components/stage/LiveStage";
+import { AwayNote } from "@/components/home/AwayNote";
 import { PageHero } from "@/components/site/KineticTitle";
 import { brand } from "@/lib/brand";
 import { useNest } from "@/lib/state/nest-context";
@@ -30,6 +31,7 @@ export default function MyCompanionsPage() {
       </PageHero>
 
       <div className="mx-auto max-w-6xl px-5 md:px-10">
+      <AwayNote />
       {instances.length === 0 ? (
         <article className="poster-card overflow-hidden rounded-[2rem]">
           <div className="min-h-[360px] bg-cream md:min-h-[460px]">

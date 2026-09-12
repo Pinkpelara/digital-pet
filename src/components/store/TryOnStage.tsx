@@ -106,7 +106,7 @@ export function TryOnStage({
             </p>
           ) : (
             <p className="mt-3 max-w-md text-sm text-ink-soft">
-              What you buy stays yours. Birthday surprises are always free.
+              What you buy stays yours. Gadgets and skills change what they do on their own.
             </p>
           )}
           <div className="mt-8">

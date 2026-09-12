@@ -2,6 +2,8 @@ const KEY = "companions.presence.v1";
 
 export type PresenceState = {
   lastInteractAt: number;
+  /** Last time this browser was seen at all. Drives away-events, never guilt. */
+  lastSeenAt: number;
   /** Demo toggle: replay the birthday parcel. */
   birthdayForce: boolean;
   birthdaySeenAt: string | null;
@@ -13,6 +15,7 @@ export type PresenceState = {
 
 const DEFAULT: PresenceState = {
   lastInteractAt: 0,
+  lastSeenAt: 0,
   birthdayForce: false,
   birthdaySeenAt: null,
   seededBirthday: false,
@@ -44,9 +47,20 @@ export function readPresence(): PresenceState {
 }
 
 export function markPresenceInteract(): PresenceState {
-  const next = { ...read(), lastInteractAt: Date.now() };
+  const next = { ...read(), lastInteractAt: Date.now(), lastSeenAt: Date.now() };
   write(next);
   return next;
+}
+
+/**
+ * Returns how long this browser was gone, then stamps the visit.
+ * Powers "something happened while you were gone" — a funny card, never guilt.
+ */
+export function readMarkSeen(): { awayMs: number } {
+  const prev = read();
+  const now = Date.now();
+  write({ ...prev, lastSeenAt: now });
+  return { awayMs: prev.lastSeenAt ? now - prev.lastSeenAt : 0 };
 }
 
 export function idleMs(state: PresenceState = read()): number {

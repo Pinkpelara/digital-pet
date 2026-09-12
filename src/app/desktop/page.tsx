@@ -8,9 +8,9 @@ export default function DesktopPage() {
   return (
     <div className="bg-paper pb-20">
       <PageHero
-        kicker="Flagship · not shipped"
-        title="Eventually they roam the whole machine."
-        lede="The version we are building toward walks across your real desktop — over windows, along the dock, asleep on the clock. That is co-presence at OS scale, OpenPets-style: a shell and a skills shelf, not a humanoid robot. It is not finished, and we are not selling an installer we do not have."
+        kicker="Desktop · not shipped yet"
+        title="Eventually they roam the whole computer."
+        lede="The big idea: Bloop walks across your actual computer. Over your windows, along the dock, asleep on the clock. That version is a prototype. Right now he lives here on the website."
       />
       <div className="mx-auto max-w-3xl px-5 md:px-10">
       <p className="text-ink-soft">
@@ -25,7 +25,7 @@ export default function DesktopPage() {
           Pin them in the corner
         </Link>
         <Link href="/skills" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
-          Skills shelf
+          Teach Moonwalk
         </Link>
         <Link href="/download/windows" className="rounded-full border border-ink/15 px-5 py-3 text-ink">
           Windows (coming soon)

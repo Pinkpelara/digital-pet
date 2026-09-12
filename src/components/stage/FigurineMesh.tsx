@@ -250,6 +250,56 @@ function Gear({
           </mesh>
         </group>
       )}
+      {hand === "gadget-ball" && (
+        <mesh castShadow position={[0.62, -0.12, 0.42]}>
+          <sphereGeometry args={[0.15, 18, 18]} />
+          <ClayMaterial color="#E89B6C" />
+        </mesh>
+      )}
+      {hand === "gadget-laptop" && (
+        <group position={[0.52, 0.02, 0.48]} rotation={[0.1, -0.4, 0]}>
+          <mesh castShadow>
+            <boxGeometry args={[0.36, 0.045, 0.27]} />
+            <ClayMaterial color="#4A4A4A" />
+          </mesh>
+          <mesh position={[0, 0.14, -0.12]} rotation={[-0.28, 0, 0]}>
+            <boxGeometry args={[0.36, 0.26, 0.03]} />
+            <ClayMaterial color="#3a3a3a" />
+          </mesh>
+          <mesh position={[0, 0.14, -0.1]} rotation={[-0.28, 0, 0]}>
+            <planeGeometry args={[0.28, 0.18]} />
+            <meshStandardMaterial color="#9BE7F2" roughness={0.3} />
+          </mesh>
+        </group>
+      )}
+      {back === "gadget-backpack" && (
+        <group position={[0, 0.12, -0.44]}>
+          <mesh castShadow>
+            <boxGeometry args={[0.4, 0.5, 0.22]} />
+            <ClayMaterial color="#7E8CFF" />
+          </mesh>
+          <mesh position={[0, -0.04, -0.13]}>
+            <boxGeometry args={[0.26, 0.24, 0.04]} />
+            <ClayMaterial color="#9AA4FF" />
+          </mesh>
+        </group>
+      )}
+      {back === "gadget-hammock" && (
+        <group position={[0, 0.42, -0.42]} rotation={[0, 0, Math.PI / 2]}>
+          <mesh castShadow rotation={[0, 0, 0]}>
+            <cylinderGeometry args={[0.1, 0.1, 0.56, 12]} />
+            <ClayMaterial color="#E8C98A" />
+          </mesh>
+          <mesh position={[0, 0.32, 0]}>
+            <cylinderGeometry args={[0.025, 0.025, 0.2, 8]} />
+            <meshStandardMaterial color="#C4A574" />
+          </mesh>
+          <mesh position={[0, -0.32, 0]}>
+            <cylinderGeometry args={[0.025, 0.025, 0.2, 8]} />
+            <meshStandardMaterial color="#C4A574" />
+          </mesh>
+        </group>
+      )}
       {feet === "outfit-rainboots" && (
         <group>
           <Ball color="#3a3d3b" position={[-0.2, -0.92, 0.12]} scale={[0.18, 0.13, 0.24]} segs={20} />

@@ -68,6 +68,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
         />
       </div>
       <div>
+        <p className="mb-4 text-sm text-ink-soft">Teaching adds it to what they do on their own. Kevin knows how to moonwalk — you don't press moonwalk.</p>
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Customize">
           {tabs.map((entry) => (
             <button
@@ -104,7 +105,7 @@ export function CompanionStudio({ instance }: { instance: CompanionInstance }) {
                     </span>
                   </span>
                   <span className="text-xs uppercase tracking-wider text-ink-soft">
-                    {owned ? (active ? "On" : item.skillId ? "Play" : "Equip") : isShopSafe(item) ? "Try" : "Preview"}
+                    {owned ? (active ? "On" : item.skillId ? "Teach" : "Equip") : isShopSafe(item) ? "Try" : "Preview"}
                   </span>
                 </button>
               </li>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ActionWheel } from "@/components/stage/ActionWheel";
 import { LiveStage } from "@/components/stage/LiveStage";
 import { StageFx } from "@/components/stage/StageFx";
 import { usePlayableCompanion } from "@/components/stage/use-playable-companion";
@@ -73,7 +72,9 @@ export function PlayableStage({
   }, [applyExternal, playAction, stage.skill]);
 
   const liveDemo = playable.demo ?? playAction ?? stage.skill ?? autoPlay ?? null;
-  const hintText = hint ?? (playable.open || playable.demo ? "" : "They’re doing their own thing.");
+  // Observation-first: they live on their own schedule. Tapping only says hi.
+  // Observed moments (trips, hiding spots) flash as captions; otherwise the hint shows.
+  const hintText = hint ?? (playable.demo || playable.caption ? "" : "They're doing their own thing. Watch a while.");
 
   return (
     <div className={`playable-stage relative h-full w-full ${className ?? ""}`}>
@@ -89,20 +90,12 @@ export function PlayableStage({
       <StageFx demo={liveDemo} />
       <button
         type="button"
-        className={`absolute inset-0 z-[5] cursor-pointer bg-transparent ${playable.open ? "pointer-events-none" : ""}`}
-        onClick={playable.toggleWheel}
-        aria-label={`See what ${companionName} can do`}
-        aria-expanded={playable.open}
+        className="absolute inset-0 z-[5] cursor-pointer bg-transparent"
+        onClick={playable.pat}
+        aria-label={`Say hi to ${companionName}`}
       />
-      <ActionWheel
-        items={playable.wheel}
-        open={playable.open}
-        onSelect={playable.play}
-        onClose={playable.closeWheel}
-        name={companionName}
-      />
-      {playable.demo && playable.caption ? (
-        <p className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full bg-ink/80 px-3 py-1 text-xs text-paper">
+      {playable.caption ? (
+        <p className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink/80 px-3 py-1 text-xs text-paper">
           {playable.caption}
         </p>
       ) : hintText ? (

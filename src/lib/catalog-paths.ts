@@ -13,7 +13,7 @@ export const FEATURED_SHOP_IDS = [
 /** Names-only shop headline. Full sentence lives in brand.shopBody. */
 export const SHOP_NOW_NAMES = "Raincoat. Umbrella. Skateboard. Moonwalk.";
 
-/** Shop-safe first, featured SKUs at the front of their kind. */
+/** Available-now first, featured SKUs at the front of their kind. */
 export function orderForShop(items: CatalogItem[]): CatalogItem[] {
   const featuredIndex = new Map<string, number>(FEATURED_SHOP_IDS.map((id, index) => [id, index]));
   return [...items].sort((a, b) => {
@@ -88,7 +88,7 @@ export function categoryCopy(kind: CatalogItem["kind"]): { title: string; lede: 
     case "skill":
       return {
         title: "Skills",
-        lede: "Moonwalk. Try it on. It’s theirs.",
+        lede: "Teach one. They know it forever.",
       };
     case "drop":
       return {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
 import { PersonalityReveal } from "@/components/share/PersonalityReveal";
 import { WhatDidTheyDo } from "@/components/share/WhatDidTheyDo";
@@ -21,9 +21,19 @@ import type { BehaviourCounters } from "@/lib/types";
 export function CompanionProfileView() {
   const params = useSearchParams();
   const id = params.get("id");
-  const { instances, hydrated, recordBehaviour } = useNest();
+  const { instances, hydrated, recordBehaviour, noteBond } = useNest();
   const instance = instances.find((row) => row.id === id) ?? instances[0] ?? null;
   const [revealed, setRevealed] = useState<string | null>(null);
+  const bonded = useRef<string | null>(null);
+
+  const others = (instance ? instances.filter((row) => row.id !== instance.id) : []);
+
+  // Living near another companion registers. Bonds deepen the longer they share the place.
+  useEffect(() => {
+    if (!instance || others.length === 0 || bonded.current === instance.id) return;
+    bonded.current = instance.id;
+    noteBond(instance.id, others[0].id);
+  }, [instance, others, noteBond]);
 
   const onBehaviour = useCallback(
     (kind: keyof BehaviourCounters) => {
@@ -130,6 +140,29 @@ export function CompanionProfileView() {
                   Favourite spot
                 </dt>
                 <dd className="mt-1 text-ink">{instance.favouriteSpot ?? "Unknown for now"}</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-semibold uppercase tracking-wider text-ink-soft">
+                  Not alone
+                </dt>
+                <dd className="mt-1 text-ink">
+                  {others.length === 0
+                    ? "Only child. For now."
+                    : others
+                        .map((other) => {
+                          const bond = instance.bonds.find(
+                            (entry) => entry.otherInstanceId === other.id,
+                          );
+                          const status =
+                            bond == null
+                              ? "hasn't noticed them yet"
+                              : bond.strength >= 5
+                                ? "napping together"
+                                : "still figuring each other out";
+                          return `${other.name} · ${status}`;
+                        })
+                        .join("  ·  ")}
+                </dd>
               </div>
             </div>
           </dl>

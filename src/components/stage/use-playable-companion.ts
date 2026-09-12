@@ -33,6 +33,9 @@ const GADGET_ACTION: Record<string, DemoActionId> = {
   "gadget-camera": "photo-pose",
   "gadget-broom": "tidy",
   "gadget-balloon": "hover",
+  "gadget-ball": "juggle",
+  "gadget-hammock": "nap",
+  "gadget-laptop": "study",
   "gadget-partyhat": "party",
   "gadget-headphones": "focus",
   "gadget-skateboard": "skate",
@@ -67,6 +70,14 @@ const BEHAVIOUR_FOR_ACTION: Partial<Record<DemoActionId, keyof BehaviourCounters
 
 const REPORT_GAP_MS = 4000;
 const LOOPING_RUN_MS = 7000;
+
+const NAP_SPOTS = [
+  "behind the heading",
+  "on the nav bar",
+  "in the warm corner",
+  "by the footer",
+  "under the cursor",
+];
 
 /** How long an action runs when the creature does it on its own. */
 function oneShotMs(action: DemoActionId): number {
@@ -136,6 +147,7 @@ export function usePlayableCompanion(input: {
   holdAction?: DemoActionId | null;
 }) {
   const nest = useNest();
+  const { setFavouriteSpot, discoverSecret } = nest;
   const [open, setOpen] = useState(false);
   const [demo, setDemo] = useState<DemoActionId | null>(null);
   const [demoEquip, setDemoEquip] = useState<EquipmentLoadout>({});
@@ -325,9 +337,19 @@ export function usePlayableCompanion(input: {
 
   // Ambient life: moods roll over on their own schedule; once in a while the
   // creature does a trick it knows or uses something it is carrying.
+  // Trips, nap spots, and hiding-spot secrets accrue here too — history comes
+  // from living together, never from a menu.
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const targetId = input.instanceId;
+    let captionTimer: number | null = null;
+    const flashCaption = (line: string) => {
+      setCaption(line);
+      if (captionTimer) window.clearTimeout(captionTimer);
+      captionTimer = window.setTimeout(() => setCaption(""), 4000);
+    };
 
     const timer = window.setInterval(() => {
       const now = Date.now();
@@ -337,7 +359,23 @@ export function usePlayableCompanion(input: {
       }
       if (now > untilRef.current) {
         if (untilRef.current > 0 && now - moodSinceRef.current > 2600) {
-          report(BEHAVIOUR_FOR_MOOD[ambientMoodRef.current]);
+          const finished = ambientMoodRef.current;
+          const kind = BEHAVIOUR_FOR_MOOD[finished];
+          report(kind);
+          if (targetId) {
+            if (finished === "walk" && Math.random() < 0.08) {
+              report("fell");
+              flashCaption("Tripped over nothing.");
+            } else if (finished === "nap" && Math.random() < 0.25) {
+              setFavouriteSpot(targetId, NAP_SPOTS[Math.floor(Math.random() * NAP_SPOTS.length)]);
+            } else if (finished === "hide" && Math.random() < 0.15) {
+              const secrets = companions.find((entry) => entry.id === input.species)?.secrets ?? [];
+              if (secrets.length > 0) {
+                discoverSecret(targetId, secrets[Math.floor(Math.random() * secrets.length)]);
+                flashCaption("Found a new hiding spot.");
+              }
+            }
+          }
         }
         const next = pickMood(statsRef.current);
         setAmbientMood(next);
@@ -355,8 +393,11 @@ export function usePlayableCompanion(input: {
         if (pick) fireDemo(pick.action, pick.item, pick.caption, oneShotMs(pick.action));
       }
     }, 900);
-    return () => window.clearInterval(timer);
-  }, [liveDemo, fireDemo, open, report]);
+    return () => {
+      window.clearInterval(timer);
+      if (captionTimer) window.clearTimeout(captionTimer);
+    };
+  }, [liveDemo, fireDemo, open, report, input.instanceId, input.species, setFavouriteSpot, discoverSecret]);
 
   useEffect(() => {
     if (!open) return;

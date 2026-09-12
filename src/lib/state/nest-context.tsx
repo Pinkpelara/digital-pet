@@ -32,6 +32,8 @@ type NestContextValue = PersistedNest & {
   /** Called when a behaviour is observed. May unlock a personality label. */
   recordBehaviour: (instanceId: string, kind: keyof BehaviourCounters) => PersonalityLabel | null;
   discoverSecret: (instanceId: string, secretId: string) => void;
+  /** Notice another companion. Bonds strengthen from living together. */
+  noteBond: (instanceId: string, otherId: string) => void;
   setFavouriteSpot: (instanceId: string, spot: string) => void;
   setCreaturesEnabled: (enabled: boolean) => void;
   previewItem: (itemId: string) => { slot?: EquipSlot; skillId?: SkillId } | undefined;
@@ -209,6 +211,31 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
     [patchInstance],
   );
 
+  const noteBond = useCallback(
+    (instanceId: string, otherId: string) => {
+      if (instanceId === otherId) return;
+      patchInstance(instanceId, (row) => {
+        const existing = row.bonds.find((entry) => entry.otherInstanceId === otherId);
+        if (!existing) {
+          return {
+            ...row,
+            bonds: [...row.bonds, { otherInstanceId: otherId, kind: "curious-about", strength: 1 }],
+          };
+        }
+        const strength = Math.min(10, existing.strength + 1);
+        return {
+          ...row,
+          bonds: row.bonds.map((entry) =>
+            entry.otherInstanceId === otherId
+              ? { ...entry, strength, kind: strength >= 5 ? "napping-together" : entry.kind }
+              : entry,
+          ),
+        };
+      });
+    },
+    [patchInstance],
+  );
+
   const setCreaturesEnabled = useCallback((enabled: boolean) => {
     update((prev) => ({ ...prev, creaturesEnabled: enabled }));
     track("creatures_paused", { enabled });
@@ -230,6 +257,7 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
       recordBehaviour,
       discoverSecret,
       setFavouriteSpot,
+      noteBond,
       setCreaturesEnabled,
       previewItem: (itemId: string) => {
         const item = items.find((entry) => entry.id === itemId);
@@ -248,6 +276,7 @@ export function NestProvider({ children }: { children: React.ReactNode }) {
       recordBehaviour,
       renameCompanion,
       saveOutfit,
+      noteBond,
       setCreaturesEnabled,
       setFavouriteSpot,
       signInDemo,

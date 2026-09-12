@@ -18,6 +18,7 @@ const MOOD_WEIGHTS: Array<{ mood: CreatureMood; weight: number }> = [
   { mood: "nap", weight: 14 },
   { mood: "follow", weight: 16 },
   { mood: "climb", weight: 6 },
+  { mood: "hide", weight: 8 },
 ];
 
 export function pickMood(stats: PersonalityStats, random = Math.random): CreatureMood {
@@ -27,6 +28,7 @@ export function pickMood(stats: PersonalityStats, random = Math.random): Creatur
     if (entry.mood === "follow") weight += stats.cling * 0.18;
     if (entry.mood === "walk" || entry.mood === "climb") weight += stats.curiosity * 0.12 + stats.energy * 0.08;
     if (entry.mood === "idle") weight += stats.shy * 0.1;
+    if (entry.mood === "hide") weight += stats.shy * 0.12;
     if (stats.chaos > 70 && entry.mood === "walk") weight += 10;
     return { ...entry, weight };
   });
@@ -52,6 +54,8 @@ export function moodDuration(mood: CreatureMood, stats: PersonalityStats): numbe
       return 2400 + stats.cling * 16;
     case "climb":
       return 2600;
+    case "hide":
+      return 4200;
     default:
       return 2000 + chaosJitter;
   }

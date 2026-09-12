@@ -103,6 +103,31 @@ export function EquipmentLayers({ equipped }: { equipped: EquipmentLoadout }) {
           <circle cx="104" cy="166" r="5" fill="#2A2118" />
         </g>
       )}
+      {slot(equipped, "gadget-ball") && (
+        <g>
+          <circle cx="132" cy="128" r="10" fill="#E89B6C" />
+          <circle cx="129" cy="125" r="3" fill="#F6C79B" opacity="0.8" />
+        </g>
+      )}
+      {slot(equipped, "gadget-laptop") && (
+        <g>
+          <rect x="14" y="110" width="30" height="20" rx="3" fill="#4A4A4A" />
+          <rect x="17" y="113" width="24" height="12" rx="1" fill="#9BE7F2" />
+        </g>
+      )}
+      {slot(equipped, "gadget-backpack") && (
+        <g>
+          <rect x="6" y="96" width="26" height="42" rx="9" fill="#7E8CFF" />
+          <rect x="10" y="112" width="18" height="14" rx="5" fill="#9AA4FF" />
+        </g>
+      )}
+      {slot(equipped, "gadget-hammock") && (
+        <g>
+          <rect x="8" y="56" width="36" height="13" rx="6.5" fill="#E8C98A" />
+          <line x1="8" y1="62" x2="2" y2="62" stroke="#C4A574" strokeWidth="2" />
+          <line x1="44" y1="62" x2="50" y2="62" stroke="#C4A574" strokeWidth="2" />
+        </g>
+      )}
       {slot(equipped, "outfit-rainboots") && (
         <g>
           <rect x="58" y="148" width="14" height="16" rx="3" fill="#F2C14E" />
