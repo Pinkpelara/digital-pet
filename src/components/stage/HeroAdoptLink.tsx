@@ -12,7 +12,7 @@ export function HeroAdoptLink({ adoptFrom }: { adoptFrom: string }) {
   if (roommate) {
     return (
       <Link href={profileHref(roommate.id)} prefetch={false} className="rounded-full bg-ink px-6 py-3 text-sm text-paper">
-        {name} is here
+        Back to {name}
       </Link>
     );
   }

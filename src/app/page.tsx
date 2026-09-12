@@ -19,27 +19,29 @@ export default function HomePage() {
           <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-3 md:px-10">
             <div>
               <p className="text-sm font-semibold tabular-nums text-moss">1 · Adopt</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">Open the parcel. Name them.</h3>
+              <h3 className="mt-2 font-display text-2xl text-ink">Choose a pet. Name them.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Pick a species from $5.99. A parcel arrives, it shakes, something climbs out, and you
-                give it a name. About a minute, start to finish.
+                Digital pets start at $5.99. A parcel opens on your screen, your new pet climbs out,
+                and you give them a name. About a minute, start to finish.
               </p>
             </div>
             <div>
               <p className="text-sm font-semibold tabular-nums text-moss">2 · They move in</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">They live where you are.</h3>
+              <h3 className="mt-2 font-display text-2xl text-ink">They live on your computer.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                On this website first — wandering the pages, napping by buttons, watching your
-                cursor. Pin it in a browser window and they sit in the corner of your screen. The
-                desktop app comes later, and they move in with everything they own.
+                Your pet stays with you on this site — walking the pages, sleeping, watching your
+                cursor. Add the site to your browser in one click and they sit in the corner of your
+                screen while you work. A desktop app is in development. When it ships, your pet
+                moves over with everything they own.
               </p>
             </div>
             <div>
-              <p className="text-sm font-semibold tabular-nums text-moss">3 · Find out who you got</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">Nobody else has your exact one.</h3>
+              <p className="text-sm font-semibold tabular-nums text-moss">3 · They become themselves</p>
+              <h3 className="mt-2 font-display text-2xl text-ink">Every pet develops its own personality.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Every companion is born with a hidden personality and a few secrets. You don&apos;t
-                choose who they are — you meet them. Their profile remembers every day of it.
+                Each pet starts with hidden traits. Some are bold, some are shy, some sleep all day.
+                You learn who you have by spending time together, and their profile keeps the
+                history.
               </p>
             </div>
           </div>
@@ -53,65 +55,69 @@ export default function HomePage() {
           <div className="mt-10 grid gap-10 md:grid-cols-4">
             <div>
               <p className="text-sm font-medium tabular-nums text-moss">09:04</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">He&apos;s already up.</h3>
+              <h3 className="mt-2 font-display text-2xl text-ink">They notice when you arrive.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Open the page and there&apos;s a little hop at the edge of your screen. He noticed
-                you arrived before you noticed him.
+                Open the site and your pet is already up. If you taught them Greeter, they hop over
+                to say hello.
               </p>
             </div>
             <div>
               <p className="text-sm font-medium tabular-nums text-moss">14:20</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">He keeps to himself.</h3>
+              <h3 className="mt-2 font-display text-2xl text-ink">They stay nearby while you work.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Naps by a button, watches your cursor, climbs something he should not. If he has
-                learned Focus Buddy, he settles beside you instead.
+                Napping beside a button, watching your cursor, occasionally climbing something they
+                should not. With Focus Buddy taught, they settle down beside you instead.
               </p>
             </div>
             <div>
               <p className="text-sm font-medium tabular-nums text-moss">16:45</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">He reminds you, quietly.</h3>
+              <h3 className="mt-2 font-display text-2xl text-ink">They remind you without saying anything.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Break Buddy pulls out a tiny drink and has a sip. You get the hint. No popup, no
-                streak, no guilt.
+                With Break Buddy taught, your pet pulls out a small drink and takes a sip when it is
+                time for a pause. You catch the hint. There is no popup and no streak.
               </p>
             </div>
             <div>
               <p className="text-sm font-medium tabular-nums text-moss">23:50</p>
-              <h3 className="mt-2 font-display text-2xl text-ink">He puts himself to bed.</h3>
+              <h3 className="mt-2 font-display text-2xl text-ink">They put themselves to bed.</h3>
               <p className="mt-3 leading-relaxed text-ink-soft">
-                Late enough, he yawns and curls up on his own. Nothing bad happens if you close the
-                lid. Nothing ever does.
+                With Bedtime taught, they yawn and curl up on their own at night. Close the lid
+                whenever you like. Nothing bad happens while you are away.
               </p>
             </div>
           </div>
           <p className="mt-10 max-w-xl text-ink-soft">
-            Every useful thing is optional and taught, never default. Someone who wants none of it
-            can simply let the creature exist.
+            Every one of these is optional. Teach them or skip them. Company comes first.
           </p>
         </section>
 
         <section className="mx-auto max-w-6xl px-5 py-16 md:px-10">
           <div className="rounded-[1.8rem] bg-mist p-8 ring-1 ring-ink/10 md:p-12">
-            <p className="kicker">Yours</p>
+            <p className="kicker">One of a kind</p>
             <KineticTitle as="h2" className="mt-3 max-w-[16ch] text-4xl text-ink md:text-6xl">
-              Nobody else has this one.
+              Your pet is their own character.
             </KineticTitle>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-soft">
-              Every companion is born with hidden tendencies — curiosity, courage, energy,
-              clinginess, mischief. You never see the numbers. Two people can adopt the same
-              species on the same day and end up with completely different roommates. You
-              don&apos;t choose the personality. You meet it.
+              Digital pets are characters with habits of their own, the way a real pet has a
+              personality. Every one starts with hidden traits — curiosity, courage, energy,
+              clinginess — and develops from there. Two people can adopt the same kind on the same
+              day and raise two completely different pets. You never see numbers or settings. You
+              learn who they are by living with them.
             </p>
-            <blockquote className="mt-8 max-w-xl border-l-2 border-moss pl-5 text-ink">
+            <p className="mt-6 text-sm text-ink-soft">After a few weeks, a profile might read:</p>
+            <blockquote className="mt-4 max-w-xl border-l-2 border-moss pl-5 text-ink">
               <p className="font-display text-2xl leading-snug">“Apparently Kevin is a chaotic coward.”</p>
               <p className="mt-2 text-ink-soft">
                 Curious about everything. Brave about almost nothing. Deeply suspicious of sudden
                 cursor movement.
               </p>
             </blockquote>
-            <p className="mt-8">
+            <p className="mt-8 flex flex-wrap gap-4">
               <Link href="/my-companions" className="text-sm text-moss underline underline-offset-4">
-                Where yours lives
+                Where your pet lives
+              </Link>
+              <Link href="/stuff" className="text-sm text-moss underline underline-offset-4">
+                What you can give them
               </Link>
             </p>
           </div>
@@ -131,8 +137,8 @@ export default function HomePage() {
               </Link>
             </div>
             <p className="mt-4 max-w-xl text-ink-soft">
-              Each species has habits. Each individual has a personality. Start with whoever
-              won&apos;t leave you alone.
+              Each kind of pet has habits of its own. Each one has a personality of its own. Start
+              with whoever won&apos;t leave you alone.
             </p>
           </div>
           <div className="mx-auto mt-10 max-w-6xl px-5 md:px-10">

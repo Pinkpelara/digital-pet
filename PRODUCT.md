@@ -150,7 +150,17 @@ DELETE ON SIGHT:
 3. No visible numbers, no commands, no chat, no guilt, no streaks.
 4. One individual everywhere; history never resets; ownership never expires.
 5. Copy: the creature is the subject; short, warm, human sentences; a teenager
-   understands it, an adult still wants it.
+   understands it, an adult still wants it. In user-facing words these are
+   **digital pets** — say "pet", "companion", or their name; the word "species"
+   never appears in anything a human reads (code identifiers only). No
+   exclamation marks, no kindergarten tone, no hype: the register is a calm
+   North-American consumer product.
+6. Presentation register, researched: characters are introduced the way Disney
+   introduces characters — name, face, one personality-trait bio. Items are
+   presented the way Roblox presents catalog items — type tag (Look / Gadget /
+   Skill / Limited), name, one line for what it does or unlocks, price, and a
+   render that proves it. Roblox even sells behaviours as items; our skills and
+   gadget behaviours follow that logic. Clarity first, charm second.
 6. The desktop is the dream. Say so plainly. Never apologize for it.
 7. New machinery requires a product answer in this file first. Scaffolding
    without a product answer gets parked, not shipped.

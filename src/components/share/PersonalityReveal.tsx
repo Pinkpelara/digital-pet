@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { ShowreelSlot } from "@/components/store/ShowreelCanvas";
 import { speciesName } from "@/lib/companion-view";
 import { track } from "@/lib/analytics";
 import type { CompanionInstance } from "@/lib/types";
@@ -64,11 +64,10 @@ export function PersonalityReveal({ instance }: { instance: CompanionInstance })
               </p>
             </div>
             <div className="flex h-28 w-28 items-end justify-center overflow-hidden rounded-xl bg-paper">
-              <LiveStage
+              <ShowreelSlot
+                className="h-28 w-28"
                 species={instance.speciesId}
                 equipped={instance.equipped}
-                size={80}
-                mood="idle"
               />
             </div>
           </div>

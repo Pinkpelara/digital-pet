@@ -25,7 +25,7 @@ export function HeroBanner() {
         <div data-creature-spot="adopt" className="pointer-events-auto mt-8 flex flex-wrap items-center gap-3">
           <HeroAdoptLink adoptFrom={adoptFrom} />
           <a href="#meet" className="rounded-full border border-ink/20 px-6 py-3 text-sm text-ink hover:border-ink/40">
-            Meet the four species
+            Meet all four
           </a>
         </div>
       </div>

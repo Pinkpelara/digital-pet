@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PlayableStage } from "@/components/stage/PlayableStage";
+import { ShowreelCanvas } from "@/components/store/ShowreelCanvas";
 import { PersonalityReveal } from "@/components/share/PersonalityReveal";
 import { WhatDidTheyDo } from "@/components/share/WhatDidTheyDo";
 import { liveHref, studioHref } from "@/lib/catalog-paths";
@@ -68,6 +69,7 @@ export function CompanionProfileView() {
   const total = secretTotal(instance);
 
   return (
+    <ShowreelCanvas>
     <div className="mx-auto max-w-5xl px-5 py-12 md:px-10">
       <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
         <div className="aspect-[4/5] overflow-hidden rounded-[1.8rem] bg-cream stage-frame">
@@ -191,5 +193,6 @@ export function CompanionProfileView() {
         follower count here on purpose.
       </p>
     </div>
+    </ShowreelCanvas>
   );
 }

@@ -57,7 +57,7 @@ export default function MyCompanionsPage() {
       ) : (
         <>
           <p className="text-sm text-ink-soft">
-            {instances.length} companion{instances.length === 1 ? "" : "s"} · {speciesCount} species
+            {instances.length} companion{instances.length === 1 ? "" : "s"} · {speciesCount} kind{speciesCount === 1 ? "" : "s"}
             {" · every one different"}
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-2">

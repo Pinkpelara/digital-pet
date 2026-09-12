@@ -14,11 +14,11 @@ export const TEMP_BRAND_NAME = "Companions";
 export const brand = {
   name: TEMP_BRAND_NAME,
   domain: "companions.app",
-  tagline: "Digital companions that live on your computer.",
-  heroHeadline: "Adopt a tiny creature that lives on your screen.",
+  tagline: "Digital pets that live on your computer.",
+  heroHeadline: "Adopt a digital pet that lives on your screen.",
   heroSub:
-    "A digital pet with a personality of its own. Adopt one, name it, dress it, teach it tricks — and it keeps you company while you browse, work and play.",
-  hero: "Adopt a tiny creature that lives on your screen. A digital pet with a personality of its own.",
+    "A pet with a personality of its own. Adopt one, name it, dress it, teach it tricks — and it keeps you company while you browse, work and play.",
+  hero: "Adopt a digital pet that lives on your screen. A pet with a personality of its own.",
   meetBody: "Adopt one. Name it. Find out who you got.",
   shopBody: "Outfits change how they look. Gadgets change what they do. Skills are tricks you taught them.",
   cameraLine: "Give them the camera. It’s still theirs tomorrow.",

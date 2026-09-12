@@ -425,7 +425,7 @@ export const items: CatalogItem[] = [
     slug: "tiny-backpack",
     kind: "gadget",
     name: "Tiny Backpack",
-    tagline: "Carries it everywhere. Contents: secret.",
+    tagline: "Carries it everywhere. What's inside is their business.",
     description:
       "A stitched little pack for important finds. What is inside is between them and the backpack.",
     priceCents: 199,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LiveStage } from "@/components/stage/LiveStage";
+import { ShowreelSlot } from "@/components/store/ShowreelCanvas";
 import { latestBehaviour, speciesName } from "@/lib/companion-view";
 import { track } from "@/lib/analytics";
 import { brand } from "@/lib/brand";
@@ -58,11 +58,11 @@ export function WhatDidTheyDo({ instance }: { instance: CompanionInstance }) {
           </div>
           <div className="mt-4 flex items-center gap-4">
             <div className="flex h-24 w-24 items-end justify-center overflow-hidden rounded-xl bg-paper">
-              <LiveStage
+              <ShowreelSlot
+                className="h-24 w-24"
                 species={instance.speciesId}
                 equipped={instance.equipped}
-                size={80}
-                mood="happy"
+                demo="dance"
               />
             </div>
             <p className="font-display text-2xl leading-tight text-ink">
@@ -70,8 +70,7 @@ export function WhatDidTheyDo({ instance }: { instance: CompanionInstance }) {
             </p>
           </div>
           <p className="mt-4 text-sm text-ink-soft">
-            Clip rendering is coming. Today this card is built from real behaviour counters —
-            nothing is invented.
+            Made from what {instance.name} actually did. Nothing on this card is invented.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <button type="button" onClick={() => void share()} className="rounded-full bg-ink px-5 py-2.5 text-sm text-paper">

@@ -80,19 +80,19 @@ export function categoryCopy(kind: CatalogItem["kind"]): { kicker: string; title
       return {
         kicker: "Looks",
         title: "The closet",
-        lede: "Raincoats, hats, ridiculous glasses. Dressing them changes how they look — and nothing else. They are still themselves.",
+        lede: "Changes how your pet looks. Nothing else. They are still themselves.",
       };
     case "gadget":
       return {
         kicker: "Watch what they do",
         title: "Gadgets",
-        lede: "Not decorations. A skateboard means he skates. A camera means he takes photos. Mostly of nothing.",
+        lede: "Unlocks new behavior. A skateboard means they skate. A camera means they take photos.",
       };
     case "skill":
       return {
         kicker: "Things you can teach them",
         title: "Skills",
-        lede: "Teach one and they know it forever. They will show off when you least expect it.",
+        lede: "Tricks you teach once. Your pet knows them forever and does them on their own.",
       };
     case "drop":
       return {

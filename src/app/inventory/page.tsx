@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { items } from "@/data/catalog";
+import { companionById, items } from "@/data/catalog";
 import { hrefForItem, isShopSafe, studioHref } from "@/lib/catalog-paths";
 import { formatPrice } from "@/lib/format";
 import { PageHero } from "@/components/site/KineticTitle";
@@ -36,7 +36,7 @@ export default function InventoryPage() {
                     className="flex items-baseline justify-between rounded-[1.3rem] bg-mist px-5 py-4 ring-1 ring-ink/10 hover:ring-moss/40"
                   >
                     <span className="font-display text-2xl text-ink">{instance.name}</span>
-                    <span className="text-sm text-ink-soft">a {instance.speciesId}</span>
+                    <span className="text-sm text-ink-soft">a {companionById.get(instance.speciesId)?.name ?? "companion"}</span>
                   </Link>
                 </li>
               ))}

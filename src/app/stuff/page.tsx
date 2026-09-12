@@ -37,7 +37,7 @@ export default function StuffPage() {
       <PageHero
         kicker="Their stuff"
         title="Things you give them. Things they become."
-        lede="You will see a ridiculous raincoat and think: he needs that. That feeling is the whole shop."
+        lede="You will see a ridiculous raincoat and think: my pet needs that. That feeling is the whole shop."
       />
       <div className="mx-auto grid max-w-6xl gap-5 px-5 md:grid-cols-2 md:px-10">
         {shelves.map((shelf) => {
